@@ -13,7 +13,7 @@
 
 &ensp;We used *Typescript* and *Golang* as the main languages 
 and some tricky layout fundamentals for the technologies
-So, We used
+So, We used:
 
    * Golang for Backend Language
    * TypeScript for Frontend Language
@@ -31,11 +31,9 @@ So, We used
 ###### npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
 ###### npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
 ###### npm i react-feather
-###### npm i react-hook-form
-###### npm install -g npm 
 
 ***Run Dev***
-+ **Backend:**  -> go build -o main.exe main.go _and then_ go run main.go
++ **Backend:**  -> go build -o main.exe main.go ***and then*** go run main.go
 + **Frontend:** -> npm run dev
 
 <hr/>
