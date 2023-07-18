@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Bars3Icon, XMarkIcon} from "@heroicons/react/24/solid";
 import Logo from "@/assets/Logo4.png"
 import Link from "./Link";
-import ActionButton from "@/shared/ActionButton";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
@@ -54,11 +53,16 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                     setSelectedPage = {setSelectedPage}
                                 />
                             </div>
-                            <div className= {`${flexBetween} gap-8 font-bold`}>
-                                <p>Sign In</p>
-                                <ActionButton setSelectedPage = {setSelectedPage}>
-                                    Become a Member
-                                </ActionButton>
+                            <div className= {`${flexBetween} gap-5`}>
+                                <Link
+                                    page= "Create new account"
+                                    selectedPage = {selectedPage}
+                                    setSelectedPage = {setSelectedPage}
+                                />
+                                <button className="rounded-md bg-yellow-500 px-10 py-2
+                                    hover:bg-red-400 hover:text-white font-bold">
+                                    Log In
+                                </button>
                             </div>
                         </div>
                     ) : (
