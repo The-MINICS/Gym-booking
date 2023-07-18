@@ -36,14 +36,13 @@ So, We used:
    7.  go mod tidy
 
 ***Additional installations for frontend running developer***
-   1.  _mkdir Frontend_
-   2.  npm install
-   3.  npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
-   4.  npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
-   5.  npm i react-feather
+   1.  _npm create vite@latest (to do along with their steps)_
+   2.  _cd Frontend(Your Project)_
+   3.  npm install
+   4.  npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
+   5.  npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
+   6.  npm i react-feather
 
 ***Run Dev***
 + **Backend:**  -> go build -o main.exe main.go ***and then*** go run main.go
 + **Frontend:** -> npm run dev
-
-<hr/>
