@@ -23,19 +23,17 @@ So, We used
 #### - Tailwind Heroicons for Icons
 #### - Pixels Website for Background Images
 
-=========================================================================
+***Additional install for running development***
 
-**Additional install for running development**
+# npm install
+# npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
+# npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
+# npm i react-feather
+# npm i react-hook-form
+# npm install -g npm 
 
-npm install
-npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
-npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
-npm i react-feather
-npm i react-hook-form
-npm install -g npm 
-
-Backend: -> go build -o main.exe main.go
-            go run main.go
-Frontend:-> npm run dev
+**Backend:**  -> go build -o main.exe main.go
+                 go run main.go
+**Frontend:** -> npm run dev
 
 <hr/>
