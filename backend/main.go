@@ -21,7 +21,7 @@ func main() {
 	r.GET("/users", controller.ListUsers)
 
 	// Authentication Routes
-	r.POST("/login/admin", controller.LoginUser)
+	r.POST("/login/user", controller.LoginUser)
 
 	api := r.Group("")
 	{
