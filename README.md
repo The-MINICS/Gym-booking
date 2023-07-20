@@ -29,7 +29,7 @@ So, We used:
 ***Needed installations for backend running developer***
    1.  _to install Golang, VS code, Node.js and Git_
    2.  _mkdir Backend_
-   3.  go mod init github.com/_YouGitHub_/_YourProject_
+   3.  go mod init github.com/chonticha1844/Gym-booking
    4.  go get -u github.com/gin-gonic/gin
    5.  go get -u gorm.io/gorm
    6.  go get -u gorm.io/driver/sqlite
@@ -42,6 +42,8 @@ So, We used:
    4.  npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
    5.  npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
    6.  npm i react-feather
+   7.  npm install --save react-router-dom@6.x
+   8.  npm install -g npm
 
 ***Run Dev***
 + **Backend:**  -> go build -o main.exe main.go ***and then*** go run main.go
