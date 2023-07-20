@@ -7,8 +7,6 @@ import Home from "@/scenes/home";
 import Benefits from "@/scenes/benefits";
 import ContactUs from "@/scenes/contact_us"
 import Footer from "./scenes/footer";
-import SignIn from "@/scenes/sign_in/index";
-import SignUp from "./scenes/sign_up";
 import BeforeLogin from "./scenes/before_login";
 
 function App() {
