@@ -61,7 +61,7 @@ const Home = ( { setSelectedPage } : Props) => {
             visible: { opacity: 1, x:-0 }
           }}>
           <ActionButton setSelectedPage={setSelectedPage}>
-            Join Now
+            Book Now
           </ActionButton>
           <AnchorLink 
             className="text-sm font-bold  text-red-400 underline hover:text-yellow-300"

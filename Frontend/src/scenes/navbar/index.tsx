@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bars3Icon, XMarkIcon} from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon, UserCircleIcon} from "@heroicons/react/24/solid";
 import Logo from "@/assets/Logo4.png"
 import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
@@ -38,6 +38,11 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                     setSelectedPage = {setSelectedPage}
                                 />
                                 <Link 
+                                    page= "Our Class"
+                                    selectedPage = {selectedPage}
+                                    setSelectedPage = {setSelectedPage}
+                                />
+                                <Link 
                                     page= "Equipments" 
                                     selectedPage = {selectedPage}
                                     setSelectedPage = {setSelectedPage}
@@ -54,15 +59,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                                 />
                             </div>
                             <div className= {`${flexBetween} gap-5`}>
-                                <Link
-                                    page= "Create new account"
-                                    selectedPage = {selectedPage}
-                                    setSelectedPage = {setSelectedPage}
-                                />
-                                <button className="rounded-md bg-yellow-500 px-10 py-2
-                                    hover:bg-red-400 hover:text-white font-bold">
-                                    Log In
-                                </button>
+                                <UserCircleIcon className="h-6 w-6"/>
                             </div>
                         </div>
                     ) : (
@@ -98,6 +95,11 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                         selectedPage = {selectedPage}
                         setSelectedPage = {setSelectedPage}
                     />
+                    <Link 
+                        page= "Our Class"
+                        selectedPage = {selectedPage}
+                        setSelectedPage = {setSelectedPage}
+                        />
                     <Link 
                         page= "Equipments" 
                         selectedPage = {selectedPage}
