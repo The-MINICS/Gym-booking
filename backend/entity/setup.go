@@ -43,26 +43,28 @@ func SetupDatabase() {
 
 	//User
 	user1 := User{
-		Username: "B1234567",
-		Gmail:    "B1234567@g.sut.ac.th",
-		Password: "1234567890123",
-		Fullname: "Tom Highway",
-		Age:      21,
-		Weight:   70,
-		Height:   182,
+		Username:  "B1234567",
+		Email:     "B1234567@g.sut.ac.th",
+		Password:  "1234567890123",
+		Firstname: "Tom ",
+		Lastname:  "Highway",
+		Age:       21,
+		Weight:    70,
+		Height:    182,
 
 		Gender: male,
 	}
 	db.Model(&User{}).Create(&user1)
 
 	user2 := User{
-		Username: "D1472583",
-		Gmail:    "D1472583@g.sut.ac.th",
-		Password: "2345678901234",
-		Fullname: "Malisa Somalia",
-		Age:      30,
-		Weight:   56,
-		Height:   160,
+		Username:  "D1472583",
+		Email:     "D1472583@g.sut.ac.th",
+		Password:  "2345678901234",
+		Firstname: "Malisa ",
+		Lastname:  "Somalia",
+		Age:       30,
+		Weight:    56,
+		Height:    160,
 
 		Gender: female,
 	}

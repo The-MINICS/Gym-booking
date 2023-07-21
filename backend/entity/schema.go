@@ -29,13 +29,14 @@ type Gender struct {
 // User
 type User struct {
 	gorm.Model
-	Username string `gorm:"uniqueIndex"`
-	Gmail    string
-	Password string
-	Fullname string
-	Age      int32
-	Weight   int32
-	Height   int32
+	Username  string `gorm:"uniqueIndex"`
+	Email     string
+	Password  string
+	Firstname string
+	Lastname  string
+	Age       int32
+	Weight    int32
+	Height    int32
 
 	GenderID *uint
 	Gender   Gender `gorm:"references:id"`
