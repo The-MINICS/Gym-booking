@@ -12,6 +12,7 @@ import (
 // LoginPayload login body
 type LoginPayload struct {
 	Username string `json:"username"`
+	Gmail    string `json:"Gmail"`
 	Password string `json:"password"`
 }
 
@@ -19,13 +20,14 @@ type LoginPayload struct {
 type User struct {
 	entity.User
 	User_username string `json:"username"`
+	User_gmail    string `json:"gmail"`
 	User_password string `json:"password"`
 }
 
 // SignUpPayload signup body
 type SignUpPayload struct {
 	Username string `json:"username"`
-	Email    string `json:"email"`
+	Gmail    string `json:"gmail"`
 	Password string `json:"password"`
 }
 
@@ -45,8 +47,8 @@ func LoginUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// ค้นหา user ด้วย Username ที่ผู้ใช้กรอกเข้ามา
-	if err := entity.DB().Raw("SELECT * FROM users WHERE username = ?", payload.Username).Scan(&user).Error; err != nil {
+	// ค้นหา user ด้วย gmail ที่ผู้ใช้กรอกเข้ามา
+	if err := entity.DB().Raw("SELECT * FROM users WHERE gmail = ?", payload.Gmail).Scan(&user).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -69,7 +71,7 @@ func LoginUser(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(user.Username)
+	signedToken, err := jwtWrapper.GenerateToken(user.Gmail)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return
