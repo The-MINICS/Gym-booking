@@ -3,20 +3,19 @@ package controller
 import (
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
-	//"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
-	//"golang.org/x/crypto/bcrypt"
 	//"gorm.io/gorm"
 )
 
-// POST /writers
+// POST /reservation
 
 func CreateReservation(c *gin.Context) {
 
 	var reservation entity.Reservation
 	var user entity.User
-	var equipment entity.Equipment
+	var class entity.Class
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -29,24 +28,23 @@ func CreateReservation(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา equipment ด้วย id
-	if tx := entity.DB().Where("id = ?", reservation.EquipmentID).First(&equipment); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกอุปกรณ์"})
+	// ค้นหา class ด้วย id
+	if tx := entity.DB().Where("id = ?", reservation.ClassID).First(&class); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "class not found"})
 		return
 	}
 
 	// 14: สร้าง  Reservation
 	rsv := entity.Reservation{
-		User:      user,
-		Datetime:  reservation.Datetime,
-		Equipment: equipment,
+		User:  user,
+		Class: class,
 	}
 
-	// // การ validate
-	// if _, err := govalidator.ValidateStruct(user); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	// การ validate
+	if _, err := govalidator.ValidateStruct(user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	// 13: บันทึก
 	if err := entity.DB().Create(&rsv).Error; err != nil {
@@ -61,7 +59,7 @@ func CreateReservation(c *gin.Context) {
 func GetReservation(c *gin.Context) {
 	var reservation entity.Reservation
 	id := c.Param("id")
-	if tx := entity.DB().Preload("User").Preload("Equipment").Raw("SELECT * FROM reservations WHERE id = ?", id).Find(&reservation).Error; tx != nil {
+	if tx := entity.DB().Preload("User").Preload("Class").Raw("SELECT * FROM reservations WHERE id = ?", id).Find(&reservation).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "reservation not found"})
 		return
 	}
@@ -72,7 +70,7 @@ func GetReservation(c *gin.Context) {
 func ListReservations(c *gin.Context) {
 	var reservations []entity.Reservation
 
-	if err := entity.DB().Preload("User").Preload("Equipment").Raw("SELECT * FROM reservations").Find(&reservations).Error; err != nil {
+	if err := entity.DB().Preload("User").Preload("Class").Raw("SELECT * FROM reservations").Find(&reservations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
