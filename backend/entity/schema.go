@@ -30,7 +30,7 @@ type Gender struct {
 type User struct {
 	gorm.Model
 	Username  string `gorm:"uniqueIndex"`
-	Email     string
+	Email     string `gorm:"uniqueIndex"`
 	Password  string
 	Firstname string
 	Lastname  string
