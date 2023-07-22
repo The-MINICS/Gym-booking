@@ -5,6 +5,7 @@ import (
 	//"go/format"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -29,7 +30,9 @@ func SetupDatabase() {
 	)
 
 	db = database
+	passworduser1, err := bcrypt.GenerateFromPassword([]byte("1234567890123"), 14)
 
+	passworduser2, err := bcrypt.GenerateFromPassword([]byte("2345678901234"), 14)
 	//gender
 	male := Gender{
 		Gender: "Male",
@@ -45,7 +48,7 @@ func SetupDatabase() {
 	user1 := User{
 		Username:  "B1234567",
 		Email:     "B1234567@g.sut.ac.th",
-		Password:  "1234567890123",
+		Password:  string(passworduser1),
 		Firstname: "Tom ",
 		Lastname:  "Highway",
 		Age:       21,
@@ -59,7 +62,7 @@ func SetupDatabase() {
 	user2 := User{
 		Username:  "D1472583",
 		Email:     "D1472583@g.sut.ac.th",
-		Password:  "2345678901234",
+		Password:  string(passworduser2),
 		Firstname: "Malisa ",
 		Lastname:  "Somalia",
 		Age:       30,
