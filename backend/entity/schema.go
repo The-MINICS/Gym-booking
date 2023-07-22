@@ -29,6 +29,7 @@ type Gender struct {
 
 // Admin
 type Admin struct {
+	gorm.Model
 	Admin_firstname string
 	Admin_lastname  string
 	Admin_email     string `gorm:"uniqueIndex" `
