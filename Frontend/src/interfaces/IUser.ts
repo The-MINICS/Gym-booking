@@ -4,9 +4,10 @@ import { ReservationInterface } from "./IReservation";
 export interface UserInterface {
     ID?: number,
     Username?: string;
-    Gmail?: string;
+    Email?: string;
     Password?: string;
-    Fullname?: string;
+    Firstname?: string;
+    Lastname?: string;
     Age?: number;
     Weight?: number;
     Height?: number;

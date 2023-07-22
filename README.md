@@ -44,6 +44,8 @@ So, We used:
    6.  npm i react-feather
    7.  npm install --save react-router-dom@6.x
    8.  npm install -g npm
+   9.  npm install @mui/material @emotion/react @emotion/styled
+   10. npm install @mui/material @mui/styled-engine-sc styled-components
 
 ***Run Dev***
 + **Backend:**  -> go build -o main.exe main.go ***and then*** go run main.go

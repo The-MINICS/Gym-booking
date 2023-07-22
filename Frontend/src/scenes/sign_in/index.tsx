@@ -5,33 +5,22 @@ import { motion } from 'framer-motion';
 import { SelectedPage } from '@/shared/types';
 import HText from "@/shared/HText";
 import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
-import { useForm } from "react-hook-form";
-import Alert from "@/shared/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 }
 
-// const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-//   props,
-//   ref
-// ) {
-//   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-// });
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const SignIn = ({setSelectedPage}: Props) => {
-  const inputStyles = `mb-3 w-full rounded-lg bg-red-400 px-5 py-3 placeholder-white`;
-  const {
-    register,
-    trigger,
-    formState: { errors },
-} = useForm();
-const onSubmit = async (e: any) => {
-    const isValid = await trigger();
-    if (!isValid) {
-        e.preventDefault();
-    }
-}
+    
   const [signin, setSignin] = useState<Partial<SigninInterface>>({});
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -69,6 +58,29 @@ const onSubmit = async (e: any) => {
     <section id="signin" className="w-full">
             <motion.div className="mx-auto w-5/6 pt-24 pb-32"
                 onViewportEnter={() => setSelectedPage(SelectedPage.SignIn)}>
+                {/* login success */}
+                <Snackbar
+                  open={success}
+                  autoHideDuration={3000}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                >
+                  <Alert onClose={handleClose} severity="success">
+                    Sign In Successful
+                  </Alert>
+                </Snackbar>
+                {/* login failure */}
+                <Snackbar
+                  open={error}
+                  autoHideDuration={3000}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                >
+                  <Alert onClose={handleClose} severity="error">
+                    email or password incorrcted!
+                  </Alert>
+                </Snackbar>
+
                 {/* Header */}
                 <motion.div
                     className="md:w-3/5"
@@ -109,6 +121,12 @@ const onSubmit = async (e: any) => {
                       <input
                         className="w-full border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4"
                         placeholder="Enter your email"
+                        id="Email"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        value={signin.Email || ""}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div>
@@ -116,6 +134,12 @@ const onSubmit = async (e: any) => {
                       <input
                         className="w-full border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-3"
                         placeholder="Enter your password"
+                        name="password"
+                        type="password"
+                        id="Password"
+                        autoComplete="current-password"
+                        value={signin.Password || ""}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mt-5 flex justify-between items-center">
@@ -123,14 +147,18 @@ const onSubmit = async (e: any) => {
                         <input
                           type="checkbox"
                           id="remember"
+                          value="remember"
                         />
-                        <label className="ml-2 font-medium text-base" id="remember" >Remember for 30 days</label>
+                        <label className="ml-2 font-medium text-base" id="remember" >Remember me</label>
                       </div>
                       <button className="font-medium text-base text-blue-900">Forgot Password</button>
                     </div>
                     <div className="mt-8 flex flex-col gap-y-4">
-                      <button className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
-                        py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out">
+                      <button 
+                        className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
+                        py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                        onClick= {submit}
+                        >
                           Sign In
                       </button>
                     </div>
@@ -173,4 +201,4 @@ const onSubmit = async (e: any) => {
     );
 }
 
-export default SignIn
+export default SignIn;
