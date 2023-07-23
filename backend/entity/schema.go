@@ -81,7 +81,7 @@ type Status struct {
 }
 
 // Booking
-// Member เป็นคนสร้าง จอง Equipment
+// Member เป็นคนสร้าง จอง Activity
 type Booking struct {
 	gorm.Model
 	Datetime time.Time

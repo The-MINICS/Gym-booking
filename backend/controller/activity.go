@@ -27,7 +27,7 @@ func CreateActivity(c *gin.Context) {
 func GetActivity(c *gin.Context) {
 	var activity entity.Activity
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM activitys WHERE id = ?", id).Scan(&activity).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM activities WHERE id = ?", id).Scan(&activity).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -35,19 +35,19 @@ func GetActivity(c *gin.Context) {
 }
 
 // GET--activitys--
-func ListActivitys(c *gin.Context) {
-	var activitys []entity.Activity
-	if err := entity.DB().Raw("SELECT * FROM activitys").Scan(&activitys).Error; err != nil {
+func ListActivities(c *gin.Context) {
+	var activities []entity.Activity
+	if err := entity.DB().Raw("SELECT * FROM activities").Scan(&activities).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": activitys})
+	c.JSON(http.StatusOK, gin.H{"data": activities})
 }
 
 // DELETE--activity id--
 func DeleteActivity(c *gin.Context) {
 	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM activitys WHERE id = ?", id); tx.RowsAffected == 0 {
+	if tx := entity.DB().Exec("DELETE FROM activities WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "activity not found"})
 		return
 	}

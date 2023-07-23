@@ -12,7 +12,8 @@ import (
 // POST /booking
 func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
-	var user entity.User
+	var member entity.Member
+	var activity entity.Activity
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -21,8 +22,14 @@ func CreateBooking(c *gin.Context) {
 	}
 
 	// ค้นหา user ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.UserID).First(&user); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", booking.MemberID).First(&member); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	}
+
+	// ค้นหา activity ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.ActivityID).First(&activity); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกกิจกรรม"})
 		return
 	}
 
@@ -34,9 +41,10 @@ func CreateBooking(c *gin.Context) {
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
-		Booking_datetime: booking.Booking_datetime,
-		User:             user,
-		Equipment:        equipment,
+		Datetime:  booking.Datetime,
+		Member:    member,
+		Activity:  activity,
+		Equipment: equipment,
 	}
 
 	// การ validate
@@ -56,9 +64,9 @@ func CreateBooking(c *gin.Context) {
 
 // GET /booking/:id
 func GetBooking(c *gin.Context) {
-	var booking entity.User
+	var booking entity.Member
 	id := c.Param("id")
-	if tx := entity.DB().Preload("User").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Preload("Activity").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "booking not found"})
 		return
 	}
@@ -69,7 +77,7 @@ func GetBooking(c *gin.Context) {
 func ListBookings(c *gin.Context) {
 	var bookings []entity.Booking
 
-	if err := entity.DB().Preload("User").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
+	if err := entity.DB().Preload("User").Preload("Activity").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -79,7 +87,8 @@ func ListBookings(c *gin.Context) {
 
 func UpdateBooking(c *gin.Context) {
 	var booking entity.Booking
-	var user entity.User
+	var member entity.Member
+	var activity entity.Activity
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -88,8 +97,14 @@ func UpdateBooking(c *gin.Context) {
 	}
 
 	// ค้นหา user ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.UserID).First(&user); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", booking.MemberID).First(&member); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		return
+	}
+
+	// ค้นหา activity ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.ActivityID).First(&activity); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกกิจกรรม"})
 		return
 	}
 
@@ -100,10 +115,11 @@ func UpdateBooking(c *gin.Context) {
 	}
 
 	update_booking := entity.Booking{
-		Model:            gorm.Model{ID: booking.ID},
-		Booking_datetime: booking.Booking_datetime,
-		User:             user,
-		Equipment:        equipment,
+		Model:     gorm.Model{ID: booking.ID},
+		Datetime:  booking.Datetime,
+		Member:    member,
+		Activity:  activity,
+		Equipment: equipment,
 	}
 
 	// การ validate

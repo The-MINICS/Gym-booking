@@ -12,16 +12,16 @@ import (
 // POST /contactus
 func CreateContactus(c *gin.Context) {
 	var contactus entity.Contactus
-	var user entity.User
+	var member entity.Member
 
 	if err := c.ShouldBindJSON(&contactus); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// ค้นหา user ด้วย id
-	if tx := entity.DB().Where("id = ?", contactus.UserID).First(&user); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+	// ค้นหา member ด้วย id
+	if tx := entity.DB().Where("id = ?", contactus.MemberID).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "member not found"})
 		return
 	}
 
@@ -29,7 +29,7 @@ func CreateContactus(c *gin.Context) {
 	ctu := entity.Contactus{
 		Subject: contactus.Subject,
 		Message: contactus.Message,
-		User:    user,
+		Member:  member,
 	}
 
 	// การ validate
@@ -72,24 +72,23 @@ func ListContactuses(c *gin.Context) {
 
 func UpdateContactus(c *gin.Context) {
 	var contactus entity.Contactus
-	var user entity.User
+	var member entity.Member
 
 	if err := c.ShouldBindJSON(&contactus); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// ค้นหา user ด้วย id
-	if tx := entity.DB().Where("id = ?", contactus.UserID).First(&user); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+	// ค้นหา member ด้วย id
+	if tx := entity.DB().Where("id = ?", contactus.MemberID).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "member not found"})
 		return
 	}
-
 	update_contactus := entity.Contactus{
 		Model:   gorm.Model{ID: contactus.ID},
 		Subject: contactus.Subject,
 		Message: contactus.Message,
-		User:    user,
+		Member:  member,
 	}
 
 	// การ validate
