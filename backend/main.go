@@ -15,14 +15,12 @@ func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
-	r.POST("/admins", controller.CreateAdmin)
-	r.POST("/users", controller.CreateUser)
+	r.POST("/members", controller.CreateMember)
 	r.GET("/genders", controller.ListGenders)
-	r.GET("/users", controller.ListUsers)
+	r.GET("/members", controller.ListMembers)
 
 	// Authentication Routes
-	r.POST("/login/user", controller.LoginUser)
-	r.POST("/login/admin", controller.LoginAdmin)
+	r.POST("/login/member", controller.LoginMember)
 
 	api := r.Group("")
 	{
@@ -41,43 +39,17 @@ func main() {
 			protected.PATCH("/genders", controller.UpdateGender)
 			protected.DELETE("/genders/:id", controller.DeleteGender)
 
-			// Admin Routes
-			protected.GET("/admins", controller.ListAdmins)
-			protected.GET("/admin/:id", controller.GetAdmin)
-			protected.PATCH("/admins", controller.UpdateAdmin)
-			protected.DELETE("/admins/:id", controller.DeleteAdmin)
-
-			//User Routes
-			protected.GET("/user/:id", controller.GetUser)
-			protected.PATCH("/users", controller.UpdateUser)
-			protected.DELETE("/users/:id", controller.DeleteUser)
-
-			// Room Routes
-			protected.POST("/rooms", controller.CreateRoom)
-			protected.GET("/rooms", controller.ListRooms)
-			protected.GET("/room/:id", controller.GetRoom)
-			protected.PATCH("/rooms", controller.UpdateRoom)
-			protected.DELETE("/rooms/:id", controller.DeleteRoom)
+			//MemberRoutes
+			protected.GET("/member/:id", controller.GetMember)
+			protected.PATCH("/members", controller.UpdateMember)
+			protected.DELETE("/members/:id", controller.DeleteMember)
 
 			// Activity Routes
-			protected.POST("/activitys", controller.CreateActivity)
-			protected.GET("/activitys", controller.ListActivitys)
+			protected.POST("/activities", controller.CreateActivity)
+			protected.GET("/activities", controller.ListActivities)
 			protected.GET("/activity/:id", controller.GetActivity)
-			protected.PATCH("/activitys", controller.UpdateActivity)
-			protected.DELETE("/activitys/:id", controller.DeleteActivity)
-
-			// Class Routes
-			protected.POST("/classes", controller.CreateClass)
-			protected.GET("/classes", controller.ListClasses)
-			protected.GET("/class/:id", controller.GetClass)
-			protected.PATCH("/classes", controller.UpdateClass)
-			protected.DELETE("/classes/:id", controller.DeleteClass)
-
-			// Reservation Routes
-			protected.POST("/reservations", controller.CreateReservation)
-			protected.GET("/reservations", controller.ListReservations)
-			protected.GET("/reservation/:id", controller.GetReservation)
-			protected.DELETE("/reservations/:id", controller.DeleteReservation)
+			protected.PATCH("/activities", controller.UpdateActivity)
+			protected.DELETE("/activities/:id", controller.DeleteActivity)
 
 			// Picture Routes
 			protected.POST("/pictures", controller.CreatePicture)
