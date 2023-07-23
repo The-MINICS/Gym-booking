@@ -17,18 +17,11 @@ type LoginPayload struct {
 }
 
 // struct temporarily
-type User struct {
-	entity.User
-	User_username string `json:"username"`
-	User_email    string `json:"email"`
-	User_password string `json:"password"`
-}
-
-// test struct temporarily
-type Admin struct {
-	entity.Admin
-	Admin_email    string `json:"email"`
-	Admin_password string `json:"password"`
+type Member struct {
+	entity.Member
+	Member_username string `json:"username"`
+	Member_email    string `json:"email"`
+	Member_password string `json:"password"`
 }
 
 // SignUpPayload signup body
@@ -45,23 +38,23 @@ type LoginResponse struct {
 	Role  int    `json:"role"`
 }
 
-// POST /loginUser
-func LoginUser(c *gin.Context) {
+// POST /loginMember
+func LoginMember(c *gin.Context) {
 	var payload LoginPayload
-	var user entity.User
+	var member entity.Member
 
 	if err := c.ShouldBindJSON(&payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// ค้นหา user ด้วย Email ที่ผู้ใช้กรอกเข้ามา
-	if err := entity.DB().Raw("SELECT * FROM users WHERE email = ?", payload.Email).Scan(&user).Error; err != nil {
+	// ค้นหา member ด้วย Email ที่ผู้ใช้กรอกเข้ามา
+	if err := entity.DB().Raw("SELECT * FROM members WHERE email = ?", payload.Email).Scan(&member).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// ตรวจสอบรหัสผ่าน
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(payload.Password))
+	err := bcrypt.CompareHashAndPassword([]byte(member.Password), []byte(payload.Password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "password is incerrect"})
 		return
@@ -78,7 +71,7 @@ func LoginUser(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(user.Email)
+	signedToken, err := jwtWrapper.GenerateToken(member.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return
@@ -86,55 +79,8 @@ func LoginUser(c *gin.Context) {
 
 	tokenResponse := LoginResponse{
 		Token: signedToken,
-		ID:    user.ID,
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
-}
-
-// POST /loginAdmin
-func LoginAdmin(c *gin.Context) {
-	var payload LoginPayload
-	var admin Admin
-
-	if err := c.ShouldBindJSON(&payload); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	// ค้นหา admin ด้วย email ที่ผู้ใช้กรอกเข้ามา
-	if err := entity.DB().Raw("SELECT * FROM admins WHERE admin_email = ?", payload.Email).Scan(&admin).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// ตรวจสอบรหัสผ่าน
-	err := bcrypt.CompareHashAndPassword([]byte(admin.Admin_password), []byte(payload.Password))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "password is incerrect"})
-		return
-	}
-
-	// กำหนดค่า SecretKey, Issuer และระยะเวลาหมดอายุของ Token สามารถกำหนดเองได้
-	// SecretKey ใช้สำหรับการ sign ข้อความเพื่อบอกว่าข้อความมาจากตัวเราแน่นอน
-	// Issuer เป็น unique id ที่เอาไว้ระบุตัว client
-	// ExpirationHours เป็นเวลาหมดอายุของ token
-
-	jwtWrapper := service.JwtWrapper{
-		SecretKey:       "SvNQpBN8y3qlVrsGAYYWoJJk56LtzFHx",
-		Issuer:          "AuthService",
-		ExpirationHours: 24,
-	}
-
-	signedToken, err := jwtWrapper.GenerateToken(admin.Admin_email)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
-		return
-	}
-
-	tokenResponse := LoginResponse{
-		Token: signedToken,
-		ID:    admin.ID,
-		Role:  int(*admin.RoleID),
+		ID:    member.ID,
+		Role:  int(*member.RoleID),
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
