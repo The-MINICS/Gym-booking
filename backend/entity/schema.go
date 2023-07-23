@@ -14,8 +14,7 @@ type Role struct {
 	gorm.Model
 	Role string
 
-	Admin []Admin `gorm:"foreignKey:RoleID"`
-	User  []User  `gorm:"foreignKey:GenderID"`
+	Member []Member `gorm:"foreignKey:RoleID"`
 }
 
 // Gender
@@ -23,27 +22,11 @@ type Gender struct {
 	gorm.Model
 	Gender string
 
-	User  []User  `gorm:"foreignKey:GenderID"`
-	Admin []Admin `gorm:"foreignKey:GenderID"`
+	Member []Member `gorm:"foreignKey:GenderID"`
 }
 
-// Admin
-type Admin struct {
-	gorm.Model
-	Admin_firstname string
-	Admin_lastname  string
-	Admin_email     string `gorm:"uniqueIndex" `
-	Admin_password  string
-
-	GenderID *uint
-	Gender   Gender `gorm:"references:id"`
-
-	RoleID *uint
-	Role   Role `gorm:"references:id"`
-}
-
-// User
-type User struct {
+// Member
+type Member struct {
 	gorm.Model
 	Username  string `gorm:"uniqueIndex"`
 	Email     string `gorm:"uniqueIndex"`
@@ -59,56 +42,18 @@ type User struct {
 	RoleID   *uint
 	Role     Role `gorm:"references:id"`
 
-	Reservation []Reservation `gorm:"foreignKey:UserID"`
-	Booking     []Booking     `gorm:"foreignKey:UserID"`
-	Contactus   []Contactus   `gorm:"foreignKey:UserID"`
-}
-
-// Room
-type Room struct {
-	gorm.Model
-	Number   string
-	Capacity int16
-
-	Class []Class `gorm:"foreignKey:RoomID"`
+	Booking   []Booking   `gorm:"foreignKey:MemberID"`
+	Contactus []Contactus `gorm:"foreignKey:MemberID"`
 }
 
 // Activity
 type Activity struct {
 	gorm.Model
 	Activity string
+	Number   string
+	Capacity int16
 
-	Class []Class `gorm:"foreignKey:ActivityID"`
-}
-
-// Class
-// Admin เป็นคนสร้าง Class ที่มีกิจกรรมไว้ให้ User จอง
-type Class struct {
-	gorm.Model
-	Class_datetime time.Time
-
-	AdminID *uint
-	Admin   Admin `gorm:"references:id"`
-
-	RoomID *uint
-	Room   Room `gorm:"references:id"`
-
-	ActivityID *uint
-	Activity   Activity `gorm:"references:id"`
-
-	Reservation []Reservation `gorm:"foreignKey:ClassID"`
-}
-
-// Reservation
-// User เป็นคนสร้าง จอง Class
-type Reservation struct {
-	gorm.Model
-
-	UserID *uint
-	User   User `gorm:"references:id"`
-
-	ClassID *uint
-	Class   Class `gorm:"references:id"`
+	Booking []Booking `gorm:"foreignKey:ActivityID"`
 }
 
 // Picture
@@ -136,25 +81,28 @@ type Status struct {
 }
 
 // Booking
-// User เป็นคนสร้าง จอง Equipment
+// Member เป็นคนสร้าง จอง Equipment
 type Booking struct {
 	gorm.Model
-	Booking_datetime time.Time
+	Datetime time.Time
 
-	UserID *uint
-	User   User `gorm:"references:id"`
+	MemberID *uint
+	Member   Member `gorm:"references:id"`
+
+	ActivityID *uint
+	Activity   Activity `gorm:"references:id"`
 
 	EquipmentID *uint
 	Equipment   Equipment `gorm:"references:id"`
 }
 
 // Contact us
-// User เป็นคนใช้
+// Member เป็นคนใช้
 type Contactus struct {
 	gorm.Model
 	Subject string
 	Message string
 
-	UserID *uint
-	User   User `gorm:"references:id"`
+	MemberID *uint
+	Member   Member `gorm:"references:id"`
 }
