@@ -44,7 +44,6 @@ function App() {
           setSelectedPage = {setSelectedPage}
         />
         <Home setSelectedPage = {setSelectedPage} />
-        <Benefits setSelectedPage = {setSelectedPage} />
         {/* <OurClass setSelectedPage={setSelectedPage} /> */}
         {/* <Equipments setSelectedPage = {setSelectedPage} /> */}
         {/* <Booking setSelectedPage = {setSelectedPage} /> */}
