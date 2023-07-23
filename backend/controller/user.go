@@ -7,7 +7,7 @@ import (
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	//"gorm.io/gorm"
+	"gorm.io/gorm"
 )
 
 // POST /users
@@ -15,6 +15,7 @@ func CreateUser(c *gin.Context) {
 
 	var user entity.User
 	var gender entity.Gender
+	var role entity.Role
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -24,6 +25,12 @@ func CreateUser(c *gin.Context) {
 	// ค้นหา gender ด้วย id
 	if tx := entity.DB().Where("id = ?", user.GenderID).First(&gender); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกเพศ"})
+		return
+	}
+
+	// ค้นหา role ด้วย id
+	if tx := entity.DB().Where("id = ?", user.RoleID).First(&role); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกหน้าที่(Role)"})
 		return
 	}
 
@@ -101,6 +108,7 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	update_user := entity.User{
+		Model:     gorm.Model{ID: user.ID},
 		Username:  user.Username,
 		Email:     user.Email,
 		Password:  user.Password,

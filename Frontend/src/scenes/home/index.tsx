@@ -4,7 +4,6 @@ import img2 from "@/assets/HomePageGraphic2.png";
 import img3 from "@/assets/HomePageGraphic3.png";
 import img4 from "@/assets/HomePageGraphic4.png";
 import { SelectedPage } from "@/shared/types";
-import ActionButton from "@/shared/ActionButton";
 import HomePageText from "@/assets/HomePageText.png";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
@@ -60,15 +59,14 @@ const Home = ( { setSelectedPage } : Props) => {
             hidden: { opacity: 0, x:-50 },
             visible: { opacity: 1, x:-0 }
           }}>
-          <ActionButton setSelectedPage={setSelectedPage}>
+          <button className="bg-red-400 text-white">
             Book Now
-          </ActionButton>
+          </button>
           <AnchorLink 
             className="text-sm font-bold  text-red-400 underline hover:text-yellow-300"
             onClick={() => setSelectedPage(SelectedPage.ContactUs)}
             href={`#${SelectedPage.ContactUs}`}
           >
-            <p>Learn More</p>
           </AnchorLink>
         </motion.div>
       </div>
