@@ -97,7 +97,7 @@ type Booking struct {
 }
 
 // Contact us
-// Member เป็นคนใช้
+// User เป็นคนใช้
 type Contactus struct {
 	gorm.Model
 	Subject string
