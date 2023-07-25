@@ -1,7 +1,7 @@
 import { GenderInterface } from "./IGender";
-import { ReservationInterface } from "./IReservation";
+import { RoleInterface } from "./IRole";
 
-export interface UserInterface {
+export interface MemberInterface {
     ID?: number,
     Username?: string;
     Email?: string;
@@ -15,6 +15,6 @@ export interface UserInterface {
     GenderID?: number;
     Gender?: GenderInterface;
 
-    ReservationID?: number;
-    Reservation?: ReservationInterface;
+    RoleID?: number;
+    Role?: RoleInterface;
 }

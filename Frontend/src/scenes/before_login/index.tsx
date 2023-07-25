@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { SelectedPage } from '@/shared/types'
 import Home1 from '../home/home';
 import Benefits from '../benefits';
-import SignUp from "../sign_up";
 import Footer from '../footer';
 import Navbar1 from '../navbar/navbar';
 import Terms from '../terms';
@@ -37,7 +36,6 @@ function BeforeLogin() {
                 />
                 <Home1 setSelectedPage = {setSelectedPage} />
                 <Benefits setSelectedPage = {setSelectedPage} />
-                {/* <Equipments setSelectedPage = {setSelectedPage} /> */}
                 <Terms setSelectedPage = {setSelectedPage} />
                 <SignIn setSelectedPage={setSelectedPage} />
                 <Footer/>

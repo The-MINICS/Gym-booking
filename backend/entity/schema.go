@@ -60,6 +60,8 @@ type Activity struct {
 type Picture struct {
 	gorm.Model
 	Picture string
+
+	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
 
 // Equipment

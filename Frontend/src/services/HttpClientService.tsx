@@ -1,8 +1,9 @@
 import { SigninInterface } from "../interfaces/ISignin";
+import { MemberInterface } from "@/interfaces/IMember";
 
 const apiUrl = "http://localhost:9999";
 
-async function LoginUser(data: SigninInterface) {
+async function Login(data: SigninInterface) {
   console.log(data)
   const requestOptions = {
     method: "POST",
@@ -10,23 +11,46 @@ async function LoginUser(data: SigninInterface) {
     body: JSON.stringify(data),
   };
 
-  let res = await fetch(`${apiUrl}/login/user`, requestOptions)
+  let res = await fetch(`${apiUrl}/login/member`, requestOptions)
     .then((response) => response.json())
     .then((res) => {
       if (res.data) {
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("uid", res.data.id);
+        localStorage.setItem("mid", res.data.id);
+        localStorage.setItem("role", res.data.role);
         return res.data;
       } else {
         return false;
       }
-      console.log(res)
     });
   return res;
 }
 
-async function GetUserByUID() {
-  let uid = localStorage.getItem("uid");
+async function Members(data: MemberInterface) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/members`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
+async function GetMemberByMID() {
+  let mid = localStorage.getItem("mid");
   const requestOptions = {
     method: "GET",
     headers: {
@@ -36,7 +60,7 @@ async function GetUserByUID() {
   };
 
   let res = await fetch(
-    `${apiUrl}/user/${uid}`,
+    `${apiUrl}/member/${mid}`,
     requestOptions
   )
     .then((response) => response.json())
@@ -51,7 +75,7 @@ async function GetUserByUID() {
   return res;
 }
 
-const UserDelete = async (ID: number) => {
+const MemberDelete = async (ID: number) => {
   console.log(ID)
   const requestOptions = {
       method: "DELETE",
@@ -60,7 +84,7 @@ const UserDelete = async (ID: number) => {
           "Content-Type": "application/json", 
       },
   };
-  let res = await fetch(`http://localhost:9999/users/`+ID, requestOptions)
+  let res = await fetch(`http://localhost:9999/members/`+ID, requestOptions)
       .then((response) => response.json())
       .then((res) => {
           if(res.data){
@@ -73,7 +97,8 @@ const UserDelete = async (ID: number) => {
 };
 
 export {
-  LoginUser, 
-  GetUserByUID, 
-  UserDelete
+  Login,
+  Members, 
+  GetMemberByMID, 
+  MemberDelete,
 };

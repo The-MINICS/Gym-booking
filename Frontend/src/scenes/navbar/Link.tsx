@@ -22,4 +22,4 @@ const Link = ({ page, selectedPage, setSelectedPage }: Props) => {
     )
 }
 
-export default Link
+export default Link;
