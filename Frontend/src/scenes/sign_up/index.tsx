@@ -349,15 +349,14 @@ const SignUp = ({setSelectedPage}: Props) => {
                       <p className="text-lg font-semibold text-red-700 w-auto">Role</p>
                       <Select
                         className="border-2 border-red-300 p-4 mt-1 bg-transparent mb-4 w-3/6 rounded-xl"
-                        // disabled
                         required
                         native
-                        value={members?.Role + ""}
+                        value={members?.RoleID + ""}
                         onChange={handleChange}
                         inputProps={{
                             name: "RoleID",
                         }}>
-                        <option className="text-gray-300">Role</option>
+                        <option className="text-gray-300">Your Role</option>
                         {roles.map((item: RoleInterface) => (
                             <option value={item.ID} key={item.ID}>
                               {item.Role}
