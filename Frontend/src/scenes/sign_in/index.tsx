@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { SigninInterface } from "@/interfaces/ISignin";
-import { LoginUser } from "@/services/HttpClientService";
+import { Login } from "@/services/HttpClientService";
 import { motion } from 'framer-motion';
 import { SelectedPage } from '@/shared/types';
 import HText from "@/shared/HText";
 import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import SignUp from "../sign_up";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -20,10 +21,18 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const SignIn = ({setSelectedPage}: Props) => {
-    
+  const [show, setShow] = useState(false);
   const [signin, setSignin] = useState<Partial<SigninInterface>>({});
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+  const ShowSignup = () => {
+    if(show == true){
+      setShow(false)
+    }else{
+      setShow(true)
+    }
+  }
 
   const handleInputChange = (
     event: React.ChangeEvent<{ id?: string; value: any }>
@@ -45,7 +54,7 @@ const SignIn = ({setSelectedPage}: Props) => {
   };
 
   const submit = async () => {
-    let res = await LoginUser(signin);
+    let res = await Login(signin);
     if (res) {
       setSuccess(true);
       setTimeout(() => {
@@ -164,13 +173,15 @@ const SignIn = ({setSelectedPage}: Props) => {
                     </div>
                     <div className="mt-4 flex flex-center mx-16">
                       <p className="mr-2">You are not our member yet?</p>
-                      <button>
+                      <button onClick={ShowSignup} 
+                        className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                      >
                         <span className="text-purple-500 font-semibold">
                           Become our member
                         </span>
                       </button>
                     </div>
-                  </div>  
+                  </div>
                   </motion.div>
 
                   {/* Image */}
@@ -197,6 +208,7 @@ const SignIn = ({setSelectedPage}: Props) => {
                   </motion.div>
                 </div>
             </motion.div>
+            { show && (<SignUp setSelectedPage={setSelectedPage} />)}
         </section>
     );
 }

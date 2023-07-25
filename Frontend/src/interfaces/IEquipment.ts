@@ -1,10 +1,9 @@
-import { ReservationInterface } from "./IReservation";
+import { PictureInterface } from "./IPicture";
 
-export interface UserInterface {
+export interface EquipmentInterface {
     ID?: number,
     Equipments?: string;
-    Picture?: string;
 
-    ReservationID?: number;
-    Reservation?: ReservationInterface;
+    PictureID?: number;
+    Picture?: PictureInterface;
 }

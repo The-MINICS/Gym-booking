@@ -7,6 +7,7 @@ import { SelectedPage } from "@/shared/types";
 import HomePageText from "@/assets/HomePageText.png";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
+import BookingButton from "@/shared/BookingButton";
 
 type Props = {
     setSelectedPage: (value: SelectedPage) => void;
@@ -59,9 +60,9 @@ const Home = ( { setSelectedPage } : Props) => {
             hidden: { opacity: 0, x:-50 },
             visible: { opacity: 1, x:-0 }
           }}>
-          <button className="bg-red-400 text-white">
+          <BookingButton setSelectedPage={setSelectedPage}>
             Book Now
-          </button>
+          </BookingButton>
           <AnchorLink 
             className="text-sm font-bold  text-red-400 underline hover:text-yellow-300"
             onClick={() => setSelectedPage(SelectedPage.ContactUs)}
