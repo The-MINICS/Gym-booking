@@ -18,6 +18,7 @@ func main() {
 	r.POST("/members", controller.CreateMember)
 	r.GET("/genders", controller.ListGenders)
 	r.GET("/members", controller.ListMembers)
+	r.GET("/roles", controller.ListRoles)
 
 	// Authentication Routes
 	r.POST("/login/member", controller.LoginMember)
@@ -28,7 +29,6 @@ func main() {
 		{
 			// Role Routes
 			protected.POST("/roles", controller.CreateRole)
-			protected.GET("/roles", controller.ListRoles)
 			protected.GET("/role/:id", controller.GetRole)
 			protected.PATCH("/roles", controller.UpdateRole)
 			protected.DELETE("/roles/:id", controller.DeleteRole)
