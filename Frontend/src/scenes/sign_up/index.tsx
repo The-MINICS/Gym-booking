@@ -127,14 +127,14 @@ function SignUp() {
 
     async function submit() {
         let data = {
-          Member_firstname: members.Firstname,
-          Member_lastname: members.Lastname,
-          Member_username: members.Username,
-          Member_email: members.Email,
-          Member_password: members.Password,
-          Member_age: members.Age,
-          Member_weight: members.Weight,
-          Member_height: members.Height,
+          Firstname: members.Firstname?? "",
+          Lastname: members.Lastname?? "",
+          Username: members.Username?? "",
+          Email: members.Email?? "",
+          Password: members.Password?? "",
+          Age: typeof members.Age === "string" ? parseInt(members.Age) : 0,
+          Weight: typeof members.Weight === "string" ? parseInt(members.Weight) : 0,
+          Height: typeof members.Height === "string" ? parseInt(members.Height) : 0,
           GenderID: convertType(members.GenderID),
           RoleID: convertType(members.RoleID),
         };
