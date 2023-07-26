@@ -1,7 +1,6 @@
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React from 'react';
 import Snackbar from "@mui/material/Snackbar";
-import { SelectedPage } from '@/shared/types';
 import { motion } from 'framer-motion';
 import HText from "@/shared/HText";
 import { useEffect, useState } from 'react';
@@ -9,21 +8,12 @@ import { MemberInterface } from '@/interfaces/IMember';
 import { GenderInterface } from '@/interfaces/IGender';
 import { RoleInterface } from '@/interfaces/IRole';
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
+import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
+import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
+import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
 
-type Props = {
-    setSelectedPage: (value: SelectedPage) => void;
-}
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const SignUp = ({setSelectedPage}: Props) => {
-    const [members, setMembers] = useState<MemberInterface>();
+function SignUp() {
+    const [members, setMembers] = useState<MemberInterface>({});
     const [genders, setGenders] = useState<GenderInterface[]>([]);
     const [roles, setRoles] = useState<RoleInterface[]>([]);
 
@@ -104,6 +94,13 @@ const SignUp = ({setSelectedPage}: Props) => {
         return res;
     }
 
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    props,
+    ref
+  ) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
     const getGenders = async () => {
       let res = await GetGenders();
       if (res) {
@@ -130,19 +127,19 @@ const SignUp = ({setSelectedPage}: Props) => {
 
     async function submit() {
         let data = {
-          Member_firstname: members?.Firstname,
-          Member_lastname: members?.Lastname,
-          Member_username: members?.Username,
-          Member_email: members?.Email,
-          Member_password: members?.Password,
-          Member_age: members?.Age,
-          Member_weight: members?.Weight,
-          Member_height: members?.Height,
-          GenderID: convertType(members?.GenderID),
-          RoleID: convertType(members?.RoleID),
+          Member_firstname: members.Firstname,
+          Member_lastname: members.Lastname,
+          Member_username: members.Username,
+          Member_email: members.Email,
+          Member_password: members.Password,
+          Member_age: members.Age,
+          Member_weight: members.Weight,
+          Member_height: members.Height,
+          GenderID: convertType(members.GenderID),
+          RoleID: convertType(members.RoleID),
         };
         console.log(data)
-
+        const apiUrl = "http://localhost:9999";
         const requestOptions = {
           method: "POST",
           headers: {
@@ -173,15 +170,14 @@ const SignUp = ({setSelectedPage}: Props) => {
 
     return (
         <section id="signup" className="w-full bg-gray-20">
-          <motion.div className="mx-auto w-5/6 pt-24 pb-32"
-                onViewportEnter={() => setSelectedPage(SelectedPage.SignUp)}>
+          <motion.div className="mx-auto w-5/6 pt-24 pb-32">
                 {/* Snackbar */}
                 <Snackbar
                   id="success"
                   open={success}
                   autoHideDuration={5000}
                   onClose={handleClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
                   >
                     <Alert onClose={handleClose} severity="success">
                       Saved Successfully!
@@ -201,7 +197,7 @@ const SignUp = ({setSelectedPage}: Props) => {
 
                 {/* Header */}
                 <motion.div
-                    className="md:w-full"
+                    className="md:w-3/5"
                     initial="hidden" 
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
@@ -220,161 +216,196 @@ const SignUp = ({setSelectedPage}: Props) => {
                     </p>
                 </motion.div>
 
-                {/* Fill the form */}
+                {/* Fill the form and image */}
+                <div className="mt-5 justify-between gap-8 md:flex">
+                  <motion.div
+                    className="mt-5 basis-3/5 md:mt-0"
+                    initial="hidden" 
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.5 }}
+                    variants={{
+                        hidden: { opacity: 0, y: 50 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                  >
+                    {/* Fill the form */}
+                      <div>
+                        <label className="text-lg font-semibold text-red-700">FirstName</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your FirstName"
+                          id="Firstname"
+                          name="firstname"
+                          autoComplete="firstname"
+                          type="string"
+                          autoFocus
+                          value={members.Firstname || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">LastName</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Lastname"
+                          id="Lastname"
+                          name="lastname"
+                          autoComplete="lastname"
+                          type="string"
+                          autoFocus
+                          value={members.Lastname || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Username</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Username"
+                          id="Username"
+                          name="username"
+                          autoComplete="username"
+                          type="string"
+                          autoFocus
+                          value={members.Username || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Email</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Email"
+                          id="Email"
+                          name="email"
+                          autoComplete="email"
+                          type="string"
+                          autoFocus
+                          value={members.Email || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Password</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Password"
+                          id="Password"
+                          name="password"
+                          autoComplete="current-password"
+                          type="password"
+                          autoFocus
+                          value={members.Password || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Gender</label>
+                        <Select
+                          className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
+                          native
+                          value={members.GenderID + ""}
+                          onChange={handleChange}
+                          inputProps={{
+                              name: "GenderID",
+                          }}>
+                          <option className="text-gray-300">Choose your Gender</option>
+                          {genders.map((item: GenderInterface) => (
+                              <option value={item.ID} key={item.ID}>
+                                {item.Gender}
+                              </option>
+                          ))}
+                        </Select>
+                        <label className="text-lg font-semibold text-red-700">Age</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Age"
+                          id="Age"
+                          name="age"
+                          autoComplete="age"
+                          type="number"
+                          autoFocus
+                          value={members.Age || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Weight</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Weight"
+                          id="Weight"
+                          name="weight"
+                          autoComplete="weight"
+                          type="number"
+                          autoFocus
+                          value={members.Weight || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Height</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Height"
+                          id="Height"
+                          name="height"
+                          autoComplete="height"
+                          type="number"
+                          autoFocus
+                          value={members.Height || ""}
+                          onChange={handleInputChange}
+                        />
+                        <label className="text-lg font-semibold text-red-700">Role</label>
+                        <Select
+                          className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
+                          required
+                          native
+                          value={members.RoleID + ""}
+                          onChange={handleChange}
+                          inputProps={{
+                              name: "RoleID",
+                          }}>
+                          <option className="text-gray-300">Your Role</option>
+                          {roles.map((item: RoleInterface) => (
+                              <option value={item.ID} key={item.ID}>
+                                {item.Role}
+                              </option>
+                          ))}
+                        </Select>
+                      </div>
+                      
+                      <div className="mt-4 flex flex-col gap-y-4">
+                        <button 
+                          className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
+                          py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                          onClick= {submit}
+                          >
+                            Create a Member
+                        </button>
+                      </div>
+                </motion.div>
+
+                {/* Image */}
                 <motion.div
-                  className="md:w-full"
-                  initial="hidden" 
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.5 }}
-                  transition={{ duration: 0.5 }}
-                  variants={{
-                      hidden: { opacity: 0, x:-50 },
-                      visible: { opacity: 1, x:-0 }
-                  }}
-                >
-                    <div>
-                      <p className="text-lg font-semibold text-red-700 w-auto">FirstName</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your FirstName"
-                        id="Firstname"
-                        name="firstname"
-                        autoComplete="firstname"
-                        autoFocus
-                        required
-                        value={members?.Firstname || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">LastName</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Lastname"
-                        id="Lastname"
-                        name="lastname"
-                        autoComplete="lastname"
-                        autoFocus
-                        required
-                        value={members?.Lastname || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Username</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Username"
-                        id="Username"
-                        name="username"
-                        autoComplete="username"
-                        autoFocus
-                        required
-                        value={members?.Username || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Email</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Email"
-                        id="Email"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        required
-                        value={members?.Email || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Password</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Password"
-                        id="Password"
-                        name="password"
-                        autoComplete="current-password"
-                        autoFocus
-                        required
-                        value={members?.Password || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Gender</p>
-                      <Select
-                        className="border-2 border-red-300 p-4 mt-1 bg-transparent mb-4 w-3/6 rounded-xl"
-                        required
-                        native
-                        value={members?.GenderID + ""}
-                        onChange={handleChange}
-                        inputProps={{
-                            name: "GenderID",
+                        className="mt-16 basis-3/5 md:mt-0"
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.5 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                        variants={{
+                        hidden: { opacity: 0, x:-50 },
+                        visible: { opacity: 1, x:-0 },
                         }}>
-                        <option className="text-gray-300">Choose your Gender</option>
-                        {genders.map((item: GenderInterface) => (
-                            <option value={item.ID} key={item.ID}>
-                              {item.Gender}
-                            </option>
-                        ))}
-                      </Select>
-                      <p className="text-lg font-semibold text-red-700 w-auto">Age</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Age"
-                        id="Age"
-                        name="age"
-                        autoComplete="age"
-                        autoFocus
-                        required
-                        value={members?.Age || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Weight</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Weight"
-                        id="Weight"
-                        name="weight"
-                        autoComplete="weight"
-                        autoFocus
-                        required
-                        value={members?.Weight || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Height</p>
-                      <input
-                        className="border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4 w-3/6"
-                        placeholder="Enter your Height"
-                        id="Height"
-                        name="height"
-                        autoComplete="height"
-                        autoFocus
-                        required
-                        value={members?.Height || ""}
-                        onChange={handleInputChange}
-                      />
-                      <p className="text-lg font-semibold text-red-700 w-auto">Role</p>
-                      <Select
-                        className="border-2 border-red-300 p-4 mt-1 bg-transparent mb-4 w-3/6 rounded-xl"
-                        required
-                        native
-                        value={members?.RoleID + ""}
-                        onChange={handleChange}
-                        inputProps={{
-                            name: "RoleID",
-                        }}>
-                        <option className="text-gray-300">Your Role</option>
-                        {roles.map((item: RoleInterface) => (
-                            <option value={item.ID} key={item.ID}>
-                              {item.Role}
-                            </option>
-                        ))}
-                      </Select>
-                    </div>
-                    
-                    <div className="mt-8 flex flex-col gap-y-4">
-                      <button 
-                        className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
-                        py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                        onClick= {submit}
-                        >
-                          Create a Member
-                      </button>
-                    </div>
-              </motion.div>
+                        <img
+                          className="w-full rounded-lg bg-auto my-2"
+                          alt="login-page-graphic"
+                          src={SignUpPageGraphic1}
+                        />
+                        <img
+                          className="w-full rounded-lg bg-auto my-2"
+                          alt="login-page-graphic"
+                          src={SignUpPageGraphic2}
+                        />
+                        <img
+                          className="w-full rounded-lg bg-auto my-2"
+                          alt="login-page-graphic"
+                          src={SignUpPageGraphic3}
+                        />
+                        <div className="relative">
+                            <div className="before:absolute before:-bottom-30 before:-right-10 
+                              before:z-[-1] md:before:content-evolvetext">
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
           </motion.div>
         </section>
     )

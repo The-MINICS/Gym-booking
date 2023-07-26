@@ -110,7 +110,7 @@ const SignIn = ({setSelectedPage}: Props) => {
                       </p>
                 </motion.div>
 
-                {/* Fill the form and image*/}
+                {/* Fill the form and image */}
                 <div className="mt-5 justify-between gap-8 md:flex">
                   <motion.div
                       className="mt-5 basis-3/5 md:mt-0"
@@ -208,7 +208,7 @@ const SignIn = ({setSelectedPage}: Props) => {
                   </motion.div>
                 </div>
             </motion.div>
-            { show && (<SignUp setSelectedPage={setSelectedPage} />)}
+            { show && (<SignUp />)}
         </section>
     );
 }

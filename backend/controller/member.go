@@ -40,6 +40,12 @@ func CreateMember(c *gin.Context) {
 		return
 	}
 
+	// การ validate
+	if _, err := govalidator.ValidateStruct(member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	// 14: สร้าง  member
 	mr := entity.Member{
 		Username:  member.Username,
@@ -54,19 +60,12 @@ func CreateMember(c *gin.Context) {
 		Role:      role,
 	}
 
-	// การ validate
-	if _, err := govalidator.ValidateStruct(member); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	// 13: บันทึก
 	if err := entity.DB().Create(&mr).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"data": mr})
-
 }
 
 // GET /member/:id
