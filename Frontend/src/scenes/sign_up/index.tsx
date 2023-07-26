@@ -13,7 +13,7 @@ import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
 
 function SignUp() {
-    const [members, setMembers] = useState<MemberInterface>({});
+    const [member, setMember] = useState<MemberInterface>({});
     const [genders, setGenders] = useState<GenderInterface[]>([]);
     const [roles, setRoles] = useState<RoleInterface[]>([]);
 
@@ -24,12 +24,12 @@ function SignUp() {
     const apiUrl = "http://localhost:9999";
 
     const handleInputChange = (
-        event: React.ChangeEvent<{ id?: string; value: any }>
-    ) => {
-        const id = event.target.id as keyof typeof SignUp;
-        const { value } = event.target;
-        setMembers({ ...members, [id]: value });
-    };
+      event: React.ChangeEvent<{ id?: string; value: any }>
+  ) => {
+      const id = event.target.id as keyof typeof SignUp;
+      const { value } = event.target;
+      setMember({ ...member, [id]: value });
+  };
 
     const handleClose = (
         event?: React.SyntheticEvent | Event,
@@ -43,9 +43,9 @@ function SignUp() {
     };
 
     const handleChange = (event: SelectChangeEvent) => {
-      const name = event.target.name as keyof typeof members;
-      setMembers({
-        ...members,
+      const name = event.target.name as keyof typeof member;
+      setMember({
+        ...member,
         [name]: event.target.value,
       });
     };
@@ -127,16 +127,18 @@ function SignUp() {
 
     async function submit() {
         let data = {
-          Firstname: members.Firstname?? "",
-          Lastname: members.Lastname?? "",
-          Username: members.Username?? "",
-          Email: members.Email?? "",
-          Password: members.Password?? "",
-          Age: typeof members.Age === "string" ? parseInt(members.Age) : 0,
-          Weight: typeof members.Weight === "string" ? parseInt(members.Weight) : 0,
-          Height: typeof members.Height === "string" ? parseInt(members.Height) : 0,
-          GenderID: convertType(members.GenderID),
-          RoleID: convertType(members.RoleID),
+
+          Firstname: member.Firstname?? "",
+          Lastname: member.Lastname?? "",
+          Username: member.Username?? "",
+          Email: member.Email?? "",
+          Password: member.Password?? "",
+          Age: typeof member.Age === "string" ? parseInt(member.Age) : 0,
+          Weight: typeof member.Weight === "string" ? parseInt(member.Weight) : 0,
+          Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
+          GenderID: convertType(member.GenderID),
+          RoleID: convertType(member.RoleID),
+
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -157,9 +159,9 @@ function SignUp() {
               console.log("Saved")
               setSuccess(true);
               setErrorMessage("")
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 1000);
             } else {
               console.log("Error!")
               setError(true);
@@ -237,10 +239,9 @@ function SignUp() {
                           placeholder="Enter your FirstName"
                           id="Firstname"
                           name="firstname"
-                          autoComplete="firstname"
-                          type="string"
+                          type="firstname"
                           autoFocus
-                          value={members.Firstname || ""}
+                          value={member.Firstname || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">LastName</label>
@@ -249,10 +250,9 @@ function SignUp() {
                           placeholder="Enter your Lastname"
                           id="Lastname"
                           name="lastname"
-                          autoComplete="lastname"
                           type="string"
                           autoFocus
-                          value={members.Lastname || ""}
+                          value={member.Lastname || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Username</label>
@@ -261,10 +261,9 @@ function SignUp() {
                           placeholder="Enter your Username"
                           id="Username"
                           name="username"
-                          autoComplete="username"
                           type="string"
                           autoFocus
-                          value={members.Username || ""}
+                          value={member.Username || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Email</label>
@@ -273,10 +272,9 @@ function SignUp() {
                           placeholder="Enter your Email"
                           id="Email"
                           name="email"
-                          autoComplete="email"
                           type="string"
                           autoFocus
-                          value={members.Email || ""}
+                          value={member.Email || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Password</label>
@@ -285,17 +283,16 @@ function SignUp() {
                           placeholder="Enter your Password"
                           id="Password"
                           name="password"
-                          autoComplete="current-password"
                           type="password"
                           autoFocus
-                          value={members.Password || ""}
+                          value={member.Password || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Gender</label>
                         <Select
                           className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
                           native
-                          value={members.GenderID + ""}
+                          value={member.GenderID + ""}
                           onChange={handleChange}
                           inputProps={{
                               name: "GenderID",
@@ -313,10 +310,9 @@ function SignUp() {
                           placeholder="Enter your Age"
                           id="Age"
                           name="age"
-                          autoComplete="age"
                           type="number"
                           autoFocus
-                          value={members.Age || ""}
+                          value={member.Age || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Weight</label>
@@ -325,10 +321,9 @@ function SignUp() {
                           placeholder="Enter your Weight"
                           id="Weight"
                           name="weight"
-                          autoComplete="weight"
                           type="number"
                           autoFocus
-                          value={members.Weight || ""}
+                          value={member.Weight || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Height</label>
@@ -336,11 +331,10 @@ function SignUp() {
                           className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
                           placeholder="Enter your Height"
                           id="Height"
-                          name="height"
-                          autoComplete="height"
+                          name="Height"
                           type="number"
                           autoFocus
-                          value={members.Height || ""}
+                          value={member.Height || ""}
                           onChange={handleInputChange}
                         />
                         <label className="text-lg font-semibold text-red-700">Role</label>
@@ -348,7 +342,7 @@ function SignUp() {
                           className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
                           required
                           native
-                          value={members.RoleID + ""}
+                          value={member.RoleID + ""}
                           onChange={handleChange}
                           inputProps={{
                               name: "RoleID",

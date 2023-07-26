@@ -17,7 +17,6 @@ func main() {
 
 	r.POST("/members", controller.CreateMember)
 	r.GET("/genders", controller.ListGenders)
-	r.GET("/members", controller.ListMembers)
 	r.GET("/roles", controller.ListRoles)
 
 	// Authentication Routes
