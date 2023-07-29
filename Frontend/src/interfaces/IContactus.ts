@@ -5,6 +5,6 @@ export interface ContactUsInterface {
     Subject?: string;
     Message?: string;
 
-    MeMemberID?: number;
+    MemberID?: number;
     Member?: MemberInterface;
 }
