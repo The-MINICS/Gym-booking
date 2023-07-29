@@ -127,7 +127,6 @@ function SignUp() {
 
     async function submit() {
         let data = {
-
           Firstname: member.Firstname?? "",
           Lastname: member.Lastname?? "",
           Username: member.Username?? "",
@@ -138,7 +137,6 @@ function SignUp() {
           Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
           GenderID: convertType(member.GenderID),
           RoleID: convertType(member.RoleID),
-
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -159,9 +157,9 @@ function SignUp() {
               console.log("Saved")
               setSuccess(true);
               setErrorMessage("")
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 1000);
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000);
             } else {
               console.log("Error!")
               setError(true);

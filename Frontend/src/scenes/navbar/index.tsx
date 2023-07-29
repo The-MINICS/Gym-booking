@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Bars3Icon, XMarkIcon, UserCircleIcon} from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/Logo4.png"
 import Link from "./Link";
 import { SelectedPage } from "@/shared/types";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
-
+import user from '@/assets/user.png';
 
 type Props = {
     isTopOfPage: boolean;
@@ -15,11 +15,20 @@ type Props = {
 }
 
 const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
+    const [show, setShow] = React.useState(false);
     const [members, setMembers] = React.useState<MemberInterface>({});
     const flexBetween = "flex items-center justify-between";
     const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
     const [isMenuToggled, setIsMenuToggled] = React.useState<boolean>(false);
-    const navbarBackground = isTopOfPage ? "" : "bg-red-200 drop-shadow"
+    const navbarBackground = isTopOfPage ? "" : "bg-red-200 drop-shadow";
+
+    const ShowProfileMore = () => {
+        if(show == true){
+          setShow(false)
+        }else{
+          setShow(true)
+        }
+    }
 
     const signout = () => {
         localStorage.clear();
@@ -30,7 +39,7 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
         let res = await GetMemberByMID();
         if (res) {
             setMembers(res);
-            }
+        }
     };
 
     React.useEffect(() => {
@@ -75,16 +84,25 @@ const Navbar = ({ isTopOfPage, selectedPage, setSelectedPage }: Props) => {
                             </div>
                             <div className= {`${flexBetween} gap-5 md:flex`}>
                                 <button
-                                    className="bg-yellow-500 rounded-3xl p-2 hover:bg-yellow-300"
+                                    className="bg-yellow-500 rounded-3xl p-0.5 hover:bg-white"
                                 >
-                                    <div className="flex items-center">
-                                        <i className="h-6 w-6"><UserCircleIcon/></i>
-                                        <span className="text-base font-bold">
-                                            {members.Firstname} {members.Lastname}
-                                        </span>
-                                    </div>
+                                    <button className="flex items-center active:scale-[.98] active:duration-75 
+                                        transition-all hover:scale-[1.01] ease-in-out"
+                                        onClick={ShowProfileMore}
+                                        >
+                                        <div className="">
+                                            <img src={user} alt='user-logo' 
+                                            className='h-10 w-10 object-cover border-4 border-yellow-500 rounded-full cursor-pointer'/>
+                                        </div>
+                                        { show && (
+                                            <span className="p-1 text-base font-bold">
+                                                {members.Username}·{members.Firstname} {members.Lastname}
+                                            </span>
+                                        )}
+                                    </button>
                                 </button>
-                                <button className="bg-red-600 text-white hover:bg-red-500 p-1 rounded"
+                                <button className="bg-red-600 text-white hover:bg-red-500 p-1 rounded
+                                    active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
                                     onClick={signout}
                                 >
                                     <div className="flex items-center">

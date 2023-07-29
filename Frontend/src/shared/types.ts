@@ -8,7 +8,8 @@ export enum SelectedPage {
     OurClass = "ourclass",
     Terms = "terms",
     SignUp = "signup",
-    SignOut = "signout"
+    SignOut = "signout",
+    Profile = "profile"
 }
 
 export interface BenefitType {
