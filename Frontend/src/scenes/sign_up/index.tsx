@@ -11,8 +11,13 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
 import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
+import { SelectedPage } from '@/shared/types';
 
-function SignUp() {
+type Props = {
+  setSelectedPage: (value: SelectedPage) => void;
+}
+
+function SignUp({setSelectedPage}: Props) {
     const [member, setMember] = useState<MemberInterface>({});
     const [genders, setGenders] = useState<GenderInterface[]>([]);
     const [roles, setRoles] = useState<RoleInterface[]>([]);
@@ -49,6 +54,12 @@ function SignUp() {
         [name]: event.target.value,
       });
     };
+
+    const Cancel = () => {
+      setTimeout(() => {
+          window.location.reload();
+      }, 500);
+    }
 
     async function GetGenders() {
         const requestOptions = {
@@ -169,8 +180,9 @@ function SignUp() {
     }
 
     return (
-        <section id="signup" className="w-full bg-gray-20">
-          <motion.div className="mx-auto w-5/6 pt-24 pb-32">
+        <section id="joinnow" className="w-full bg-gray-20">
+          <motion.div className="mx-auto w-5/6 pt-24 pb-32"
+          onViewportEnter={() => setSelectedPage(SelectedPage.JoinNow)}>
                 {/* Snackbar */}
                 <Snackbar
                   id="success"
@@ -362,6 +374,12 @@ function SignUp() {
                           >
                             Create a Member
                         </button>
+                        <button 
+                        className="text-black bg-slate-300 text-lg font-bold rounded-xl 
+                        py-2 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                        onClick={Cancel}>
+                          Cancel
+                      </button>
                       </div>
                 </motion.div>
 

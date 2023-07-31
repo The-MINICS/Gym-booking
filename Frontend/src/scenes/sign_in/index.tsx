@@ -8,6 +8,7 @@ import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import SignUp from "../sign_up";
+import InputEmail from "../forgot_password/input_email";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -22,6 +23,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const SignIn = ({setSelectedPage}: Props) => {
   const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [signin, setSignin] = useState<Partial<SigninInterface>>({});
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -31,6 +33,14 @@ const SignIn = ({setSelectedPage}: Props) => {
       setShow(false)
     }else{
       setShow(true)
+    }
+  }
+
+  const ShowForgotPassword = () => {
+    if(open == true){
+      setOpen(false)
+    }else{
+      setOpen(true)
     }
   }
 
@@ -58,15 +68,15 @@ const SignIn = ({setSelectedPage}: Props) => {
     if (res) {
       setSuccess(true);
       setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+        window.location.href = "/";
+    }, 1000);
     } else { setError(true); };
   };
 
   return (
-    <section id="signin" className="w-full">
+    <section id="joinnow" className="w-full">
             <motion.div className="mx-auto w-5/6 pt-24 pb-32"
-                onViewportEnter={() => setSelectedPage(SelectedPage.SignIn)}>
+                onViewportEnter={() => setSelectedPage(SelectedPage.JoinNow)}>
                 {/* login success */}
                 <Snackbar
                   open={success}
@@ -160,7 +170,11 @@ const SignIn = ({setSelectedPage}: Props) => {
                         />
                         <label className="ml-2 font-medium text-base" id="remember" >Remember me</label>
                       </div>
-                      <button className="font-medium text-base text-blue-900">Forgot Password</button>
+                      <button className="text-base font-semibold text-blue-900
+                      active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                      onClick={ShowForgotPassword}>
+                        Forgotten Password?
+                      </button>
                     </div>
                     <div className="mt-8 flex flex-col gap-y-4">
                       <button 
@@ -208,7 +222,8 @@ const SignIn = ({setSelectedPage}: Props) => {
                   </motion.div>
                 </div>
             </motion.div>
-            { show && (<SignUp />)}
+            {show && (<SignUp setSelectedPage={setSelectedPage} />)}
+            {open && (<InputEmail setSelectedPage={setSelectedPage} />)}
         </section>
     );
 }
