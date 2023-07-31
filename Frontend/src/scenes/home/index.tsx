@@ -1,27 +1,15 @@
-import Carousel from "./carousel";
-import img1 from "@/assets/HomePageGraphic1.png";
-import img2 from "@/assets/HomePageGraphic2.png";
-import img3 from "@/assets/HomePageGraphic3.png";
-import img4 from "@/assets/HomePageGraphic4.png";
-import { SelectedPage } from "@/shared/types";
 import HomePageText from "@/assets/HomePageText.png";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
-import BookingButton from "@/shared/BookingButton";
+import HomePageGraphic from "@/assets/HomePageGraphic.png"
 
-type Props = {
-    setSelectedPage: (value: SelectedPage) => void;
-};
+function Home(){
 
-const Home = ( { setSelectedPage } : Props) => {
-  const slides = [img1, img2, img3, img4];
-
-  return <section id="home"
+  return (
+  <div
     className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0">
     {/* Image and main header */}
     <motion.div 
-      className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6"
-      onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
+      className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
       {/* Main Header */}
       <div className="z-10 mt-32 md:basis-3/5">
         {/* Headings */}
@@ -60,27 +48,21 @@ const Home = ( { setSelectedPage } : Props) => {
             hidden: { opacity: 0, x:-50 },
             visible: { opacity: 1, x:-0 }
           }}>
-          <BookingButton setSelectedPage={setSelectedPage}>
+          <button >
             Book Now
-          </BookingButton>
-          <AnchorLink 
-            className="text-sm font-bold  text-red-400 underline hover:text-yellow-300"
-            onClick={() => setSelectedPage(SelectedPage.ContactUs)}
-            href={`#${SelectedPage.ContactUs}`}
-          >
-          </AnchorLink>
+          </button>
         </motion.div>
       </div>
-
-      {/* Image */}
-      <div className="flex basis-3/5 justify-center md:z-10
-        md:ml-40 md:mt-20 md:justify-items-end">
-        <Carousel 
-        autoSlide={true}
-        slides={slides} />
-      </div>
+      {/* IMAGE */}
+      <div
+          className="flex basis-3/5 justify-center md:z-10
+              md:ml-40 md:mt-16 md:justify-items-end"
+        >
+          <img alt="home-pageGraphic" src={HomePageGraphic} />
+        </div>
     </motion.div>
-  </section>;
+  </div>
+  )
 }
 
 export default Home;

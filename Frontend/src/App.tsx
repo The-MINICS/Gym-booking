@@ -1,19 +1,21 @@
-import Navbar from "@/scenes/navbar";
+import Navbar2 from "@/Components/Navbar2"
 import { useEffect, useState } from "react";
-import { SelectedPage } from "@/shared/types";
 import Home from "@/scenes/home";
-import ContactUs from "@/scenes/contact_us"
+import ContactUs from "@/Components/pages/contact_us"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Footer from "./scenes/footer";
 import BeforeLogin from "./scenes/before_login";
-import Booking from "./scenes/booking";
-import OurClass from "./scenes/our_class";
-import Equipment from "./scenes/equipment";
+import Booking from "./Components/pages/booking";
+import Recreations from "./Components/pages/recreation_room";
+import Equipments from "./Components/pages/equipment";
+import Member from "./Components/pages/member";
+import Programs from "./Components/pages/programs";
+import Services from "./Components/pages/services";
+import Profile from "./Components/pages/profile";
+import ChangePSW from "./Components/pages/member/change_password";
+import BookingSCH from "./Components/pages/member/booking_schedule";
 
 function App() {
-  const [selectedPage,setSelectedPage] = useState<SelectedPage>(
-    SelectedPage.Home
-  );
-  const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
   const [token, setToken] = useState<String>("");
 
   useEffect(() => {
@@ -21,15 +23,6 @@ function App() {
     if (token) {
       setToken(token);
     }
-    const handleScroll = () => {
-      if (window.scrollY === 0) {
-        setIsTopOfPage(true);
-        setSelectedPage(SelectedPage.Home);
-      }
-      if (window.scrollY !== 0) setIsTopOfPage(false);
-    }
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
   if (!token) {
@@ -37,21 +30,23 @@ function App() {
   }
 
   return (
-      <div>
-        <div className="app bg-yellow-50">
-          <Navbar 
-            isTopOfPage = {isTopOfPage}
-            selectedPage = {selectedPage}
-            setSelectedPage = {setSelectedPage}
-          />
-          <Home setSelectedPage={setSelectedPage} />
-          <OurClass setSelectedPage={setSelectedPage} />
-          <Equipment setSelectedPage={setSelectedPage} />
-          <Booking setSelectedPage={setSelectedPage} />
-          <ContactUs setSelectedPage = {setSelectedPage} />
-          <Footer/>
-        </div>
-      </div>
+    <Router>
+      <Navbar2 />
+      <Routes>
+        <Route path='/' element={<Home/>}/> {}
+        <Route path='/members' element={<Member/>}/> {}
+        <Route path='/services' element={<Services/>}/> {}
+        <Route path='/contact-us' element={<ContactUs/>}/> {}
+        <Route path='/equipments' element={<Equipments/>}/> {}
+        <Route path='/recreations' element={<Recreations/>}/> {}
+        <Route path='/programs' element={<Programs/>}/> {}
+        <Route path='/bookings' element={<Booking/>}/> {}
+        <Route path='/profile' element={<Profile/>}/> {}
+        <Route path='/chpassword' element={<ChangePSW/>}/> {}
+        <Route path='/bookingsch' element={<BookingSCH/>}/> {}
+      </Routes>
+      <Footer />
+  </Router>
   )
 }
 

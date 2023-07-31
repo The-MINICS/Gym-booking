@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { SelectedPage } from "@/shared/types";
+//import { SelectedPage } from "@/shared/types";
 import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.jpg"
 import HText from "@/shared/HText";
 import { ContactUsInterface } from "@/interfaces/IContactus";
@@ -10,11 +10,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import {GetMemberByMID} from "@/services/HttpClientService";
 import Snackbar from "@mui/material/Snackbar";
 
-type Props = {
-    setSelectedPage: (value: SelectedPage) => void;
-}
-
-const ContactUs = ({setSelectedPage}: Props) => {
+function ContactUs(){
     const inputStyles = `mb-3 w-full rounded-lg bg-red-400 px-5 py-3 placeholder-white text-white`;
     const [contactus, setContactus] =  useState<ContactUsInterface>({});
     const [members, setMembers] = useState<MemberInterface>();
@@ -138,9 +134,8 @@ const ContactUs = ({setSelectedPage}: Props) => {
     }
 
     return (
-    <section id="contactus" className="w-full bg-gray-20">
-        <motion.div className="mx-auto w-5/6 pt-24 pb-32"
-            onViewportEnter={() => setSelectedPage(SelectedPage.ContactUs)}>
+    <div className="w-full bg-gray-20">
+        <motion.div className="mx-auto w-5/6 pt-24 pb-32">
             {/* Snackbar */}
             <Snackbar
                 id="success"
@@ -289,7 +284,7 @@ const ContactUs = ({setSelectedPage}: Props) => {
                 </motion.div>
             </div>
         </motion.div>
-    </section>
+    </div>
   )
 }
 

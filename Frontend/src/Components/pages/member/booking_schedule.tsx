@@ -1,17 +1,11 @@
 import { motion } from "framer-motion";
-import { SelectedPage } from "@/shared/types";
 import HText from "@/shared/HText";
 
-type Props = {
-    setSelectedPage: (value: SelectedPage) => void;
-}
-
-const Booking = ({setSelectedPage}: Props) => {
+function BookingSCH(){
     
     return (
-    <section id="booking" className="w-full">
-        <motion.div className="mx-auto w-5/6 pt-24 pb-32"
-            onViewportEnter={() => setSelectedPage(SelectedPage.Booking)}>
+    <div className="w-full">
+        <motion.div className="mx-auto w-5/6 pt-24 pb-32">
             {/* Header */}
             <motion.div
                 className="md:w-3/5"
@@ -25,7 +19,7 @@ const Booking = ({setSelectedPage}: Props) => {
                 }}
             >
                 <HText>
-                    <span className="text-red-500">WELCOME</span> TO THE BOOKING
+                    <span className="text-red-500">YOUR BOOKING SCHEDULE</span> MAKE YOU FUN THE RECREATION
                 </HText>
                 <p className="my-5">
                 Recovery and Wellness Facilities: APC understands the importance of recovery 
@@ -35,8 +29,8 @@ const Booking = ({setSelectedPage}: Props) => {
                 </p>
             </motion.div>
         </motion.div>
-    </section>
+    </div>
   )
 }
 
-export default Booking;
+export default BookingSCH;

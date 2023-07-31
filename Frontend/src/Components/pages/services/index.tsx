@@ -1,17 +1,11 @@
 import { motion } from "framer-motion";
-import { SelectedPage } from "@/shared/types";
 import HText from "@/shared/HText";
 
-type Props = {
-    setSelectedPage: (value: SelectedPage) => void;
-}
-
-const OurClass = ({setSelectedPage}: Props) => {
+function Services(){
     
     return (
-    <section id="ourclass" className="w-full">
-        <motion.div className="mx-auto w-5/6 pt-24 pb-32"
-            onViewportEnter={() => setSelectedPage(SelectedPage.OurClass)}>
+    <div className="w-full">
+        <motion.div className="mx-auto w-5/6 pt-24 pb-32">
             {/* Header */}
             <motion.div
                 className="md:w-3/5"
@@ -25,7 +19,7 @@ const OurClass = ({setSelectedPage}: Props) => {
                 }}
             >
                 <HText>
-                    <span className="text-red-500">OUR CLASS</span> MAKE YOU FUN THE RECREATION
+                    <span className="text-red-500">Survices</span> MAKE YOU FUN THE RECREATION
                 </HText>
                 <p className="my-5">
                 Recovery and Wellness Facilities: APC understands the importance of recovery 
@@ -35,8 +29,8 @@ const OurClass = ({setSelectedPage}: Props) => {
                 </p>
             </motion.div>
         </motion.div>
-    </section>
+    </div>
   )
 }
 
-export default OurClass;
+export default Services;
