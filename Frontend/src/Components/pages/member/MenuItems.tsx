@@ -1,6 +1,6 @@
 export const MenuItemMember = [
     {
-      title: 'Account information',
+      title: 'Account Information',
       path: '/profile',
       cName: 'dropdown-link'
     },
@@ -15,7 +15,7 @@ export const MenuItemMember = [
       cName: 'dropdown-link'
     },
     {
-      title: 'Change my password',
+      title: 'Change My Password',
       path: '/chpassword',
       cName: 'dropdown-link'
     }

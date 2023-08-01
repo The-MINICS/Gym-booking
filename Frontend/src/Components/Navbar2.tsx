@@ -159,21 +159,21 @@ function Navbar2() {
                       <p className='flex justify-center items-center span-font-size text-purple-950 my-2 p-0 rounded-md bg-gray-200'>
                         {members.Firstname} {members.Lastname}
                       </p>
-                      <li className='p-0 my-2 cursor-pointer rounded hover:bg-yellow-500'>
+                      <li className='p-1 my-2 cursor-pointer rounded hover:bg-yellow-500'>
                         <Link to="/profile"
                           className='text-base'
                           onClick={()=> setOpen(false)}>
                             <AccountCircleIcon/> My Profile
                         </Link>
                       </li>
-                      <li className='p-0 my-2 cursor-pointer rounded hover:bg-yellow-500'>
+                      <li className='p-1 my-2 cursor-pointer rounded hover:bg-yellow-500'>
                         <Link to="/bookingsch"
                           className='text-base'
                           onClick={()=> setOpen(false)}>
                             <BookmarksIcon/> Booking Schedule
                         </Link>
                       </li>
-                      <li className='p-0 my-2 cursor-pointer rounded hover:bg-yellow-500'>
+                      <li className='p-1 my-2 cursor-pointer rounded hover:bg-yellow-500'>
                         <Link to="/contact-us"
                           className='text-base' 
                           onClick={()=> setOpen(false)}>
@@ -182,7 +182,7 @@ function Navbar2() {
                       </li>
                       <li 
                         onClick={signout}
-                        className='p-0 text-base cursor-pointer rounded hover:bg-yellow-500' >
+                        className='p-1 text-base cursor-pointer rounded hover:bg-yellow-500' >
                           <LogoutIcon/> Sign Out
                       </li>
                   </ul>
