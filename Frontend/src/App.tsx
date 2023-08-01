@@ -1,6 +1,6 @@
 import Navbar2 from "@/Components/Navbar2"
 import { useEffect, useState } from "react";
-import Home from "@/scenes/home";
+import Home from "@/Components/Home2";
 import ContactUs from "@/Components/pages/contact_us"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Footer from "./scenes/footer";

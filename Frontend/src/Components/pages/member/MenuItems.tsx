@@ -15,7 +15,7 @@ export const MenuItemMember = [
       cName: 'dropdown-link'
     },
     {
-      title: 'Change your password',
+      title: 'Change my password',
       path: '/chpassword',
       cName: 'dropdown-link'
     }
