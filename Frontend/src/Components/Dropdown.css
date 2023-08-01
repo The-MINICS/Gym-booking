@@ -1,21 +1,21 @@
 .dropdown-menu {
-    background: red;
+    background: rgb(234, 162, 162);
     width: 250px;
     position: absolute;
     top: 80px;
     list-style: none;
     text-align: start;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 1.0rem;
   }
   
   .dropdown-menu li {
-    background: rgb(234 179 8);
+    background: rgb(255, 152, 152);
     cursor: pointer;
   }
   
   .dropdown-menu li:hover {
-    background:rgb(234, 162, 162);
+    background:rgb(234 179 8);
   }
   
   .dropdown-menu.clicked {
@@ -35,4 +35,18 @@
     .fa-caret-down {
       display: none;
     }
+  }
+
+  .h3-font-size{
+    font-size: 18px;
+  }
+
+  .span-font-size{
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .dropdown-front-size{
+    font-weight: 400;
+    font-size: 1.0rem;
   }

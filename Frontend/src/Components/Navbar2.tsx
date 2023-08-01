@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '@/Components/Navbar2.css';
 import Logo from "@/assets/Logo4.png"
@@ -8,13 +8,19 @@ import { GetMemberByMID } from "@/services/HttpClientService";
 import user from '@/assets/user.png';
 import DropdownMember from './pages/member/Dropdown';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+import LogoutIcon from '@mui/icons-material/Logout';
+import UserPhoto from '@/assets/Administrator.png';
 
 function Navbar2() {
   const [click, setClick] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const [dropdown2, setDropdown2] = useState(false);
-  const [show, setShow] = useState(false);
   const [members, setMembers] = useState<MemberInterface>({});
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -35,6 +41,10 @@ function Navbar2() {
     }
   };
 
+  const toggleDropdown = () => {
+    setOpen((prevIsOpen) => !prevIsOpen);
+  };
+
   const onMouseEnterMember = () => {
     if (window.innerWidth < 960) {
       setDropdown2(false);
@@ -51,29 +61,34 @@ function Navbar2() {
     }
   };
 
-  const ShowProfileMore = () => {
-    if(show == true){
-      setShow(false)
-    }else{
-      setShow(true)
-    }
-}
-
-const signout = () => {
+  const signout = () => {
     localStorage.clear();
     window.location.href = "/";
-};
+  };
 
-const GetMembers = async () => {
-    let res = await GetMemberByMID();
-    if (res) {
-        setMembers(res);
-    }
-};
+  const GetMembers = async () => {
+      let res = await GetMemberByMID();
+      if (res) {
+          setMembers(res);
+      }
+  };
 
-useEffect(() => {
-    GetMembers();
-}, []);
+  useEffect(() => {
+      GetMembers();
+      const handleOutsideClick = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+          setOpen(false);
+        }
+      };
+      if (open) {
+        document.addEventListener('mousedown', handleOutsideClick);
+      } else {
+        document.removeEventListener('mousedown', handleOutsideClick);
+      }
+      return () => {
+        document.removeEventListener('mousedown', handleOutsideClick);
+      };
+  }, [open]);
 
   return (
     <>
@@ -128,40 +143,53 @@ useEffect(() => {
               Contact Us
             </Link>
           </li>
-          
-          <div className="gap-5 md:flex my-3">
-            <button
-              className="bg-yellow-500 rounded-3xl p-0.5 hover:bg-white"
-            >
-              <button 
-                className="flex items-center active:scale-[.98] active:duration-75 
-                  transition-all hover:scale-[1.01] ease-in-out"
-                onClick={ShowProfileMore}
-              >
-                <div className="">
-                  <img src={user} alt='user-logo' 
-                    className='h-10 w-10 object-cover border-4 border-yellow-500 
-                    rounded-full cursor-pointer'/>
-                </div>
-                { show && (
-                  <span className="p-1 text-base font-bold">
-                    {members.Username}·{members.Firstname} {members.Lastname}
-                  </span>
-                )}
-              </button>
-            </button>
-            <button className="bg-red-600 text-white hover:bg-red-500 p-1 rounded
-              active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-              onClick={signout}
-            >
-              <div className="flex items-center">
-                <span className="text-base font-bold">
-                  Sign Out
-                </span>
-              </div>
-            </button>
-          </div>
         </ul>
+          <div className="gap-5 md:flex my-3 relative rounded-full right-5">
+                <img src={user} alt='user-logo' 
+                    onClick={toggleDropdown}
+                    className='h-10 w-10 hover:bg-yellow-200
+                    rounded-full cursor-pointer active:scale-[.98] active:duration-75 transition-all'
+                />
+                { open && (
+                  <div className='bg-white p-2 w-52 shadow-lg absolute right-0 top-14 rounded-md z-20'
+                    ref={dropdownRef}
+                  >
+                    <ul>
+                      <img className='flex justify-center items-center my-1' src={UserPhoto} alt='user-cover-photo'/>
+                      <p className='flex justify-center items-center span-font-size text-purple-950 my-2 p-0 rounded-md bg-gray-200'>
+                        {members.Firstname} {members.Lastname}
+                      </p>
+                      <li className='p-0 my-2 cursor-pointer rounded hover:bg-yellow-500'>
+                        <Link to="/profile"
+                          className='text-base'
+                          onClick={()=> setOpen(false)}>
+                            <AccountCircleIcon/> My Profile
+                        </Link>
+                      </li>
+                      <li className='p-0 my-2 cursor-pointer rounded hover:bg-yellow-500'>
+                        <Link to="/bookingsch"
+                          className='text-base'
+                          onClick={()=> setOpen(false)}>
+                            <BookmarksIcon/> Booking Schedule
+                        </Link>
+                      </li>
+                      <li className='p-0 my-2 cursor-pointer rounded hover:bg-yellow-500'>
+                        <Link to="/contact-us"
+                          className='text-base' 
+                          onClick={()=> setOpen(false)}>
+                            <HelpCenterIcon/> Helps
+                        </Link>
+                      </li>
+                      <li 
+                        onClick={signout}
+                        className='p-0 text-base cursor-pointer rounded hover:bg-yellow-500' >
+                          <LogoutIcon/> Sign Out
+                      </li>
+                  </ul>
+              </div>
+                  )
+                }
+          </div>
       </nav>
     </>
   );

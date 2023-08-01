@@ -1,15 +1,20 @@
 import HomePageText from "@/assets/HomePageText.png";
 import { motion } from "framer-motion";
-import HomePageGraphic from "@/assets/HomePageGraphic.png"
+import HomePageGraphic from "@/assets/HomePageGraphic6.png"
 
 function Home(){
-
   return (
   <div
-    className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0">
+    className="gap-16 bg-gray-50 pt-5 md:h-full md:pb-0 left-20">
     {/* Image and main header */}
     <motion.div 
       className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
+      {/* IMAGE */}
+      <div
+          className="flex justify-center basis-2/5"
+        >
+          <img alt="home-pageGraphic" src={HomePageGraphic} />
+      </div>
       {/* Main Header */}
       <div className="z-10 mt-32 md:basis-3/5">
         {/* Headings */}
@@ -24,16 +29,15 @@ function Home(){
             visible: { opacity: 1, x:-0 }
           }}>
           <div className="relative">
-            <div className="before:absolute before:-top-20 before:-left-20 
-            before:z-[-1] md:before:content-evolvetext">
+            <div>
               <img alt="home-page-text" src={HomePageText}/>
             </div>
           </div>
-          <p className="mt-8 text-sm">
+          <p className="mt-4 text-sm">
           Welcome to The MINICS Gym.
-          The Place where you're gonna have a perfect body and sexy body,
-          The Place where you're gonna be healthy,
-          The Place where you're gonna be happy in everyday life.
+          <li>The Place where you're gonna have a perfect body and sexy body,</li>
+          <li>The Place where you're gonna be healthy,</li>
+          <li>The Place where you're gonna be happy in everyday life.</li>
           </p>
         </motion.div>
 
@@ -48,18 +52,14 @@ function Home(){
             hidden: { opacity: 0, x:-50 },
             visible: { opacity: 1, x:-0 }
           }}>
-          <button >
-            Book Now
+          <button
+            className="rounded-md bg-yellow-500 px-10 py-2 hover:bg-red-400
+            hover:text-white active:scale-[.98] active:duration-75 transition-all"
+            >
+              Our Services
           </button>
         </motion.div>
       </div>
-      {/* IMAGE */}
-      <div
-          className="flex basis-3/5 justify-center md:z-10
-              md:ml-40 md:mt-16 md:justify-items-end"
-        >
-          <img alt="home-pageGraphic" src={HomePageGraphic} />
-        </div>
     </motion.div>
   </div>
   )
