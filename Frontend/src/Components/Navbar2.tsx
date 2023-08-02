@@ -107,7 +107,7 @@ function Navbar2() {
             </Link>
           </li>
           <li
-            className='nav-item'
+            className='nav-item z-20'
             onMouseEnter={onMouseEnterServices}
             onMouseLeave={onMouseLeaveServices}
           >
@@ -121,7 +121,7 @@ function Navbar2() {
             {dropdown && <DropdownServices />}
           </li>
           <li 
-            className='nav-item'
+            className='nav-item z-20'
             onMouseEnter={onMouseEnterMember}
             onMouseLeave={onMouseLeaveMember}
           >

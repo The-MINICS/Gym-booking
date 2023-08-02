@@ -1,6 +1,7 @@
 import HomePageText from "@/assets/HomePageText.png";
 import { motion } from "framer-motion";
 import HomePageGraphic from "@/assets/HomePageGraphic6.png"
+import { Link } from "react-router-dom";
 
 function Home(){
   return (
@@ -56,7 +57,9 @@ function Home(){
             className="rounded-md bg-yellow-500 px-10 py-2 hover:bg-red-400
             hover:text-white active:scale-[.98] active:duration-75 transition-all"
             >
-              Our Services
+              <Link to="/services">
+                <h3 className="text-xl font-bold">Our Services</h3>
+              </Link>
           </button>
         </motion.div>
       </div>
