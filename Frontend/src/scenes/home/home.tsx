@@ -21,7 +21,8 @@ const Home1 = ( { setSelectedPage } : Props) => {
     {/* Image and main header */}
     <motion.div 
       className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6"
-      onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
+      onViewportEnter={() => setSelectedPage(SelectedPage.Home)}
+      >
       {/* Main Header */}
       <div className="z-10 mt-32 md:basis-3/5">
         {/* Headings */}

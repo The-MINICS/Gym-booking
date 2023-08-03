@@ -83,7 +83,7 @@ const Benefits = ({setSelectedPage}: Props) => {
 
                         <h3 className="my-4 text-red-900 font-bold">
                             PROCEDURE FOR ACCESSING THE GYM</h3>
-                        <p className="mb-4">
+                        <p className="mb-8">
                             <p>1. Open the system to reserve the service from 6:00 a.m. onwards.</p>
                             <p>2. Sign in in the sutsport.sut.ac.th system and reserve the service and the time period you want to use the service.</p>
                             <p>3. When arriving at the fitness room Log in to the service in front of the fitness room again.</p>

@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-//import { SelectedPage } from "@/shared/types";
 import ContactUsPageGraphic from "@/assets/ContactUsPageGraphic.jpg"
 import HText from "@/shared/HText";
 import { ContactUsInterface } from "@/interfaces/IContactus";
@@ -135,7 +134,7 @@ function ContactUs(){
 
     return (
     <div className="w-full bg-gray-20">
-        <motion.div className="mx-auto w-5/6 pt-24 pb-32">
+        <motion.div className="mx-auto w-5/6 pt-20 pb-20">
             {/* Snackbar */}
             <Snackbar
                 id="success"
@@ -259,8 +258,7 @@ function ContactUs(){
                     SUBMIT
                 </button>
                 </motion.div>
-
-
+                {/* ContactPageGraphic */}
                 <motion.div
                     className="mt-16 basis-2/5 md:mt-0"
                     initial="hidden"

@@ -75,7 +75,7 @@ const SignIn = ({setSelectedPage}: Props) => {
 
   return (
     <section id="joinnow" className="w-full">
-            <motion.div className="mx-auto w-5/6 pt-24 pb-32"
+            <motion.div className="mx-auto w-5/6 pt-24 pb-36"
                 onViewportEnter={() => setSelectedPage(SelectedPage.JoinNow)}>
                 {/* login success */}
                 <Snackbar
