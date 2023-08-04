@@ -7,7 +7,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import { Slide } from "@mui/material";
 
 function Equipments(){
-    const [equipments, setEquipments] = useState<EquipmentInterface[]>([]);
+    const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
 
     const getEquipments = async () => {
         let res = await GetEquipments();
@@ -20,18 +20,18 @@ function Equipments(){
         getEquipments();
     }, []);
 
-    // const Transition = React.forwardRef(function Transition(
-    //   props: TransitionProps & {
-    //     children: React.ReactElement<any, any>;
-    //   },
-    //   ref: React.Ref<unknown>,
-    // ) {
-    //   return <Slide direction="up" ref={ref} {...props} />;
-    // });
+    const Transition = React.forwardRef(function Transition(
+      props: TransitionProps & {
+        children: React.ReactElement<any, any>;
+      },
+      ref: React.Ref<unknown>,
+    ) {
+      return <Slide direction="up" ref={ref} {...props} />;
+    });
 
     return (
     <section id="equipments" className="w-full bg-white">
-        <motion.div className="mx-auto w-5/6 pt-24 pb-32 justify-between">
+        <motion.div className="mx-auto w-5/6 pt-10 pb-10 justify-between">
             {/* Header */}
             <motion.div
                 className="md:w-3/5"
@@ -60,6 +60,7 @@ function Equipments(){
                 </ul>
             </motion.div>
         </motion.div>
+
         {/* Equipments */}
         <motion.div
             className="mx-auto ml-24"

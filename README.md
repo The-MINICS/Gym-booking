@@ -20,9 +20,10 @@ So, We used:
    * React for FrameWork
    * Vite for Starter Pack
    * Framer Motion for Animations
-   * Tailwind CSS for Styling
-   * Tailwind Heroicons for Icons
-   * Pixels Website for Background Images
+   * Tailwind CSS and MUI Material for Styling
+   * Tailwind Heroicons and Mui Material icons for Icons
+   * Pixels Website for Background Images and Graphic page
+   * Flaticon Website for vector icons and stickers
 
 <hr/>
 
@@ -48,5 +49,5 @@ So, We used:
    10. npm install @mui/material @mui/styled-engine-sc styled-components
 
 ***Run Dev***
-+ **Backend:**  -> go build -o main.exe main.go ***and then*** go run main.go
++ **Backend:**  -> go build -o main.exe main.go ***and then*** ./main.exe ***,or*** go run main.go
 + **Frontend:** -> npm run dev
