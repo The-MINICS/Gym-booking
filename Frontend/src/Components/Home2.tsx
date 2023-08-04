@@ -12,7 +12,7 @@ import BookingSchedule from "@/assets/BookingSchedule.png";
 function Home(){
   return (
   <div
-    className="gap-16 bg-gray-50 pt-5 md:h-full md:pb-0 left-16">
+    className="gap-16 bg-gray-50 pt-36 md:h-full md:pb-0 left-16">
     {/* Image and main header */}
     <motion.div 
       className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
@@ -36,7 +36,8 @@ function Home(){
             visible: { opacity: 1, x:-0 }
           }}>
           <div className="relative -ml-5">
-            <div>
+            <div className="before:absolute before:-top-24 before:-left-72
+              before:z-[-1] md:before:content-evolvetext">
               <img alt="home-page-text" src={HomePageText}/>
             </div>
           </div>

@@ -38,7 +38,8 @@ function Services(){
                     visible: { opacity: 1, x:-0 }
                 }}>
                 <div className="relative">
-                    <div>
+                    <div className="before:absolute before:-top-24 before:-left-72
+                    before:z-[-1] md:before:content-evolvetext">
                     <img alt="home-page-text" src={HomePageText}/>
                     </div>
                 </div>
