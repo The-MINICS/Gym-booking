@@ -44,12 +44,12 @@ func main() {
 			protected.PATCH("/members", controller.UpdateMember)
 			protected.DELETE("/members/:id", controller.DeleteMember)
 
-			// Activity Routes
-			protected.POST("/activities", controller.CreateActivity)
-			protected.GET("/activities", controller.ListActivities)
-			protected.GET("/activity/:id", controller.GetActivity)
-			protected.PATCH("/activities", controller.UpdateActivity)
-			protected.DELETE("/activities/:id", controller.DeleteActivity)
+			// Room Routes
+			protected.POST("/rooms", controller.CreateRoom)
+			protected.GET("/rooms", controller.ListRooms)
+			protected.GET("/room/:id", controller.GetRoom)
+			protected.PATCH("/rooms", controller.UpdateRoom)
+			protected.DELETE("/rooms/:id", controller.DeleteRoom)
 
 			// Picture Routes
 			protected.POST("/pictures", controller.CreatePicture)

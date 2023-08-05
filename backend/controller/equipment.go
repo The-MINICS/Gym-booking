@@ -21,7 +21,7 @@ func CreateEquipment(c *gin.Context) {
 
 	// ค้นหา picture ด้วย id
 	if tx := entity.DB().Where("id = ?", equipment.PictureID).First(&picture); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกรูป"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a picture"})
 		return
 	}
 
@@ -80,7 +80,7 @@ func UpdateEquipment(c *gin.Context) {
 
 	// ค้นหา picture ด้วย id
 	if tx := entity.DB().Where("id = ?", equipment.PictureID).First(&picture); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "กรุณาเลือกรูป"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a picture"})
 		return
 	}
 	update_equipment := entity.Equipment{

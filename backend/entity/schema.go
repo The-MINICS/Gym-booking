@@ -28,14 +28,16 @@ type Gender struct {
 // Member
 type Member struct {
 	gorm.Model
-	Username  string `gorm:"uniqueIndex"`
-	Email     string `gorm:"uniqueIndex"`
-	Password  string
-	Firstname string
-	Lastname  string
-	Age       int32
-	Weight    int32
-	Height    int32
+	Username        string `gorm:"uniqueIndex"`
+	Email           string `gorm:"uniqueIndex"`
+	Password        string
+	Firstname       string
+	Lastname        string
+	Phonenumber     string
+	Age             int32
+	Weight          int32
+	Height          int32
+	Member_datetime time.Time
 
 	GenderID *uint
 	Gender   Gender `gorm:"references:id"`
@@ -46,21 +48,26 @@ type Member struct {
 	Contactus []Contactus `gorm:"foreignKey:MemberID"`
 }
 
-// Activity
-type Activity struct {
+// Room
+type Room struct {
 	gorm.Model
 	Activity string
 	Number   string
 	Capacity int16
 
-	Booking []Booking `gorm:"foreignKey:ActivityID"`
+	PictureID *uint
+	Picture   Picture `gorm:"references:id"`
+
+	Booking []Booking `gorm:"foreignKey:RoomID"`
 }
 
 // Picture
 type Picture struct {
 	gorm.Model
-	Picture string
+	Picture  string
+	Describe string
 
+	Room      []Room      `gorm:"foreignKey:PictureID"`
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
 
@@ -68,6 +75,9 @@ type Picture struct {
 type Equipment struct {
 	gorm.Model
 	Equipments string
+
+	RoomID *uint
+	Room   Room `gorm:"references:id"`
 
 	PictureID *uint
 	Picture   Picture `gorm:"references:id"`
@@ -83,7 +93,7 @@ type Status struct {
 }
 
 // Booking
-// Member เป็นคนสร้าง จอง Activity
+// Member เป็นคนสร้าง จอง Room
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
@@ -91,8 +101,8 @@ type Booking struct {
 	MemberID *uint
 	Member   Member `gorm:"references:id"`
 
-	ActivityID *uint
-	Activity   Activity `gorm:"references:id"`
+	RoomID *uint
+	Room   Room `gorm:"references:id"`
 
 	EquipmentID *uint
 	Equipment   Equipment `gorm:"references:id"`
