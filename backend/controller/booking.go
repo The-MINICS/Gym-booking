@@ -21,9 +21,9 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา user ด้วย id
+	// ค้นหา member ด้วย id
 	if tx := entity.DB().Where("id = ?", booking.MemberID).First(&member); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "member not found"})
 		return
 	}
 
@@ -64,7 +64,7 @@ func CreateBooking(c *gin.Context) {
 
 // GET /booking/:id
 func GetBooking(c *gin.Context) {
-	var booking entity.Member
+	var booking entity.Booking
 	id := c.Param("id")
 	if tx := entity.DB().Preload("Member").Preload("Activity").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "booking not found"})
@@ -77,7 +77,7 @@ func GetBooking(c *gin.Context) {
 func ListBookings(c *gin.Context) {
 	var bookings []entity.Booking
 
-	if err := entity.DB().Preload("User").Preload("Activity").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
+	if err := entity.DB().Preload("Member").Preload("Activity").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

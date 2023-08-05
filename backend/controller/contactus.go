@@ -51,7 +51,7 @@ func CreateContactus(c *gin.Context) {
 func GetContactus(c *gin.Context) {
 	var contactus entity.Contactus
 	id := c.Param("id")
-	if tx := entity.DB().Preload("User").Raw("SELECT * FROM contactuses WHERE id = ?", id).Find(&contactus).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Raw("SELECT * FROM contactuses WHERE id = ?", id).Find(&contactus).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "contactus not found"})
 		return
 	}
@@ -62,7 +62,7 @@ func GetContactus(c *gin.Context) {
 func ListContactuses(c *gin.Context) {
 	var contactuses []entity.Contactus
 
-	if err := entity.DB().Preload("User").Raw("SELECT * FROM contactuses").Find(&contactuses).Error; err != nil {
+	if err := entity.DB().Preload("Member").Raw("SELECT * FROM contactuses").Find(&contactuses).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

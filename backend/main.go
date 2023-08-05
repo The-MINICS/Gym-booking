@@ -40,6 +40,7 @@ func main() {
 
 			//MemberRoutes
 			protected.GET("/member/:id", controller.GetMember)
+			protected.GET("/members", controller.ListMembers)
 			protected.PATCH("/members", controller.UpdateMember)
 			protected.DELETE("/members/:id", controller.DeleteMember)
 
