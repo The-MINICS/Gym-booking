@@ -47,6 +47,8 @@ So, We used:
    8.  npm install -g npm
    9.  npm install @mui/material @emotion/react @emotion/styled
    10. npm install @mui/material @mui/styled-engine-sc styled-components
+   11. npm install @mui/x-date-pickers
+   12. npm install dayjs --save
 
 ***Run Dev***
 + **Backend:**  -> go build -o main.exe main.go ***and then*** ./main.exe ***,or*** go run main.go

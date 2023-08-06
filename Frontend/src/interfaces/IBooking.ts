@@ -1,6 +1,6 @@
 import { MemberInterface } from "./IMember";
 import { EquipmentInterface } from "./IEquipment";
-import { ActivityInterface } from "./IActivity";
+import { RoomInterface } from "./IRoom";
 
 export interface BookingInterface {
     ID?: number,
@@ -9,8 +9,8 @@ export interface BookingInterface {
     MemberID?: number;
     Member?: MemberInterface;
 
-    ActivityID?: number;
-    Activity?: ActivityInterface;
+    RoomID?: number;
+    Room?: RoomInterface;
 
     EquipmentID?: number;
     Equipment?: EquipmentInterface;

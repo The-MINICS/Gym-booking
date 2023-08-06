@@ -12,13 +12,17 @@ import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
 import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
 import { SelectedPage } from '@/shared/types';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers";
+import { TextField } from "@mui/material";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 }
 
 function SignUp({setSelectedPage}: Props) {
-    const [member, setMember] = useState<MemberInterface>({});
+    const [member, setMember] = useState<MemberInterface>({ Member_datetime: new Date(), });
     const [genders, setGenders] = useState<GenderInterface[]>([]);
     const [roles, setRoles] = useState<RoleInterface[]>([]);
 
@@ -143,6 +147,8 @@ function SignUp({setSelectedPage}: Props) {
           Username: member.Username?? "",
           Email: member.Email?? "",
           Password: member.Password?? "",
+          Phonenumber: member.Phonenumber?? "",
+          Member_datetime: member.Member_datetime,
           Age: typeof member.Age === "string" ? parseInt(member.Age) : 0,
           Weight: typeof member.Weight === "string" ? parseInt(member.Weight) : 0,
           Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
@@ -298,6 +304,17 @@ function SignUp({setSelectedPage}: Props) {
                           value={member.Password || ""}
                           onChange={handleInputChange}
                         />
+                        <label className="text-lg font-semibold text-red-700">Phone Number</label>
+                        <input
+                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                          placeholder="Enter your Email"
+                          id="Phonenumber"
+                          name="phonenumber"
+                          type="string"
+                          autoFocus
+                          value={member.Phonenumber || ""}
+                          onChange={handleInputChange}
+                        />
                         <label className="text-lg font-semibold text-red-700">Gender</label>
                         <Select
                           className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
@@ -347,6 +364,25 @@ function SignUp({setSelectedPage}: Props) {
                           value={member.Height || ""}
                           onChange={handleInputChange}
                         />
+                        <label className="text-lg font-semibold text-red-700">Date Time</label>
+                        <div className="my-2">
+                          <LocalizationProvider dateAdapter={AdapterDateFns}>
+                              <DatePicker
+                                  disabled
+                                  value={member.Member_datetime}
+                                  onChange={(newValue) => {
+                                    setMember({
+                                      ...member,
+                                      Member_datetime: newValue,
+                                    });
+                                  }}
+                                  // renderInput={(params) => <TextField {...params} />}
+                                  slots={{
+                                    textField: textFieldProps => <TextField {...textFieldProps} />
+                                  }}
+                              />
+                          </LocalizationProvider>
+                        </div>
                         <label className="text-lg font-semibold text-red-700">Role</label>
                         <Select
                           className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
