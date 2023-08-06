@@ -48,16 +48,18 @@ func CreateMember(c *gin.Context) {
 
 	// 14: สร้าง  member
 	mr := entity.Member{
-		Username:  member.Username,
-		Email:     member.Email,
-		Password:  string(hashPassword),
-		Gender:    gender,
-		Firstname: member.Firstname,
-		Lastname:  member.Lastname,
-		Age:       member.Age,
-		Weight:    member.Weight,
-		Height:    member.Height,
-		Role:      role,
+		Username:        member.Username,
+		Email:           member.Email,
+		Password:        string(hashPassword),
+		Gender:          gender,
+		Firstname:       member.Firstname,
+		Lastname:        member.Lastname,
+		Phonenumber:     member.Phonenumber,
+		Member_datetime: member.Member_datetime,
+		Age:             member.Age,
+		Weight:          member.Weight,
+		Height:          member.Height,
+		Role:            role,
 	}
 
 	// 13: บันทึก
@@ -114,17 +116,19 @@ func UpdateMember(c *gin.Context) {
 	}
 
 	update_member := entity.Member{
-		Model:     gorm.Model{ID: member.ID},
-		Username:  member.Username,
-		Email:     member.Email,
-		Password:  member.Password,
-		Gender:    gender,
-		Firstname: member.Firstname,
-		Lastname:  member.Lastname,
-		Age:       member.Age,
-		Weight:    member.Weight,
-		Height:    member.Height,
-		Role:      role,
+		Model:           gorm.Model{ID: member.ID},
+		Username:        member.Username,
+		Email:           member.Email,
+		Password:        member.Password,
+		Gender:          gender,
+		Firstname:       member.Firstname,
+		Lastname:        member.Lastname,
+		Phonenumber:     member.Phonenumber,
+		Age:             member.Age,
+		Weight:          member.Weight,
+		Height:          member.Height,
+		Member_datetime: member.Member_datetime,
+		Role:            role,
 	}
 
 	// การ validate

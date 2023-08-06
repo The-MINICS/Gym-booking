@@ -153,7 +153,7 @@ function Navbar2() {
                     rounded-full cursor-pointer active:scale-[.98] active:duration-75 transition-all'
                 />
                 { open && (
-                  <div className='bg-white p-2 w-52 shadow-lg absolute right-0 top-14 rounded-md z-20'
+                  <div className='p-2 w-52 shadow-lg absolute right-0 top-14 rounded-md z-20 bg-slate-50'
                     ref={dropdownRef}
                   >
                     <ul>

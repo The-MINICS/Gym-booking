@@ -9,7 +9,7 @@ import Booking from "./Components/pages/booking";
 import Recreations from "./Components/pages/recreation_room";
 import Equipments from "./Components/pages/equipment";
 import Member from "./Components/pages/member";
-import Programs from "./Components/pages/programs";
+import WorkoutPrograms from "./Components/pages/workout_program";
 import Services from "./Components/pages/services";
 import Profile from "./Components/pages/profile";
 import ChangePSW from "./Components/pages/member/change_password";
@@ -39,7 +39,7 @@ function App() {
         <Route path='/contact-us' element={<ContactUs/>}/> {}
         <Route path='/equipments' element={<Equipments/>}/> {}
         <Route path='/recreations' element={<Recreations/>}/> {}
-        <Route path='/programs' element={<Programs/>}/> {}
+        <Route path='/programs' element={<WorkoutPrograms/>}/> {}
         <Route path='/bookings' element={<Booking/>}/> {}
         <Route path='/profile' element={<Profile/>}/> {}
         <Route path='/chpassword' element={<ChangePSW/>}/> {}

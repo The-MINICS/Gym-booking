@@ -8,9 +8,11 @@ export interface MemberInterface {
     Password?: string;
     Firstname?: string;
     Lastname?: string;
+    Phonenumber?: string
     Age?: number;
     Weight?: number;
     Height?: number;
+    Member_datetime?: Date | null;
 
     GenderID?: number;
     Gender?: GenderInterface;
