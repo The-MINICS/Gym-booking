@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import { EquipmentInterface } from "@/interfaces/IEquipment";
-import { GetEquipments } from "@/services/HttpClientService";
+//import { GetEquipments } from "@/services/HttpClientService";
 import { TransitionProps } from '@mui/material/transitions';
 import { Slide } from "@mui/material";
 
 function Equipments(){
     const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
 
-    const getEquipments = async () => {
-        let res = await GetEquipments();
-        if (res) {
-            setEquipments(res);
-      }
-    };
+    // const getEquipments = async () => {
+    //     let res = await GetEquipments();
+    //     if (res) {
+    //         setEquipments(res);
+    //   }
+    // };
 
     useEffect(() => {
-        getEquipments();
+        // getEquipments();
     }, []);
 
     const Transition = React.forwardRef(function Transition(
