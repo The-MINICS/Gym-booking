@@ -1,9 +1,9 @@
 export const MenuItemMember = [
-    {
-      title: 'Account Information',
-      path: '/profile',
-      cName: 'dropdown-link',
-    },
+  {
+    title: 'Account Settings',
+    path: '/accountsettings',
+    cName: 'dropdown-link',
+  },
     {
       title: 'Booking Schedule',
       path: '/bookingsch',

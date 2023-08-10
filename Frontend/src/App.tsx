@@ -14,6 +14,7 @@ import Services from "./Components/pages/services";
 import Profile from "./Components/pages/profile";
 import ChangePSW from "./Components/pages/member/change_password";
 import BookingSCH from "./Components/pages/member/booking_schedule";
+import AccountSettings from "./Components/pages/account_settings";
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -44,6 +45,7 @@ function App() {
         <Route path='/profile' element={<Profile/>}/> {}
         <Route path='/chpassword' element={<ChangePSW/>}/> {}
         <Route path='/bookingsch' element={<BookingSCH/>}/> {}
+        <Route path='/accountsettings' element={<AccountSettings/>}/> {}
       </Routes>
       <Footer />
   </Router>
