@@ -12,12 +12,19 @@ import (
 // POST /booking
 func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
+	var admin entity.Admin
 	var member entity.Member
 	var room entity.Room
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ค้นหา admin ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.AdminID).First(&admin); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
 		return
 	}
 
@@ -42,6 +49,7 @@ func CreateBooking(c *gin.Context) {
 	// 14: สร้าง  booking
 	bk := entity.Booking{
 		Datetime:  booking.Datetime,
+		Admin:     admin,
 		Member:    member,
 		Room:      room,
 		Equipment: equipment,
@@ -87,12 +95,19 @@ func ListBookings(c *gin.Context) {
 
 func UpdateBooking(c *gin.Context) {
 	var booking entity.Booking
+	var admin entity.Admin
 	var member entity.Member
 	var room entity.Room
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ค้นหา admin ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.AdminID).First(&admin); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
 		return
 	}
 
@@ -117,6 +132,7 @@ func UpdateBooking(c *gin.Context) {
 	update_booking := entity.Booking{
 		Model:     gorm.Model{ID: booking.ID},
 		Datetime:  booking.Datetime,
+		Admin:     admin,
 		Member:    member,
 		Room:      room,
 		Equipment: equipment,

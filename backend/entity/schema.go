@@ -15,6 +15,7 @@ type Role struct {
 	Role string
 
 	Member []Member `gorm:"foreignKey:RoleID"`
+	Admin  []Admin  `gorm:"foreignKey:RoleID"`
 }
 
 // Gender
@@ -23,6 +24,28 @@ type Gender struct {
 	Gender string
 
 	Member []Member `gorm:"foreignKey:GenderID"`
+	Admin  []Admin  `gorm:"foreignKey:GenderID"`
+}
+
+// Admin
+type Admin struct {
+	gorm.Model
+	Username    string `gorm:"uniqueIndex"`
+	Email       string `gorm:"uniqueIndex"`
+	Password    string
+	Firstname   string
+	Lastname    string
+	Phonenumber string
+	Age         int32
+	Weight      int32
+	Height      int32
+
+	GenderID *uint
+	Gender   Gender `gorm:"references:id"`
+	RoleID   *uint
+	Role     Role `gorm:"references:id"`
+
+	Booking []Booking `gorm:"foreignKey:AdminID"`
 }
 
 // Member
@@ -51,9 +74,10 @@ type Member struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity string
-	Number   string
-	Capacity int16
+	Activity  string
+	Number    string
+	Capacity  int16
+	Attendant string
 
 	PictureID *uint
 	Picture   Picture `gorm:"references:id"`
@@ -97,6 +121,9 @@ type Status struct {
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
+
+	AdminID *uint
+	Admin   Admin `gorm:"references:id"`
 
 	MemberID *uint
 	Member   Member `gorm:"references:id"`
