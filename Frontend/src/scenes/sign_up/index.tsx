@@ -6,16 +6,11 @@ import HText from "@/shared/HText";
 import { useEffect, useState } from 'react';
 import { MemberInterface } from '@/interfaces/IMember';
 import { GenderInterface } from '@/interfaces/IGender';
-import { RoleInterface } from '@/interfaces/IRole';
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
 import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
 import { SelectedPage } from '@/shared/types';
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers";
-import { TextField } from "@mui/material";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -24,7 +19,6 @@ type Props = {
 function SignUp({setSelectedPage}: Props) {
     const [member, setMember] = useState<MemberInterface>({ Member_datetime: new Date(), });
     const [genders, setGenders] = useState<GenderInterface[]>([]);
-    const [roles, setRoles] = useState<RoleInterface[]>([]);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -59,12 +53,6 @@ function SignUp({setSelectedPage}: Props) {
       });
     };
 
-    const Cancel = () => {
-      setTimeout(() => {
-          window.location.reload();
-      }, 500);
-    }
-
     async function GetGenders() {
         const requestOptions = {
           method: "GET",
@@ -75,28 +63,6 @@ function SignUp({setSelectedPage}: Props) {
         };
       
         let res = await fetch(`${apiUrl}/genders`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            if (res.data) {
-              return res.data;
-            } else {
-              return false;
-            }
-          });
-      
-        return res;
-    }
-
-    async function GetRoles() {
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        };
-      
-        let res = await fetch(`${apiUrl}/roles`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             if (res.data) {
@@ -122,17 +88,9 @@ function SignUp({setSelectedPage}: Props) {
        setGenders(res);
       }
     };
-
-    const getRoles = async () => {
-      let res = await GetRoles();
-      if (res) {
-      setRoles(res);
-      }
-    };
     
     useEffect(() => {
       getGenders();
-      getRoles();
     }, []);
 
     const convertType = (data: string | number | undefined) => {
@@ -342,7 +300,7 @@ function SignUp({setSelectedPage}: Props) {
                           value={member.Age || ""}
                           onChange={handleInputChange}
                         />
-                        <label className="text-lg font-semibold text-red-700">Weight</label>
+                        <label className="text-lg font-semibold text-red-700">Weight(Kg.)</label>
                         <input
                           className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
                           placeholder="Enter your Weight"
@@ -353,7 +311,7 @@ function SignUp({setSelectedPage}: Props) {
                           value={member.Weight || ""}
                           onChange={handleInputChange}
                         />
-                        <label className="text-lg font-semibold text-red-700">Height</label>
+                        <label className="text-lg font-semibold text-red-700">Height(cm.)</label>
                         <input
                           className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
                           placeholder="Enter your Height"
@@ -364,58 +322,16 @@ function SignUp({setSelectedPage}: Props) {
                           value={member.Height || ""}
                           onChange={handleInputChange}
                         />
-                        <label className="text-lg font-semibold text-red-700">Date Time</label>
-                        <div className="my-2">
-                          <LocalizationProvider dateAdapter={AdapterDateFns}>
-                              <DatePicker
-                                  disabled
-                                  value={member.Member_datetime}
-                                  onChange={(newValue) => {
-                                    setMember({
-                                      ...member,
-                                      Member_datetime: newValue,
-                                    });
-                                  }}
-                                  // renderInput={(params) => <TextField {...params} />}
-                                  slots={{
-                                    textField: textFieldProps => <TextField {...textFieldProps} />
-                                  }}
-                              />
-                          </LocalizationProvider>
-                        </div>
-                        <label className="text-lg font-semibold text-red-700">Role</label>
-                        <Select
-                          className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
-                          required
-                          native
-                          value={member.RoleID + ""}
-                          onChange={handleChange}
-                          inputProps={{
-                              name: "RoleID",
-                          }}>
-                          <option className="text-gray-300">Your Role</option>
-                          {roles.map((item: RoleInterface) => (
-                              <option value={item.ID} key={item.ID}>
-                                {item.Role}
-                              </option>
-                          ))}
-                        </Select>
                       </div>
                       
                       <div className="mt-4 flex flex-col gap-y-4">
-                        <button 
-                          className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
-                          py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                          onClick= {submit}
-                          >
-                            Create a Member
-                        </button>
-                        <button 
-                        className="text-black bg-slate-300 text-lg font-bold rounded-xl 
-                        py-2 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                        onClick={Cancel}>
-                          Cancel
-                      </button>
+                          <button 
+                            className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
+                            py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                            onClick= {submit}
+                            >
+                              Create a Member
+                          </button>
                       </div>
                 </motion.div>
 

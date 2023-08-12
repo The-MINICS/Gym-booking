@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
@@ -51,7 +52,7 @@ func CreateMember(c *gin.Context) {
 		Firstname:       member.Firstname,
 		Lastname:        member.Lastname,
 		Phonenumber:     member.Phonenumber,
-		Member_datetime: member.Member_datetime,
+		Member_datetime: time.Now(),
 		Age:             member.Age,
 		Weight:          member.Weight,
 		Height:          member.Height,
@@ -105,19 +106,18 @@ func UpdateMember(c *gin.Context) {
 	}
 
 	update_member := entity.Member{
-		Model:           gorm.Model{ID: member.ID},
-		Username:        member.Username,
-		Email:           member.Email,
-		Password:        member.Password,
-		Gender:          gender,
-		Firstname:       member.Firstname,
-		Lastname:        member.Lastname,
-		Phonenumber:     member.Phonenumber,
-		Age:             member.Age,
-		Weight:          member.Weight,
-		Height:          member.Height,
-		Member_datetime: member.Member_datetime,
-		Role:            member.Role,
+		Model:       gorm.Model{ID: member.ID},
+		Username:    member.Username,
+		Email:       member.Email,
+		Password:    member.Password,
+		Gender:      gender,
+		Firstname:   member.Firstname,
+		Lastname:    member.Lastname,
+		Phonenumber: member.Phonenumber,
+		Age:         member.Age,
+		Weight:      member.Weight,
+		Height:      member.Height,
+		Role:        member.Role,
 	}
 
 	// การ validate

@@ -62,15 +62,13 @@ function Services(){
             {/* Header */}
                 <motion.div
                     className="basis-3/5 md:mt-0"
-                    initial="hidden" 
+                    initial="visible" 
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
                     transition={{ duration: 0.5 }}
                     variants={{
-                        hidden: { opacity: 0, x:-50 },
                         visible: { opacity: 1, x:-0 }
-                    }}
-                >
+                    }}>
                     <HText>
                         <span className="text-red-500">OUR SERVICES</span> ALL WE GIVE WILLINGLY
                     </HText>
@@ -92,16 +90,15 @@ function Services(){
                         fitness level, or background, you'll find a supportive community here.
                     </p>
                 </motion.div>
-                {/* ContactPageGraphic */}
+                {/* ServicesPageGraphic */}
                 <motion.div
                     className="mt-16 basis-2/5 md:mt-0"
-                    initial="hidden"
+                    initial="visible" 
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
+                    transition={{ duration: 0.5 }}
                     variants={{
-                        hidden: { opacity: 0, x:-50 },
-                        visible: { opacity: 1, x:-0 },
+                        visible: { opacity: 1, x:-0 }
                     }}>
                     <div className="relative">
                         <div>
@@ -116,15 +113,15 @@ function Services(){
             </div>
             {/* QuickMenu */}
                 <motion.div
-                        className="mt-16 basis-2/5 md:mt-0"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.5 }}
-                        transition={{ duration: 0.5 }}
-                        variants={{
+                    className="mt-16 basis-2/5 md:mt-0"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.5 }}
+                    variants={{
                         hidden: { opacity: 0, x:-50 },
                         visible: { opacity: 1, x:-0 },
-                        }}>
+                    }}>
                     <ul>
                         <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl">
                             <button className="curser-pointer ml-16 hover:bg-gray-200 rounded-xl py-3 px-3
