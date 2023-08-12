@@ -57,20 +57,18 @@ function Member(){
                     
                 </motion.div>
             </motion.div>
-    
-            {/* Our Services page */}
+
+            {/* Page Graphic */}
             <motion.div className="mx-auto w-5/6 pt-10 pb-10">
                 <div className="justify-between gap-8 md:flex">
-                {/* ContactPageGraphic */}
                     <motion.div
                         className="mt-4 basis-2/5"
-                        initial="hidden"
+                        initial="visible" 
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
                         transition={{ duration: 0.5 }}
                         variants={{
-                            hidden: { opacity: 0, x:-50 },
-                            visible: { opacity: 1, x:-0 },
+                            visible: { opacity: 1, x:-0 }
                         }}>
                         <img
                             className="rounded-lg bg-auto w-full"
@@ -87,15 +85,13 @@ function Member(){
             <div className="relative">
                 <div className="">
                     <motion.div
-                            initial="hidden" 
+                            initial="visible" 
                             whileInView="visible"
                             viewport={{ once: true, amount: 0.5 }}
-                            transition={{ delay: 0.2, duration: 0.5 }}
+                            transition={{ duration: 0.5 }}
                             variants={{
-                                hidden: { opacity: 0, x: 50 },
-                                visible: { opacity: 1, x: 0 }
-                            }}
-                        >
+                                visible: { opacity: 1, x:-0 }
+                            }}>
                             <HText>
                                 <span className="text-red-500">BEING MEMBERSHIP</span> BEING FITNESS HOME
                             </HText>
@@ -130,13 +126,13 @@ function Member(){
                 {/* QuickMenu */}
                     <motion.div
                             className="mt-16 basis-2/5 md:mt-0"
-                            initial="hidden"
+                            initial="hidden" 
                             whileInView="visible"
                             viewport={{ once: true, amount: 0.5 }}
                             transition={{ duration: 0.5 }}
                             variants={{
-                            hidden: { opacity: 0, x:-50 },
-                            visible: { opacity: 1, x:-0 },
+                                hidden: { opacity: 0, x:-50 },
+                                visible: { opacity: 1, x:-0 }
                             }}>
                         <ul>
                             <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl">

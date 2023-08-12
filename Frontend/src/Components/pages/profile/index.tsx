@@ -1,14 +1,33 @@
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
+import { MemberInterface } from "@/interfaces/IMember";
+import { GetMemberByMID } from "@/services/HttpClientService";
+import { useEffect, useState } from "react";
+import UserPhoto from '@/assets/Administrator.png';
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
+import EditIcon from '@mui/icons-material/Edit';
 
 function Profile(){
+    const [members, setMembers] = useState<MemberInterface>({});
+
+    const GetMembers = async () => {
+        let res = await GetMemberByMID();
+        if (res) {
+            setMembers(res);
+        }
+    };
+
+    useEffect(() => {
+        GetMembers();
+    }, []);
     
     return (
     <div className="w-full">
-        <motion.div className="mx-auto w-5/6 pt-24 pb-32">
+        <motion.div className="mx-16 w-5/6 pt-10">
             {/* Header */}
             <motion.div
-                className="md:w-3/5"
+                className="md:w-3/5 mx-14"
                 initial="hidden" 
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
@@ -19,15 +38,66 @@ function Profile(){
                 }}
             >
                 <HText>
-                    <span className="text-red-500">PROFILE</span> MAKE YOU FUN THE RECREATION
+                    <span className="text-red-500">MY PROFILE</span>
                 </HText>
-                <p className="my-5">
-                Recovery and Wellness Facilities: APC understands the importance of recovery 
-                and offers facilities such as saunas, steam rooms, cryotherapy chambers, 
-                and massage therapy to promote muscle relaxation, reduce soreness, 
-                and enhance overall well-being.
-                </p>
             </motion.div>
+        </motion.div>
+
+        {/* Profile */}
+        <motion.div
+            className="mx-auto w-5/6 bg-pink-50 my-5 py-5 rounded-2xl"
+            initial="hidden" 
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            variants={{
+                hidden: { opacity: 0, x:-50 },
+                visible: { opacity: 1, x:-0 }
+            }}
+        >
+            <div className="px-3 pt-3 flex items-center justify-center">
+                <img className="w-36 h-36 mb-1" 
+                    src={UserPhoto} alt="user-photo"
+                />
+            </div>
+            <h1 className="text-center text-base text-slate-500 font-semibold" >{members.Username} ({members.Role?.Role})</h1>
+            <h1 className="font-medium text-slate-500 text-center text-base mb-2 italic">
+                    Registration Date: {dayjs(members.Member_datetime).format('YYYY-MM-DD HH:mm:ss')}
+            </h1>
+            <div className="px-10 py-6 bg-slate-50 mx-40 rounded-3xl text-2xl">
+                <div className="flex items-center justify-start">
+                    <p className="px-3 py-2 font-semibold">FULL-NAME:</p>
+                    <p className="px-3 py-2 font-base text-purple-800">{members.Firstname} {members.Lastname}</p>
+                </div>
+                <div className="flex items-center justify-start">
+                    <p className="px-3 py-2 font-semibold">EMAIL:</p>
+                    <p className="px-3 py-2 font-base text-purple-800">{members.Email}</p>
+                </div>
+                <div className="flex items-center justify-start">
+                    <p className="px-3 py-2 font-semibold">GENDER:</p>
+                    <p className="px-3 py-2 font-base text-purple-800">{members.Gender?.Gender}</p>
+                </div>
+                <div className="flex items-center justify-start">
+                    <p className="px-3 py-2 font-semibold">AGE:</p>
+                    <p className="px-3 py-2 font-base text-purple-800">{members.Age} years</p>
+                </div>
+                <div className="flex items-center justify-start">
+                    <p className="px-3 py-2 font-semibold">WEIGHT:</p>
+                    <p className="px-3 py-2 font-base text-purple-800">{members.Weight} kg.</p>
+                </div>
+                <div className="flex items-center justify-start">
+                    <p className="px-3 py-2 font-semibold">HEIGHT:</p>
+                    <p className="px-3 py-2 font-base text-purple-800">{members.Height} cm.</p>
+                </div>
+            </div>
+            <div className="mx-3 py-3 mt-3 flex items-center justify-center">
+                <button className="bg-yellow-500 text-white hover:bg-red-300 rounded px-3 py-3 
+                active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out">
+                    <Link to="/accountsettings">
+                        <EditIcon/> Edit Profile
+                    </Link>
+                </button>
+            </div>
         </motion.div>
     </div>
   )
