@@ -51,7 +51,7 @@ func CreateEquipment(c *gin.Context) {
 func GetEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	id := c.Param("id")
-	if err := entity.DB().Preload("Picture").Raw("SELECT * FROM equipments WHERE id = ?", id).Scan(&equipment).Error; err != nil {
+	if err := entity.DB().Preload("Picture").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -60,12 +60,12 @@ func GetEquipment(c *gin.Context) {
 
 // GET--equipments--
 func ListEquipments(c *gin.Context) {
-	var equipments []entity.Equipment
-	if err := entity.DB().Preload("Picture").Raw("SELECT * FROM equipments").Scan(&equipments).Error; err != nil {
+	var equipmets []entity.Equipment
+	if err := entity.DB().Preload("Picture").Raw("SELECT * FROM equipment").Find(&equipmets).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": equipments})
+	c.JSON(http.StatusOK, gin.H{"data": equipmets})
 }
 
 // PATCH--equipment
@@ -102,12 +102,12 @@ func DeleteEquipment(c *gin.Context) {
 	id := c.Param("id")
 
 	//ลบเมื่อ
-	if err := entity.DB().Exec("DELETE FROM equipments WHERE equipment_id = ?", id).Error; err != nil {
+	if err := entity.DB().Exec("DELETE FROM equipment WHERE equipment_id = ?", id).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Exec("DELETE FROM equipments WHERE id = ?", id); tx.RowsAffected == 0 {
+	if tx := entity.DB().Exec("DELETE FROM equipment WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "equipment not found"})
 		return
 	}

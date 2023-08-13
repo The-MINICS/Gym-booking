@@ -6,6 +6,8 @@ export interface RoomInterface {
     Activity?: string;
     Number?: string;
     Capacity?: number;
+    Illustration?: string;
+    Caption?: string;
 
     BookingID?: number;
     Booking?: BookingInterface;
