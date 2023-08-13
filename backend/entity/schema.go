@@ -74,13 +74,12 @@ type Member struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity  string
-	Number    string
-	Capacity  int16
-	Attendant string
-
-	PictureID *uint
-	Picture   Picture `gorm:"references:id"`
+	Activity     string
+	Number       string
+	Capacity     int16
+	Attendant    string
+	Illustration string
+	Caption      string
 
 	Booking []Booking `gorm:"foreignKey:RoomID"`
 }
@@ -91,7 +90,6 @@ type Picture struct {
 	Picture  string
 	Describe string
 
-	Room      []Room      `gorm:"foreignKey:PictureID"`
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
 
