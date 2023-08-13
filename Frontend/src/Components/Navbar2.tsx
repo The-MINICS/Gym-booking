@@ -158,7 +158,7 @@ function Navbar2() {
                   >
                     <ul>
                       <img className='flex justify-center items-center my-1' src={UserPhoto} alt='user-cover-photo'/>
-                      <p className='flex justify-center items-center span-font-size text-purple-950 my-2 p-0 rounded-md bg-gray-200'>
+                      <p className='flex justify-center items-center text-center span-font-size text-purple-950 my-2 p-0 rounded-md bg-gray-200'>
                         {members.Firstname} {members.Lastname}
                       </p>
                       <li className='p-1 my-2 cursor-pointer rounded hover:bg-yellow-500'>

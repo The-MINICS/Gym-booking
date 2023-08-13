@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
-import { EquipmentInterface } from "@/interfaces/IEquipment";
-//import { GetEquipments } from "@/services/HttpClientService";
+import { GetPictures } from "@/services/HttpClientService";
 import { TransitionProps } from '@mui/material/transitions';
-import { Slide } from "@mui/material";
+import { PictureInterface } from "@/interfaces/IPicture";
+import { Slide } from '@mui/material';
 
 function Equipments(){
-    const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
+    const [Equipments, setEquipments] = useState<PictureInterface[]>([]);
 
-    // const getEquipments = async () => {
-    //     let res = await GetEquipments();
-    //     if (res) {
-    //         setEquipments(res);
-    //   }
-    // };
+    const getPictures = async () => {
+        let res = await GetPictures();
+        if (res) {
+            setEquipments(res);
+      }
+    };
 
     useEffect(() => {
-        // getEquipments();
+        getPictures();
     }, []);
 
     const Transition = React.forwardRef(function Transition(
@@ -30,11 +30,11 @@ function Equipments(){
     });
 
     return (
-    <section id="equipments" className="w-full bg-white">
-        <motion.div className="mx-auto w-5/6 pt-10 pb-10 justify-between">
+    <section id="equipments" className="w-full">
+        <motion.div className="mx-auto w-5/6 pt-10 pb-10 mt-5 justify-between bg-pink-50 rounded-2xl">
             {/* Header */}
             <motion.div
-                className="md:w-3/5"
+                className="md:w-3/5 mx-7"
                 initial="hidden" 
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
@@ -45,7 +45,7 @@ function Equipments(){
                 }}
             >
                 <HText>
-                    <span className="text-red-500">ALL EQUIPMENTS:</span> WE PROUND TO PRESENT YOU
+                    <span className="text-red-500">ALL EQUIPMENTS in our gym:</span> WE PROUND TO PRESENT YOU
                 </HText>
                 <ul className="mt-5">
                     <li>🏋️‍♀️ Get Fit with Cutting-Edge Fitness Equipment!</li>
@@ -61,22 +61,54 @@ function Equipments(){
             </motion.div>
         </motion.div>
 
-        {/* Equipments */}
-        <motion.div
-            className="mx-auto ml-24"
-            initial="hidden" 
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            variants={{
-                hidden: { opacity: 0, x:-50 },
-                visible: { opacity: 1, x:-0 }
-            }}
-        >
-            <HText>
-                <span>All Equipment in our gym</span>
-            </HText>
-            </motion.div>
+        {/* Equipment */}
+        <motion.div className="mx-auto w-5/6 pt-10 pb-10 bg-white rounded-2xl mb-10">
+            <div className="justify-between gap-8 md:flex">
+                <motion.div> 
+                    {Equipments.map((row) => (
+                        <section className="flex items-center px-10 py-10">
+                            {/* Title and Describe */}
+                            <motion.div
+                                className="basis-3/5 md:mt-0"
+                                initial="visible" 
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.5 }}
+                                transition={{ duration: 0.5 }}
+                                variants={{
+                                    visible: { opacity: 1, x:-0 }
+                                }}
+                            >
+                                <h1 className="text-orange-600 text-3xl font-bold mx-14 text-center">{row.Title}</h1>
+                                <p className="my-2 font-semibold text-xl font-sans">{row.Describe}</p>
+                            </motion.div>
+                            
+                            {/* Ilustration */}
+                            <motion.div
+                                className="mt-16 basis-2/5 md:mt-0 flex items-center justify-center"
+                                initial="visible" 
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.5 }}
+                                transition={{ duration: 0.5 }}
+                                variants={{
+                                    visible: { opacity: 1, x:-0 }
+                                }}>
+                                <div className="relative">
+                                    <div>
+                                        <img
+                                            className="rounded-lg bg-auto"
+                                            alt="illustration-page-graphic"
+                                            src={`${row.Picture}`}
+                                            width="450" 
+                                            height="350"
+                                        />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </section>
+                    ))}  
+                </motion.div>   
+            </div>
+        </motion.div>
     </section>
   )
 }

@@ -88,6 +88,7 @@ type Room struct {
 type Picture struct {
 	gorm.Model
 	Picture  string
+	Title    string
 	Describe string
 
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
