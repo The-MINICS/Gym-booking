@@ -13,7 +13,6 @@ import (
 func CreateEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	var picture entity.Picture
-	var admin entity.Admin
 
 	if err := c.ShouldBindJSON(&equipment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -26,17 +25,10 @@ func CreateEquipment(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา admin ด้วย id
-	if tx := entity.DB().Where("id = ?", equipment.AdminID).First(&admin); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
-		return
-	}
-
 	// 14: สร้าง  equipmentr
 	eqi := entity.Equipment{
 		Equipments: equipment.Equipments,
 		Picture:    picture,
-		Admin:      admin,
 	}
 
 	// การ validate
@@ -80,7 +72,6 @@ func ListEquipments(c *gin.Context) {
 func UpdateEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	var picture entity.Picture
-	var admin entity.Admin
 
 	if err := c.ShouldBindJSON(&equipment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -93,17 +84,10 @@ func UpdateEquipment(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา admin ด้วย id
-	if tx := entity.DB().Where("id = ?", equipment.AdminID).First(&admin); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
-		return
-	}
-
 	update_equipment := entity.Equipment{
 		Model:      gorm.Model{ID: equipment.ID},
 		Equipments: equipment.Equipments,
 		Picture:    picture,
-		Admin:      admin,
 	}
 
 	// การ validate

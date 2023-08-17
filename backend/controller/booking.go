@@ -12,7 +12,6 @@ import (
 // POST /booking
 func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
-	var admin entity.Admin
 	var member entity.Member
 	var room entity.Room
 	var timeproportion entity.TimeProportion
@@ -20,12 +19,6 @@ func CreateBooking(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// ค้นหา admin ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.AdminID).First(&admin); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
 		return
 	}
 
@@ -56,12 +49,11 @@ func CreateBooking(c *gin.Context) {
 	room.Quantity += 1
 	// 14: สร้าง  booking
 	bk := entity.Booking{
-		Datetime:  booking.Datetime,
-		Admin:     admin,
-		Member:    member,
-		Room:      room,
+		Datetime:       booking.Datetime,
+		Member:         member,
+		Room:           room,
 		TimeProportion: timeproportion,
-		Equipment: equipment,
+		Equipment:      equipment,
 	}
 
 	// การ validate
@@ -83,7 +75,7 @@ func CreateBooking(c *gin.Context) {
 func GetBooking(c *gin.Context) {
 	var booking entity.Booking
 	id := c.Param("id")
-	if tx := entity.DB().Preload("Member").Preload("Admin").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "booking not found"})
 		return
 	}
@@ -94,7 +86,7 @@ func GetBooking(c *gin.Context) {
 func ListBookings(c *gin.Context) {
 	var bookings []entity.Booking
 
-	if err := entity.DB().Preload("Member").Preload("Admin").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
+	if err := entity.DB().Preload("Member").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -104,7 +96,6 @@ func ListBookings(c *gin.Context) {
 
 func UpdateBooking(c *gin.Context) {
 	var booking entity.Booking
-	var admin entity.Admin
 	var member entity.Member
 	var room entity.Room
 	var timeproportion entity.TimeProportion
@@ -112,12 +103,6 @@ func UpdateBooking(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	// ค้นหา admin ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.AdminID).First(&admin); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
 		return
 	}
 
@@ -146,13 +131,12 @@ func UpdateBooking(c *gin.Context) {
 	}
 
 	update_booking := entity.Booking{
-		Model:     gorm.Model{ID: booking.ID},
-		Datetime:  booking.Datetime,
-		Admin:     admin,
-		Member:    member,
-		Room:      room,
+		Model:          gorm.Model{ID: booking.ID},
+		Datetime:       booking.Datetime,
+		Member:         member,
+		Room:           room,
 		TimeProportion: timeproportion,
-		Equipment: equipment,
+		Equipment:      equipment,
 	}
 
 	// การ validate
