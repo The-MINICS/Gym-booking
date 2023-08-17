@@ -13,6 +13,7 @@ import (
 func CreateEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	var picture entity.Picture
+	var admin entity.Admin
 
 	if err := c.ShouldBindJSON(&equipment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -25,10 +26,17 @@ func CreateEquipment(c *gin.Context) {
 		return
 	}
 
+	// ค้นหา admin ด้วย id
+	if tx := entity.DB().Where("id = ?", equipment.AdminID).First(&admin); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
+		return
+	}
+
 	// 14: สร้าง  equipmentr
 	eqi := entity.Equipment{
 		Equipments: equipment.Equipments,
 		Picture:    picture,
+		Admin:      admin,
 	}
 
 	// การ validate
@@ -51,7 +59,7 @@ func CreateEquipment(c *gin.Context) {
 func GetEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	id := c.Param("id")
-	if err := entity.DB().Preload("Picture").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
+	if err := entity.DB().Preload("Picture").Preload("Admin").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -61,7 +69,7 @@ func GetEquipment(c *gin.Context) {
 // GET--equipments--
 func ListEquipments(c *gin.Context) {
 	var equipmets []entity.Equipment
-	if err := entity.DB().Preload("Picture").Raw("SELECT * FROM equipment").Find(&equipmets).Error; err != nil {
+	if err := entity.DB().Preload("Picture").Preload("Admin").Raw("SELECT * FROM equipment").Find(&equipmets).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -72,6 +80,7 @@ func ListEquipments(c *gin.Context) {
 func UpdateEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	var picture entity.Picture
+	var admin entity.Admin
 
 	if err := c.ShouldBindJSON(&equipment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -83,10 +92,18 @@ func UpdateEquipment(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a picture"})
 		return
 	}
+
+	// ค้นหา admin ด้วย id
+	if tx := entity.DB().Where("id = ?", equipment.AdminID).First(&admin); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "admin not found"})
+		return
+	}
+
 	update_equipment := entity.Equipment{
 		Model:      gorm.Model{ID: equipment.ID},
 		Equipments: equipment.Equipments,
 		Picture:    picture,
+		Admin:      admin,
 	}
 
 	// การ validate

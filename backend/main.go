@@ -66,12 +66,12 @@ func main() {
 			protected.PATCH("/equipments", controller.UpdateEquipment)
 			protected.DELETE("/equipments/:id", controller.DeleteEquipment)
 
-			// Status Routes
-			protected.POST("/statuses", controller.CreateStatus)
-			protected.GET("/statuses", controller.ListStatuses)
-			protected.GET("/status/:id", controller.GetStatus)
-			protected.PATCH("/statuses", controller.UpdateStatus)
-			protected.DELETE("/statuses/:id", controller.DeleteStatus)
+			// TimeProportion Routes
+			protected.POST("/timeproportions", controller.CreateTimeProportion)
+			protected.GET("/timeproportions", controller.ListTimeProportions)
+			protected.GET("/timeproportion/:id", controller.GetTimeProportion)
+			protected.PATCH("/timeproportions", controller.UpdateTimeProportion)
+			protected.DELETE("/timeproportions/:id", controller.DeleteTimeProportion)
 
 			// Booking Routes
 			protected.POST("/bookings", controller.CreateBooking)

@@ -45,7 +45,8 @@ type Admin struct {
 	RoleID   *uint
 	Role     Role `gorm:"references:id"`
 
-	Booking []Booking `gorm:"foreignKey:AdminID"`
+	Booking   []Booking   `gorm:"foreignKey:AdminID"`
+	Equipment []Equipment `gorm:"foreignKey:AdminID"`
 }
 
 // Member
@@ -71,11 +72,20 @@ type Member struct {
 	Contactus []Contactus `gorm:"foreignKey:MemberID"`
 }
 
+// Proportion
+type TimeProportion struct {
+	gorm.Model
+	Proportion string
+
+	Booking []Booking `gorm:"foreignKey:TimeProportionID"`
+}
+
 // Room
 type Room struct {
 	gorm.Model
 	Activity     string
 	Number       string
+	Quantity	int16
 	Capacity     int16
 	Attendant    string
 	Illustration string
@@ -105,18 +115,14 @@ type Equipment struct {
 	PictureID *uint
 	Picture   Picture `gorm:"references:id"`
 
+	AdminID *uint
+	Admin   Admin `gorm:"references:id"`
+
 	Booking []Booking `gorm:"foreignKey:EquipmentID"`
 }
 
-// Status
-// สถานะ ของ Equipment
-type Status struct {
-	gorm.Model
-	Status string
-}
-
 // Booking
-// Member เป็นคนสร้าง จอง Room
+// Member เป็นคนสร้าง ใช้จอง
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
@@ -130,12 +136,15 @@ type Booking struct {
 	RoomID *uint
 	Room   Room `gorm:"references:id"`
 
+	TimeProportionID *uint
+	TimeProportion   TimeProportion `gorm:"references:id"`
+
 	EquipmentID *uint
 	Equipment   Equipment `gorm:"references:id"`
 }
 
 // Contact us
-// User เป็นคนใช้
+// Member เป็นคนใช้
 type Contactus struct {
 	gorm.Model
 	Subject string

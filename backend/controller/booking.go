@@ -15,6 +15,7 @@ func CreateBooking(c *gin.Context) {
 	var admin entity.Admin
 	var member entity.Member
 	var room entity.Room
+	var timeproportion entity.TimeProportion
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -40,18 +41,26 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
+	// ค้นหา timeproportion ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.TimeProportionID).First(&timeproportion); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a time"})
+		return
+	}
+
 	// ค้นหา equipment ด้วย id
 	if tx := entity.DB().Where("id = ?", booking.EquipmentID).First(&equipment); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
 		return
 	}
 
+	room.Quantity += 1
 	// 14: สร้าง  booking
 	bk := entity.Booking{
 		Datetime:  booking.Datetime,
 		Admin:     admin,
 		Member:    member,
 		Room:      room,
+		TimeProportion: timeproportion,
 		Equipment: equipment,
 	}
 
@@ -74,7 +83,7 @@ func CreateBooking(c *gin.Context) {
 func GetBooking(c *gin.Context) {
 	var booking entity.Booking
 	id := c.Param("id")
-	if tx := entity.DB().Preload("Member").Preload("Room").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Preload("Admin").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "booking not found"})
 		return
 	}
@@ -85,7 +94,7 @@ func GetBooking(c *gin.Context) {
 func ListBookings(c *gin.Context) {
 	var bookings []entity.Booking
 
-	if err := entity.DB().Preload("Member").Preload("Room").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
+	if err := entity.DB().Preload("Member").Preload("Admin").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -98,6 +107,7 @@ func UpdateBooking(c *gin.Context) {
 	var admin entity.Admin
 	var member entity.Member
 	var room entity.Room
+	var timeproportion entity.TimeProportion
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -123,6 +133,12 @@ func UpdateBooking(c *gin.Context) {
 		return
 	}
 
+	// ค้นหา timeproportion ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.TimeProportionID).First(&timeproportion); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a time"})
+		return
+	}
+
 	// ค้นหา equipment ด้วย id
 	if tx := entity.DB().Where("id = ?", booking.EquipmentID).First(&equipment); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
@@ -135,6 +151,7 @@ func UpdateBooking(c *gin.Context) {
 		Admin:     admin,
 		Member:    member,
 		Room:      room,
+		TimeProportion: timeproportion,
 		Equipment: equipment,
 	}
 
