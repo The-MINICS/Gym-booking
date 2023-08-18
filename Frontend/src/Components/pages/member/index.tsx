@@ -54,7 +54,6 @@ function Member(){
                             >
                             <img alt="home-pageGraphic" src={HomePageGraphic} />
                         </div>
-                    
                 </motion.div>
             </motion.div>
 
@@ -62,7 +61,7 @@ function Member(){
             <motion.div className="mx-auto w-5/6 pt-10 pb-10">
                 <div className="justify-between gap-8 md:flex">
                     <motion.div
-                        className="mt-4 basis-2/5"
+                        className="mt-2 basis-2/5"
                         initial="visible" 
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
@@ -76,7 +75,7 @@ function Member(){
                             src={MemberPageGraphic}
                         />
                         <img
-                            className="rounded-lg bg-auto w-full mt-5"
+                            className="rounded-lg bg-auto w-full mt-4"
                             alt="our-services-page-graphic"
                             src={MemberPageGraphic2}
                         />
@@ -135,8 +134,8 @@ function Member(){
                                 visible: { opacity: 1, x:-0 }
                             }}>
                         <ul>
-                            <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl">
-                                <button className="curser-pointer ml-16 hover:bg-gray-200 rounded-xl py-3 px-3
+                            <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl flex items-center justify-center">
+                                <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                     active:scale-[.98] active:duration-85 transition-all">
                                     <Link to="/profile">
                                         <img className="h-40 w-40" src={AcountIcon} alt="equipment-icon"/>

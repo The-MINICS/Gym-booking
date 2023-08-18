@@ -2,30 +2,30 @@ import { useState } from 'react';
 import '@/Components/Dropdown.css';
 import { Link } from 'react-router-dom';
 
-const MenuItemMember = [
+const MenuItemAdmin = [
   {
-    title: 'Account Settings',
-    path: '/accountsettings',
+    title: 'Member Management',
+    path: '/member-manage',
     cName: 'dropdown-link',
   },
   {
-    title: 'Booking Schedule',
-    path: '/bookingsch',
-    cName: 'dropdown-link'
+    title: 'Equipment Management',
+    path: '/equipment-manage',
+    cName: 'dropdown-link',
   },
   {
-    title: 'Workout Programs',
-    path: '/programs',
-    cName: 'dropdown-link'
+    title: 'Recreation Room Management',
+    path: '/recreation-room-mannage',
+    cName: 'dropdown-link',
   },
   {
-    title: 'Change My Password',
-    path: '/chpassword',
-    cName: 'dropdown-link'
+    title: 'Complaint Handling',
+    path: '/complaint-handle',
+    cName: 'dropdown-link',
   }
 ];
 
-function DropdownMember() {
+function DropdownAdminTools() {
   const [click, setClick] = useState(false);
 
   const handleClick = () => setClick(!click);
@@ -36,7 +36,7 @@ function DropdownMember() {
         onClick={handleClick}
         className={click ? 'dropdown-menu clicked' : 'dropdown-menu'}
       >
-        {MenuItemMember.map((item, index) => {
+        {MenuItemAdmin.map((item, index) => {
           return (
             <li key={index}>
               <Link
@@ -54,4 +54,4 @@ function DropdownMember() {
   );
 }
 
-export default DropdownMember;
+export default DropdownAdminTools;

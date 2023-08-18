@@ -123,8 +123,8 @@ function Services(){
                         visible: { opacity: 1, x:-0 },
                     }}>
                     <ul>
-                        <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl">
-                            <button className="curser-pointer ml-16 hover:bg-gray-200 rounded-xl py-3 px-3
+                        <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl flex items-center justify-center">
+                            <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all">
                                 <Link to="/equipments">
                                     <img className="h-40 w-40" src={equipment} alt="equipment-icon"/>

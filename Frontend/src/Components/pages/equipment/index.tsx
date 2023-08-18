@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import { GetPictures } from "@/services/HttpClientService";
-import { TransitionProps } from '@mui/material/transitions';
 import { PictureInterface } from "@/interfaces/IPicture";
-import { Slide } from '@mui/material';
 
 function Equipments(){
     const [Equipments, setEquipments] = useState<PictureInterface[]>([]);
@@ -19,15 +17,6 @@ function Equipments(){
     useEffect(() => {
         getPictures();
     }, []);
-
-    const Transition = React.forwardRef(function Transition(
-      props: TransitionProps & {
-        children: React.ReactElement<any, any>;
-      },
-      ref: React.Ref<unknown>,
-    ) {
-      return <Slide direction="up" ref={ref} {...props} />;
-    });
 
     return (
     <section id="equipments" className="w-full">

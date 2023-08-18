@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
-import UserPhoto from '@/assets/Administrator.png';
+import UserPhoto from '@/assets/UserProfile.png';
+import AdminPhoto from '@/assets/AdministratorProfile.png';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import KeyIcon from '@mui/icons-material/Key';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -13,6 +14,7 @@ import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 
 function AccountSettings(){
     const [members, setMembers] = useState<MemberInterface>({});
+    const roles = localStorage.getItem("role");
 
     const GetMembers = async () => {
         let res = await GetMemberByMID();
@@ -24,7 +26,8 @@ function AccountSettings(){
         GetMembers();
     }, []);
 
-    return <>
+    return (
+    <>
     <div className="w-full">
         <motion.div className="w-full py-3 my-2 mx-16 pl-3">
             {/* Header */}
@@ -47,7 +50,7 @@ function AccountSettings(){
         <div className="bg-slate-50 mx-20 my-2 pl-3 py-2 shadow rounded flex flex-col ">
             {/* Image located on left side */}
             <div className="bg-white w-1/4">
-                <img src={UserPhoto} alt="user-photo" className="w-36 h-36 ml-20 mb-2 mt-4"/>
+                {ImageOption()}
                 <h1 className="text-center font-semibold text-2xl">{members.Firstname} {members.Lastname}</h1>
                 <h1 className="text-center font-medium text-base text-slate-300">{members.Username}</h1>
                 <div>
@@ -80,7 +83,21 @@ function AccountSettings(){
             </div>
         </div>
     </div>
-  </>
+    </>
+    );
+
+    function ImageOption() {
+        if (roles === 'User') {
+          return (
+          <img className='w-36 h-36 ml-20 mb-2 mt-4' src={UserPhoto} alt='user-photo'/>
+          )
+        }
+        if (roles === 'Admin') {
+          return(
+          <img className='w-36 h-36 ml-20 mb-2 mt-4' src={AdminPhoto} alt='admin-photo'/>
+          )
+        }
+      }
 }
 
 export default AccountSettings; 
