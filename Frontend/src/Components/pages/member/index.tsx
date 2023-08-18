@@ -1,6 +1,4 @@
-import HomePageText from "@/assets/HomePageText.png";
 import { motion } from "framer-motion";
-import HomePageGraphic from "@/assets/BenefitPageGraphic.png";
 import ResetPasswordIcon from "@/assets/reset-password.png";
 import BookingSchedule from "@/assets/BookingSchedule.png";
 import WorkoutPrograms from "@/assets/workout-program.png";
@@ -14,60 +12,18 @@ function Member(){
     
     return (
         <div className="w-full bg-gray-50">
-            {/* HomePage */}
-            <motion.div className="gap-16 bg-pink-50 pt-5 md:h-full md:pb-0 left-20">
-                {/* Image and main header */}
-                <motion.div 
-                    className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
-                        {/* Main Header */}
-                        <div className="z-10 mt-10 md:basis-3/5">
-                            {/* Headings */}
-                            <motion.div 
-                            className="md:mt-0" 
-                            initial="hidden" 
-                            whileInView="visible"
-                            viewport={{ once: true, amount: 0.5 }}
-                            transition={{ duration: 0.5 }}
-                            variants={{
-                                hidden: { opacity: 0, x:-50 },
-                                visible: { opacity: 1, x:-0 }
-                            }}>
-                            <div className="relative">
-                                <div className="before:absolute before:-top-20 before:-left-20 
-                                    before:z-[-1] md:before:content-evolvetext">
-                                <img alt="home-page-text" src={HomePageText}/>
-                                </div>
-                            </div>
-                            <h1 className="mt-4 text-red-600 font-monserrat text-3xl font-bold">
-                                🏋️ Join Our Fitness Gym and Unlock Your True Potential! 🏋️
-                            </h1>
-                            <ul>
-                                <li>Are you ready to transform your body and take your fitness journey to the next level?</li>
-                                <li>Look no further! Our state-of-the-art fitness gym is the ultimate destination for anyone</li>
-                                <li>who is passionate about health, wellness, and achieving their fitness goals</li>
-                            </ul>
-                            </motion.div>
-                        </div>
-                        {/* IMAGE */}
-                        <div
-                            className="flex justify-center basis-2/5"
-                            >
-                            <img alt="home-pageGraphic" src={HomePageGraphic} />
-                        </div>
-                </motion.div>
-            </motion.div>
-
-            {/* Page Graphic */}
-            <motion.div className="mx-auto w-5/6 pt-10 pb-10">
+        {/* Page Graphic */}
+            <motion.div className="mx-auto w-5/6 py-16">
                 <div className="justify-between gap-8 md:flex">
                     <motion.div
                         className="mt-2 basis-2/5"
-                        initial="visible" 
+                        initial="hidden" 
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
-                        transition={{ duration: 0.5 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
                         variants={{
-                            visible: { opacity: 1, x:-0 }
+                            visible: { opacity: 1, x:-0 },
+                            hidden: { opacity: 0, x:-50 },
                         }}>
                         <img
                             className="rounded-lg bg-auto w-full"
@@ -84,12 +40,13 @@ function Member(){
             <div className="relative">
                 <div className="">
                     <motion.div
-                            initial="visible" 
+                            initial="hidden" 
                             whileInView="visible"
                             viewport={{ once: true, amount: 0.5 }}
                             transition={{ duration: 0.5 }}
                             variants={{
-                                visible: { opacity: 1, x:-0 }
+                                visible: { opacity: 1, x:-0 },
+                                hidden: { opacity: 0, x:-50 },
                             }}>
                             <HText>
                                 <span className="text-red-500">BEING MEMBERSHIP</span> BEING FITNESS HOME

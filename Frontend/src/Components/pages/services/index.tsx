@@ -1,6 +1,4 @@
-import HomePageText from "@/assets/HomePageText.png";
 import { motion } from "framer-motion";
-import HomePageGraphic from "@/assets/HomePageGraphic4.png"
 import equipment from "@/assets/equipments.png";
 import RecreationRoom from "@/assets/Recreation-room.png";
 import WorkoutPrograms from "@/assets/workout-program.png";
@@ -13,61 +11,19 @@ function Services(){
     
     return (
     <div className="w-full bg-gray-50">
-        {/* HomePage */}
-        <motion.div className="gap-16 bg-white pt-5 md:h-full md:pb-0 left-20">
-            {/* Image and main header */}
-            <motion.div 
-            className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
-            {/* IMAGE */}
-            <div
-                className="flex justify-center basis-2/5"
-                >
-                <img alt="home-pageGraphic" src={HomePageGraphic} />
-            </div>
-            {/* Main Header */}
-            <div className="z-10 mt-32 md:basis-3/5">
-                {/* Headings */}
-                <motion.div 
-                className="md:-mt-20" 
-                initial="hidden" 
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.5 }}
-                variants={{
-                    hidden: { opacity: 0, x:-50 },
-                    visible: { opacity: 1, x:-0 }
-                }}>
-                <div className="relative">
-                    <div className="before:absolute before:-top-24 before:-left-72
-                    before:z-[-1] md:before:content-evolvetext">
-                    <img alt="home-page-text" src={HomePageText}/>
-                    </div>
-                </div>
-                <h1 className="mt-4 text-red-600 font-monserrat text-3xl font-bold">
-                    Welcome to Our Services.
-                </h1>
-                <ul>
-                    <li>🏋️‍♀️ Get Fit and Feel Great at Our Fitness Gym! 🏋️‍♂️</li>
-                    <li>🌟 Join us now and take the first step towards a healthier, fitter you! 🌟</li>
-                    <li>🔥 Why Choose Our Fitness Gym? 🔥</li>
-                </ul>
-                </motion.div>
-            </div>
-            </motion.div>
-        </motion.div>
-
-        {/* Our Services page */}
-        <motion.div className="mx-auto w-5/6 pt-10 pb-10">
+    {/* Our Services page */}
+        <motion.div className="mx-auto w-5/6 py-16">
             <div className="justify-between gap-8 md:flex">
             {/* Header */}
                 <motion.div
                     className="basis-3/5 md:mt-0"
-                    initial="visible" 
+                    initial="hidden" 
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
                     transition={{ duration: 0.5 }}
                     variants={{
-                        visible: { opacity: 1, x:-0 }
+                        visible: { opacity: 1, x:-0 },
+                        hidden: { opacity: 0, x:-50 },
                     }}>
                     <HText>
                         <span className="text-red-500">OUR SERVICES</span> ALL WE GIVE WILLINGLY
@@ -93,12 +49,13 @@ function Services(){
                 {/* ServicesPageGraphic */}
                 <motion.div
                     className="mt-16 basis-2/5 md:mt-0"
-                    initial="visible" 
+                    initial="hidden" 
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
                     variants={{
-                        visible: { opacity: 1, x:-0 }
+                        visible: { opacity: 1, x:-0 },
+                        hidden: { opacity: 0, x:-50 },
                     }}>
                     <div className="relative">
                         <div>

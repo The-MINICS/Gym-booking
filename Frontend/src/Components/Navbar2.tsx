@@ -181,7 +181,7 @@ function Navbar2() {
                         className='nav-links bg-rose-50 rounded-xl' 
                         onClick={closeMobileMenu}
                       >
-                        <h1><BuildIcon/> {item.name} {item.icon}</h1>
+                        <h1><BuildIcon/>{item.name} {item.icon}</h1>
                       </Link>
                       {dropdown3 && <DropdownAdminTools/>}
                   </li>
@@ -196,7 +196,7 @@ function Navbar2() {
                       className='nav-links' 
                       onClick={closeMobileMenu}
                     >
-                      <h1>{item.name} {item.icon}</h1>
+                      <h1>{item.name}</h1>
                     </Link>
                   </li>
                 )
