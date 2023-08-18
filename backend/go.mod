@@ -10,6 +10,8 @@ require (
 	gorm.io/gorm v1.25.2
 )
 
+require github.com/google/go-cmp v0.5.9 // indirect
+
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
 	github.com/bytedance/sonic v1.10.0-rc2 // indirect
@@ -30,6 +32,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/onsi/gomega v1.27.10
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
