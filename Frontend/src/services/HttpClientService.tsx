@@ -140,11 +140,34 @@ async function GetPictures() {
   return res;
 }
 
+async function GetRooms() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/rooms`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 export {
   Login,
-  Members, 
-  GetMemberByMID, 
+  Members,
+  GetMemberByMID,
   MemberDelete,
   GetEquipments,
   GetPictures,
+  GetRooms,
 };

@@ -39,7 +39,7 @@
   
   .nav-links:hover {
     background-color: rgb(234 179 8);
-    border-radius: 4px;
+    border-radius: 12px;
     transition: all 0.2s ease-out;
   }
   

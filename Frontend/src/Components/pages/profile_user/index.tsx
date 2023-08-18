@@ -3,13 +3,15 @@ import HText from "@/shared/HText";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
 import { useEffect, useState } from "react";
-import UserPhoto from '@/assets/Administrator.png';
+import UserPhoto from '@/assets/UserProfile.png';
+import AdminPhoto from '@/assets/AdministratorProfile.png';
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 
 function Profile(){
     const [members, setMembers] = useState<MemberInterface>({});
+    const roles = localStorage.getItem("role");
 
     const GetMembers = async () => {
         let res = await GetMemberByMID();
@@ -56,9 +58,7 @@ function Profile(){
             }}
         >
             <div className="px-3 pt-3 flex items-center justify-center">
-                <img className="w-36 h-36 mb-1" 
-                    src={UserPhoto} alt="user-photo"
-                />
+                {ImageOption()}
             </div>
             <h1 className="text-center text-base text-slate-500 font-semibold" >{members.Username} ({members.Role?.Role})</h1>
             <h1 className="font-medium text-slate-500 text-center text-base mb-2 italic">
@@ -100,7 +100,20 @@ function Profile(){
             </div>
         </motion.div>
     </div>
-  )
+  );
+
+  function ImageOption() {
+    if (roles === 'User') {
+      return (
+      <img className='w-36 h-36 mb-1' src={UserPhoto} alt='user-photo'/>
+      )
+    }
+    if (roles === 'Admin') {
+      return(
+      <img className='w-36 h-36 mb-1' src={AdminPhoto} alt='admin-photo'/>
+      )
+    }
+  }
 }
 
 export default Profile;

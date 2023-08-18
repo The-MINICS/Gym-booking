@@ -61,8 +61,8 @@ function Home(){
                     visible: { opacity: 1, x:-0 },
                     }}>
                 <ul>
-                    <div className="my-5 bg-gray-100 pt-2 pb-2 px-0 rounded-xl">
-                        <button className="curser-pointer ml-5 hover:bg-gray-200 rounded-xl py-3 px-3
+                    <div className="my-5 bg-gray-100 pt-2 pb-2 rounded-xl">
+                        <button className="curser-pointer ml-14 hover:bg-gray-200 rounded-xl py-3 px-3
                             active:scale-[.98] active:duration-85 transition-all">
                             <Link to="/equipments">
                                 <img className="h-32 w-32" src={equipment} alt="equipment-icon"/>
@@ -79,11 +79,11 @@ function Home(){
                         <button className="curser-point ml-16 hover:bg-gray-200 rounded-xl py-3 px-3
                             active:scale-[.98] active:duration-85 transition-all">
                             <Link to="/programs">
-                                <img className="h-32 w-32 ml-2" src={WorkoutPrograms} alt="workout_room-icon"/>
+                                <img className="h-32 w-32 mx-2" src={WorkoutPrograms} alt="workout_room-icon"/>
                                 <h3 className="text-lg text-center font-bold text-black">Workout Programs</h3>
                             </Link>
                         </button>
-                        <button className="curser-pointer ml-5 hover:bg-gray-200 rounded-xl py-3 px-3
+                        <button className="curser-pointer ml-12 hover:bg-gray-200 rounded-xl py-3 px-3
                             active:scale-[.98] active:duration-85 transition-all">
                             <Link to="/bookings">
                                 <img className="h-32 w-32" src={BookIcon} alt="booking-icon"/>
@@ -100,7 +100,7 @@ function Home(){
                         <button className="curser-pointer ml-16 hover:bg-gray-200 rounded-xl py-3 px-3
                             active:scale-[.98] active:duration-85 transition-all">
                             <Link to="/contact-us">
-                                <img className="h-32 w-32 ml-2" src={ContactUs} alt="booking-icon"/>
+                                <img className="h-32 w-32 mx-2" src={ContactUs} alt="booking-icon"/>
                                 <h3 className="text-lg font-bold text-black">Contact Us</h3>
                             </Link>
                         </button>

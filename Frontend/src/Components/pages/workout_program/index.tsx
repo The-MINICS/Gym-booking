@@ -44,11 +44,11 @@ function WorkoutPrograms(){
             </motion.div>
         </motion.div>
         {/* Header program*/}
-        <div className="bg-gray-50 mx-16 my-2 py-3 px-3 text-center text-blue-800">
+        <div className="bg-gray-50 mx-16 my-2 py-3 px-3 text-center text-blue-800 rounded-lg">
             <HText>BIGINNER WORKOUT</HText>
         </div>
         {/* workout beginner phase 1*/}
-        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2">
+        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2 rounded-lg">
             <button className="flex font-semibold text-2xl py-2 text-pink-700 w-full text-left items-center"
                 onClick={()=> setIsExpanded1(!isExpanded1)}
             >
@@ -61,7 +61,7 @@ function WorkoutPrograms(){
             {isExpanded1 && <WorkoutBeginner1/>}
         </div>
         {/* workout beginner phase 2*/}
-        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2">
+        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2 rounded-lg">
             <button className="flex font-semibold text-2xl py-2 text-pink-700 w-full text-left items-center"
                 onClick={()=> setIsExpanded2(!isExpanded2)}
             >
@@ -74,7 +74,7 @@ function WorkoutPrograms(){
             {isExpanded2 && <WorkoutBeginner2/>}
         </div>
         {/* workout beginner phase 3*/}
-        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2">
+        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2 rounded-lg">
             <button className="flex font-semibold text-2xl py-2 text-pink-700 w-full text-left items-center"
                 onClick={()=> setIsExpanded3(!isExpanded3)}
             >

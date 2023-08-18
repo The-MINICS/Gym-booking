@@ -1,7 +1,33 @@
 import { useState } from 'react';
-import { MenuItemServices } from './MenuItems';
 import '@/Components/Dropdown.css';
 import { Link } from 'react-router-dom';
+
+const MenuItemServices = [
+  {
+    title: 'Equipments',
+    path: '/equipments',
+    cName: 'dropdown-link',
+    role: 'all'
+  },
+  {
+    title: 'Recreation Room',
+    path: '/recreations',
+    cName: 'dropdown-link',
+    role: 'all'
+  },
+  {
+    title: 'Workout Programs',
+    path: '/programs',
+    cName: 'dropdown-link',
+    role: 'all'
+  },
+  {
+    title: 'Booking',
+    path: '/bookings',
+    cName: 'dropdown-link',
+    role: 'all'
+  }
+];
 
 function DropdownServices() {
   const [click, setClick] = useState(false);
@@ -21,6 +47,7 @@ function DropdownServices() {
                 className={item.cName}
                 to={item.path}
                 onClick={() => setClick(false)}
+                role={item.role}
               >
                 {item.title}
               </Link>
