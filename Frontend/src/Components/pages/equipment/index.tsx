@@ -1,25 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
-import { GetPictures } from "@/services/HttpClientService";
-import { PictureInterface } from "@/interfaces/IPicture";
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+import { Link } from "react-router-dom";
+import { ChevronDown, ChevronUp } from "react-feather";
+import AllEquipment from "./equipment";
 
 function Equipments(){
-    const [Equipments, setEquipments] = useState<PictureInterface[]>([]);
-
-    const getPictures = async () => {
-        let res = await GetPictures();
-        if (res) {
-            setEquipments(res);
-      }
-    };
-
-    useEffect(() => {
-        getPictures();
-    }, []);
+    const[ isExpanded, setIsExpanded ] = useState(false);
+    const isChevronDown = isExpanded;
+    const showChevronUp = !isExpanded;
 
     return (
-    <section id="equipments" className="w-full">
+    <section className="w-full">
         <motion.div className="mx-auto w-5/6 pt-10 pb-10 mt-5 justify-between bg-pink-50 rounded-2xl">
             {/* Header */}
             <motion.div
@@ -50,54 +43,40 @@ function Equipments(){
             </motion.div>
         </motion.div>
 
-        {/* Equipment */}
-        <motion.div className="mx-auto w-5/6 pt-10 pb-10 bg-white rounded-2xl mb-10">
-            <div className="justify-between gap-8 md:flex">
-                <motion.div> 
-                    {Equipments.map((row) => (
-                        <section className="flex items-center px-10 py-10">
-                            {/* Title and Describe */}
-                            <motion.div
-                                className="basis-3/5 md:mt-0"
-                                initial="visible" 
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.5 }}
-                                transition={{ duration: 0.5 }}
-                                variants={{
-                                    visible: { opacity: 1, x:-0 }
-                                }}
-                            >
-                                <h1 className="text-orange-600 text-3xl font-bold mx-14 text-center">{row.Title}</h1>
-                                <p className="my-2 font-semibold text-xl font-sans">{row.Describe}</p>
-                            </motion.div>
-                            
-                            {/* Ilustration */}
-                            <motion.div
-                                className="mt-16 basis-2/5 md:mt-0 flex items-center justify-center"
-                                initial="visible" 
-                                whileInView="visible"
-                                viewport={{ once: true, amount: 0.5 }}
-                                transition={{ duration: 0.5 }}
-                                variants={{
-                                    visible: { opacity: 1, x:-0 }
-                                }}>
-                                <div className="relative">
-                                    <div>
-                                        <img
-                                            className="rounded-lg bg-auto"
-                                            alt="illustration-page-graphic"
-                                            src={`${row.Picture}`}
-                                            width="450" 
-                                            height="350"
-                                        />
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </section>
-                    ))}  
-                </motion.div>   
-            </div>
+        <motion.div
+            className="flex items-center justify-center my-5"
+            initial="hidden" 
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            variants={{
+                hidden: { opacity: 0, x:-50 },
+                visible: { opacity: 1, x:-0 }
+            }}
+        >
+            <button className="rounded-md bg-yellow-500 px-10 py-3 hover:bg-red-400
+             hover:text-white active:scale-[.98] active:duration-75 transition-all">
+                <Link to="/bookings" className="flex items-center justify-center gap-2">
+                    <LaptopChromebookIcon/>
+                    <p className="font-bold text-xl">Book Now</p>
+                </Link>
+            </button>
         </motion.div>
+
+        {/* Equipment page */}
+        <div className="mx-auto md:w-4/5 my-2 px-3 py-2 rounded-lg mb-5 bg-orange-500">
+            <button className="flex font-semibold text-2xl py-1 text-white 
+                w-full text-left items-center justify-between px-5"
+                onClick={()=> setIsExpanded(!isExpanded)}
+            >
+                Show All Our Equipment
+                <div className="ml-2">
+                    {isChevronDown && <ChevronDown size={42}/>}
+                    {showChevronUp && <ChevronUp size={42}/>}
+                </div>
+            </button>
+            {isExpanded && <AllEquipment/>}
+        </div>
     </section>
   )
 }

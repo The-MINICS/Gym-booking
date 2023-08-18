@@ -49,7 +49,8 @@ function WorkoutPrograms(){
         </div>
         {/* workout beginner phase 1*/}
         <div className="bg-gray-50 mx-16 my-2 pl-3 py-2 rounded-lg">
-            <button className="flex font-semibold text-2xl py-2 text-pink-700 w-full text-left items-center"
+            <button className="flex font-semibold text-2xl py-2 text-pink-700 
+                w-full text-left items-center justify-between px-5"
                 onClick={()=> setIsExpanded1(!isExpanded1)}
             >
                 THE BEST 15-MINUTE WARM-UPS
@@ -62,7 +63,8 @@ function WorkoutPrograms(){
         </div>
         {/* workout beginner phase 2*/}
         <div className="bg-gray-50 mx-16 my-2 pl-3 py-2 rounded-lg">
-            <button className="flex font-semibold text-2xl py-2 text-pink-700 w-full text-left items-center"
+            <button className="flex font-semibold text-2xl py-2 text-pink-700 
+                w-full text-left items-center justify-between px-5"
                 onClick={()=> setIsExpanded2(!isExpanded2)}
             >
                 HOW TO GAIN MASS FAST: 20 WEEK QUICK START PROGRAM
@@ -74,8 +76,9 @@ function WorkoutPrograms(){
             {isExpanded2 && <WorkoutBeginner2/>}
         </div>
         {/* workout beginner phase 3*/}
-        <div className="bg-gray-50 mx-16 my-2 pl-3 py-2 rounded-lg">
-            <button className="flex font-semibold text-2xl py-2 text-pink-700 w-full text-left items-center"
+        <div className="bg-gray-50 mx-16 mt-2 mb-10 pl-3 py-2 rounded-lg">
+            <button className="flex font-semibold text-2xl py-2 text-pink-700 
+                w-full text-left items-center justify-between px-5"
                 onClick={()=> setIsExpanded3(!isExpanded3)}
             >
                 5 DAY HOME WORKOUT ROUTINE WITH MINIMAL EQUIPMENT
