@@ -55,7 +55,7 @@ function App() {
         <Route path='/admin-tools' element={<AdminTools/>}/> {}
         <Route path='/member-manage' element={<MemberManagement/>}/> {}
         <Route path='/equipment-manage' element={<EquipmentManagement/>}/> {}
-        <Route path='/recreation-room-mannage' element={<RoomManagement/>}/> {}
+        <Route path='/class-mannage' element={<RoomManagement/>}/> {}
         <Route path='/complaint-handle' element={<ComplaintHandling/>}/> {}
       </Routes>
       <Footer />

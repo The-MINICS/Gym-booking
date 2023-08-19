@@ -13,7 +13,7 @@ function Member(){
     return (
         <div className="w-full bg-gray-50">
         {/* Page Graphic */}
-            <motion.div className="mx-auto w-5/6 py-16">
+            <motion.div className="mx-auto w-5/6 py-10">
                 <div className="justify-between gap-8 md:flex">
                     <motion.div
                         className="mt-2 basis-2/5"

@@ -5,6 +5,9 @@ import { useState } from "react";
 import WorkoutBeginner1 from "./workout-beginner1";
 import WorkoutBeginner2 from "./workout-beginner2";
 import WorkoutBeginner3 from "./workout-beginner3";
+import { Link } from "react-router-dom";
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+import HomeIcon from '@mui/icons-material/Home';
 
 function WorkoutPrograms(){
     const[ isExpanded1, setIsExpanded1 ] = useState(false);
@@ -89,6 +92,33 @@ function WorkoutPrograms(){
             </button>
             {isExpanded3 && <WorkoutBeginner3/>}
         </div>
+        {/* BookIcon */}
+        <motion.div
+            className="flex items-center justify-center mt-5 mb-10 gap-3"
+            initial="hidden" 
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            variants={{
+                hidden: { opacity: 0, x:-50 },
+                visible: { opacity: 1, x:-0 }
+            }}
+        >
+            <button className="rounded-md bg-yellow-500 px-5 py-3 hover:bg-red-400
+             hover:text-white active:scale-[.98] active:duration-75 transition-all">
+                <Link to="/bookings" className="flex items-center justify-center gap-2">
+                    <LaptopChromebookIcon/>
+                    <p className="font-bold text-xl">Book Now</p>
+                </Link>
+            </button>
+            <button className="rounded-md bg-red-300 px-5 py-3 hover:bg-yellow-500
+             hover:text-white active:scale-[.98] active:duration-75 transition-all">
+                <Link to="/services" className="flex items-center justify-center gap-2">
+                    <HomeIcon/>
+                    <p className="font-bold text-xl">All Our Services</p>
+                </Link>
+            </button>
+        </motion.div>
     </div>
   )
 }
