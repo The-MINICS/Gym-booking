@@ -21,6 +21,8 @@ import RoomManagement from "./Components/pages/admin/room_control";
 import EquipmentManagement from "./Components/pages/admin/equipment_control";
 import MemberManagement from "./Components/pages/admin/member_control";
 import '@/Components/Dropdown.css';
+import MemberCreate from "./Components/pages/admin/member_create";
+import MemberUpdate from "./Components/pages/admin/member_update";
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -57,6 +59,8 @@ function App() {
         <Route path='/equipment-manage' element={<EquipmentManagement/>}/> {}
         <Route path='/class-mannage' element={<RoomManagement/>}/> {}
         <Route path='/complaint-handle' element={<ComplaintHandling/>}/> {}
+        <Route path='/member-create' element={<MemberCreate/>}/> {}
+        <Route path="/member/update/:id" element={<MemberUpdate/>}/> {}
       </Routes>
       <Footer />
   </Router>

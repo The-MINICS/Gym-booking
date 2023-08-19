@@ -82,7 +82,7 @@ func GetMember(c *gin.Context) {
 func ListMembers(c *gin.Context) {
 	var members []entity.Member
 
-	if err := entity.DB().Preload("Gender").Preload("Role").Raw("SELECT * FROM members").Find(&members).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("Role").Raw("SELECT * FROM members WHERE role_id = 2").Find(&members).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -93,31 +93,52 @@ func ListMembers(c *gin.Context) {
 func UpdateMember(c *gin.Context) {
 	var member entity.Member
 	var gender entity.Gender
+	var role entity.Role
 
 	if err := c.ShouldBindJSON(&member); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// ค้นหา gender ด้วย id
+	var newUsername = member.Username
+	var newFirstname = member.Firstname
+	var newLastname = member.Lastname
+	var newEmail = member.Email
+	var newPassword = member.Password
+	var newPhone = member.Phonenumber
+	var newAge = member.Age
+	var newWeight = member.Weight
+	var newHeight = member.Height
+
 	if tx := entity.DB().Where("id = ?", member.GenderID).First(&gender); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Gender not found"})
+		return
+	}
+
+	if tx := entity.DB().Where("id = ?", member.RoleID).First(&role); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Role not found"})
+		return
+	}
+
+	if tx := entity.DB().Where("id = ?", member.ID).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
 		return
 	}
 
 	update_member := entity.Member{
-		Model:       gorm.Model{ID: member.ID},
-		Username:    member.Username,
-		Email:       member.Email,
-		Password:    member.Password,
-		Gender:      gender,
-		Firstname:   member.Firstname,
-		Lastname:    member.Lastname,
-		Phonenumber: member.Phonenumber,
-		Age:         member.Age,
-		Weight:      member.Weight,
-		Height:      member.Height,
-		Role:        member.Role,
+		Model:           gorm.Model{ID: member.ID},
+		Username:        newUsername,
+		Email:           newEmail,
+		Password:        newPassword,
+		Gender:          gender,
+		Firstname:       newFirstname,
+		Lastname:        newLastname,
+		Phonenumber:     newPhone,
+		Member_datetime: member.Member_datetime,
+		Age:             newAge,
+		Weight:          newWeight,
+		Height:          newHeight,
+		Role:            role,
 	}
 
 	// การ validate
@@ -144,20 +165,13 @@ func UpdateMember(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": update_member})
 
 }
+
+// DELETE /members/:id
 func DeleteMember(c *gin.Context) {
 	id := c.Param("id")
-
-	//ลบเมื่อ
-	if err := entity.DB().Exec("DELETE FROM members WHERE member_id = ?", id).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	if tx := entity.DB().Exec("DELETE FROM members WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "members not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"data": id})
-
 }

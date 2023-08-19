@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import UserPhoto from '@/assets/UserProfile.png';
 import AdminPhoto from '@/assets/AdministratorProfile.png';
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 
 function Profile(){
+    const navigate = useNavigate();
     const [members, setMembers] = useState<MemberInterface>({});
     const roles = localStorage.getItem("role");
 
@@ -92,10 +93,10 @@ function Profile(){
             </div>
             <div className="mx-3 py-3 mt-3 flex items-center justify-center">
                 <button className="bg-yellow-500 text-white hover:bg-red-300 rounded px-3 py-3 
-                active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out">
-                    <Link to="/accountsettings">
-                        <EditIcon/> Edit Profile
-                    </Link>
+                active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                    onClick={() => navigate({ pathname: `/member/update/${members.ID}` })}
+                >
+                    <EditIcon/> Edit Profile
                 </button>
             </div>
         </motion.div>
