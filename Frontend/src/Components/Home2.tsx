@@ -42,7 +42,7 @@ function Home(){
             </div>
           </div>
           <p className="mt-4 text-sm font-medium">
-          Welcome to The MINICS Gym.
+            <p className="font-bold text-lg">Welcome to The MINICS Gym.</p>
           <li>The Place where you're gonna have a perfect body and sexy body,</li>
           <li>The Place where you're gonna be healthy,</li>
           <li>The Place where you're gonna be happy in everyday life.</li>

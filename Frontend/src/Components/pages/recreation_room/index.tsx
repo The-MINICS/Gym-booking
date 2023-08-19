@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Class from "./class";
 import { Link } from "react-router-dom";
 import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+import HomeIcon from '@mui/icons-material/Home';
 
 function Recreations(){
     const [Rooms, setRooms] = useState<RoomInterface[]>([]);
@@ -61,7 +62,7 @@ function Recreations(){
                         </ul>
                     </div>
                     <motion.div
-                        className="md:w-3/5"
+                        className="flex items-center justify-start my-5 gap-3"
                         initial="hidden" 
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
@@ -71,11 +72,18 @@ function Recreations(){
                             visible: { opacity: 1, x:-0 }
                         }}
                     >
-                        <button className="rounded-md bg-yellow-500 px-10 py-3 hover:bg-red-400
+                        <button className="rounded-md bg-yellow-500 px-5 py-3 hover:bg-red-400
                         hover:text-white active:scale-[.98] active:duration-75 transition-all">
                             <Link to="/bookings" className="flex items-center justify-center gap-2">
                                 <LaptopChromebookIcon/>
                                 <p className="font-bold text-xl">Book Now</p>
+                            </Link>
+                        </button>
+                        <button className="rounded-md bg-red-300 px-5 py-3 hover:bg-yellow-500
+                        hover:text-white active:scale-[.98] active:duration-75 transition-all">
+                            <Link to="/services" className="flex items-center justify-center gap-2">
+                                <HomeIcon/>
+                                <p className="font-bold text-xl">All Our Services</p>
                             </Link>
                         </button>
                     </motion.div>

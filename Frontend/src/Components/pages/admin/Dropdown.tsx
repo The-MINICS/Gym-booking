@@ -14,8 +14,8 @@ const MenuItemAdmin = [
     cName: 'dropdown-link',
   },
   {
-    title: 'Recreation Room Management',
-    path: '/recreation-room-mannage',
+    title: 'Class Management',
+    path: '/class-mannage',
     cName: 'dropdown-link',
   },
   {
