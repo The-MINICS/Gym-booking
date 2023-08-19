@@ -27,6 +27,7 @@ const SignIn = ({setSelectedPage}: Props) => {
   const [signin, setSignin] = useState<Partial<SigninInterface>>({});
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const roles = localStorage.getItem("role");
 
   const ShowSignup = () => {
     if(show == true){
@@ -84,9 +85,7 @@ const SignIn = ({setSelectedPage}: Props) => {
                   onClose={handleClose}
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
-                  <Alert onClose={handleClose} severity="success">
-                    Sign In Successful
-                  </Alert>
+                  {AlerSignIn()}
                 </Snackbar>
                 {/* login failure */}
                 <Snackbar
@@ -226,6 +225,23 @@ const SignIn = ({setSelectedPage}: Props) => {
             {open && (<InputEmail setSelectedPage={setSelectedPage} />)}
         </section>
     );
+
+    function AlerSignIn() {
+      if (roles === 'Admin') {
+        return (
+          <Alert onClose={handleClose} severity="success">
+            You are logged in as an Administrator.
+          </Alert>
+        )
+      }
+      else {
+        return (
+          <Alert onClose={handleClose} severity="success">
+            Sign In Successful
+          </Alert>
+        )
+      }
+    }
 }
 
 export default SignIn;
