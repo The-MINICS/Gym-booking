@@ -4,11 +4,6 @@ import { Link } from 'react-router-dom';
 
 const MenuItemMember = [
   {
-    title: 'Account Settings',
-    path: '/accountsettings',
-    cName: 'dropdown-link',
-  },
-  {
     title: 'Booking Schedule',
     path: '/bookingsch',
     cName: 'dropdown-link'

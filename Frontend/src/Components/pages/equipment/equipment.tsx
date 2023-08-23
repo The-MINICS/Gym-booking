@@ -20,7 +20,7 @@ function AllEquipment() {
     return (
     <section>
         {/* All Equipment */}
-        <motion.div className="mx-5 pt-10 pb-10 bg-white rounded-2xl my-10">
+        <motion.div className="mx-2 pb-10 bg-white rounded-lg my-10">
             <div className="justify-between gap-8 md:flex">
                 <motion.div> 
                     {Equipments.map((row) => (

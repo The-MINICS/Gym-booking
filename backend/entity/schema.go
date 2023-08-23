@@ -47,6 +47,7 @@ type Member struct {
 
 	Booking   []Booking   `gorm:"foreignKey:MemberID"`
 	Contactus []Contactus `gorm:"foreignKey:MemberID"`
+	Equipment []Equipment `gorm:"foreignKey:MemberID"`
 }
 
 // Proportion
@@ -68,7 +69,8 @@ type Room struct {
 	Illustration string
 	Caption      string
 
-	Booking []Booking `gorm:"foreignKey:RoomID"`
+	Booking   []Booking   `gorm:"foreignKey:RoomID"`
+	Equipment []Equipment `gorm:"foreignKey:RoomID"`
 }
 
 // Picture

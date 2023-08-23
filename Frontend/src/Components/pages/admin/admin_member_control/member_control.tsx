@@ -1,7 +1,7 @@
 import React from "react";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMembers, MemberDelete } from "@/services/HttpClientService";
-import MemberIcon1 from "@/assets/group.png";
+import MemberIcon from "@/assets/group.png";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -86,9 +86,9 @@ function MemberManagement() {
                         }}
                     >
                         <div className="flex items-center justify-center gap-2 py-3 my-3">
-                            <img src={MemberIcon1} className="h-16 w-16"/>
+                            <img src={MemberIcon} className="h-16 w-16"/>
                             <h1 className="text-red-500 font-bold text-6xl">Member Management</h1>
-                            <img src={MemberIcon1} className="h-16 w-16"/>
+                            <img src={MemberIcon} className="h-16 w-16"/>
                         </div>
                     </motion.div>
             </motion.div>

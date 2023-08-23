@@ -3,8 +3,10 @@ package controller
 import (
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // POST--picture--
@@ -56,20 +58,44 @@ func DeletePicture(c *gin.Context) {
 
 // PATCH--picture--
 func UpdatePicture(c *gin.Context) {
-	var picture entity.Picture
-	if err := c.ShouldBindJSON(&picture); err != nil {
+	var pic entity.Picture
+
+	if err := c.ShouldBindJSON(&pic); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", picture.ID).First(&picture); tx.RowsAffected == 0 {
+	var new_picture_tittle = pic.Title
+	var new_picture_pic = pic.Picture
+	var new_picture_describe = pic.Describe
+
+	if tx := entity.DB().Where("id = ?", pic.ID).First(&pic); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "picture not found"})
 		return
 	}
 
-	if err := entity.DB().Save(&picture).Error; err != nil {
+	picture_update := entity.Picture{
+		Model:    gorm.Model{ID: pic.ID},
+		Picture:  new_picture_pic,
+		Title:    new_picture_tittle,
+		Describe: new_picture_describe,
+	}
+
+	if _, err := govalidator.ValidateStruct(picture_update); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": picture})
+
+	if err := entity.DB().Save(&picture_update).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := entity.DB().Where("id = ?", pic.ID).Updates(&picture_update).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": picture_update})
+
 }
