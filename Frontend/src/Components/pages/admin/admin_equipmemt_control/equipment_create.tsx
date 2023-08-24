@@ -140,7 +140,7 @@ function EquipmentCreate({ onClose }: any ){
 
     async function submit() {
         let data = {
-            Name: equipment.Name?? "",
+            Name: equipment.Name,
             PictureID: convertType(equipment.PictureID),
             RoomID: convertType(equipment.RoomID),
             MemberID: convertType(equipment.MemberID),
@@ -157,7 +157,7 @@ function EquipmentCreate({ onClose }: any ){
           body: JSON.stringify(data)
         };
       
-        fetch(`${apiUrl}/pictures`, requestOptions)
+        fetch(`${apiUrl}/equipments`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             console.log(res)
