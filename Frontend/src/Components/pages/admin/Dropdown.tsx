@@ -15,7 +15,7 @@ const MenuItemAdmin = [
   },
   {
     title: 'Class Management',
-    path: '/class-mannage',
+    path: '/room-mannage',
     cName: 'dropdown-link',
   },
   {

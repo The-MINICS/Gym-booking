@@ -74,7 +74,7 @@ function AdminTools(){
                             </button>
                             <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
-                                <Link to="/class-mannage">
+                                <Link to="/room-mannage">
                                     <img className="h-32 w-32" src={RecreationRoom} alt="recreation_room-icon"/>
                                     <h3 className="text-lg font-bold text-black">Class Management</h3>
                                 </Link>

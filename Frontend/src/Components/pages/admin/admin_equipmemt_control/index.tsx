@@ -11,6 +11,7 @@ import { ChevronDown, ChevronUp } from "react-feather";
 import PicturEquipment from "./picture_control";
 import AllEquipment from "./equipment_control";
 import PictureEquipmentCreate from "./pic_eqi_create";
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 function EquipmentManagement() {
     const [showPictureCreate, setShowPictureCreate] = useState(false);
@@ -72,7 +73,7 @@ function EquipmentManagement() {
                     onClick={() => setShowPictureCreate(true)}
                 >
                     <div className="flex items-center justify-center gap-2">
-                        <GroupAddIcon/>
+                        <FitnessCenterIcon/>
                         <p className="font-bold text-xl">Add Equipment</p>
                     </div>
                 </button>

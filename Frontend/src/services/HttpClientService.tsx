@@ -118,6 +118,27 @@ const MemberDelete = async (ID: number) => {
   return res
 };
 
+const RoomDelete = async (ID: number) => {
+  console.log(ID)
+  const requestOptions = {
+      method: "DELETE",
+      headers: { 
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json", 
+      },
+  };
+  let res = await fetch(`http://localhost:9999/rooms/`+ID, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+          if(res.data){
+              return res.data
+          } else{
+              return false
+          }
+  })
+  return res
+};
+
 const EquipmentDelete = async (ID: number) => {
   console.log(ID)
   const requestOptions = {
@@ -232,6 +253,7 @@ export {
   GetMemberByMID,
   GetMembers,
   MemberDelete,
+  RoomDelete,
   EquipmentDelete,
   PictureDelete,
   GetEquipments,
