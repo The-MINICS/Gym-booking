@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import UserPhoto from '@/assets/UserProfile.png';
 import AdminPhoto from '@/assets/AdministratorProfile.png';
 import dayjs from "dayjs";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 
 function Profile(){

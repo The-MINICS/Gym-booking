@@ -8,7 +8,7 @@ import AllEquipment from "./equipment";
 import HomeIcon from '@mui/icons-material/Home';
 
 function Equipments(){
-    const[ isExpanded, setIsExpanded ] = useState(false);
+    const [ isExpanded, setIsExpanded ] = useState(true);
     const isChevronDown = isExpanded;
     const showChevronUp = !isExpanded;
 
@@ -72,12 +72,12 @@ function Equipments(){
         </motion.div>
 
         {/* Equipment page */}
-        <div className="mx-auto md:w-4/5 my-2 px-3 py-2 rounded-lg mb-5 bg-orange-500">
+        <div className="mx-auto md:w-4/5 my-2 px-3 py-2 rounded-lg mb-5 bg-orange-400">
             <button className="flex font-semibold text-2xl py-1 text-white 
-                w-full text-left items-center justify-between px-5"
+                w-full text-left items-center justify-between px-2"
                 onClick={()=> setIsExpanded(!isExpanded)}
             >
-                Show All Our Equipment
+                Show All Our Equipments
                 <div className="ml-2">
                     {isChevronDown && <ChevronDown size={42}/>}
                     {showChevronUp && <ChevronUp size={42}/>}

@@ -111,6 +111,7 @@ function MemberCreate() {
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
+
         const requestOptions = {
           method: "POST",
           headers: {
@@ -208,7 +209,7 @@ function MemberCreate() {
                           placeholder="Enter your FirstName"
                           id="Firstname"
                           name="firstname"
-                          type="firstname"
+                          type="string"
                           autoFocus
                           value={member.Firstname || ""}
                           onChange={handleInputChange}

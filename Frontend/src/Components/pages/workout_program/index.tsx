@@ -10,9 +10,9 @@ import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import HomeIcon from '@mui/icons-material/Home';
 
 function WorkoutPrograms(){
-    const[ isExpanded1, setIsExpanded1 ] = useState(false);
-    const[ isExpanded2, setIsExpanded2 ] = useState(false);
-    const[ isExpanded3, setIsExpanded3 ] = useState(false);
+    const[ isExpanded1, setIsExpanded1 ] = useState(true);
+    const[ isExpanded2, setIsExpanded2 ] = useState(true);
+    const[ isExpanded3, setIsExpanded3 ] = useState(true);
 
     const isChevronDown1 = isExpanded1;
     const showChevronUp1 = !isExpanded1;
