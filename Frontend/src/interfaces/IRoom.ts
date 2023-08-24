@@ -4,6 +4,7 @@ export interface RoomInterface {
     ID?: number,
     Activity?: string;
     Number?: string;
+    Quantity?: number;
     Capacity?: number;
     Attendant?: string;
     Illustration?: string;

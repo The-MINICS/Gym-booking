@@ -1,3 +1,4 @@
+import '@/Components/Dropdown.css';
 import Navbar2 from "@/Components/Navbar2"
 import { useEffect, useState } from "react";
 import Home from "@/Components/Home2";
@@ -16,16 +17,13 @@ import ChangePSW from "./Components/pages/member/change_password";
 import BookingSCH from "./Components/pages/member/booking_schedule";
 import AdminTools from "./Components/pages/admin";
 import ComplaintHandling from "./Components/pages/admin/complaint_handle";
-import RoomManagement from "./Components/pages/admin/room_control";
+import RoomManagement from "./Components/pages/admin/admin_room_control/room_control";
 import EquipmentManagement from "./Components/pages/admin/admin_equipmemt_control";
 import MemberManagement from "./Components/pages/admin/admin_member_control/member_control";
-import '@/Components/Dropdown.css';
 import MemberCreate from "./Components/pages/admin/admin_member_control/member_create";
 import MemberUpdate from "./Components/pages/admin/admin_member_control/member_update";
 import PictureEquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/picture_update";
 import EquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/equipment_update";
-//import PictureCreate from "./Components/pages/admin/admin_equipmemt_control/picture_create";
-//import EquipmentCreate from "./Components/pages/admin/admin_equipmemt_control/equipment_create";
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -59,11 +57,9 @@ function App() {
         <Route path='/admin-tools' element={<AdminTools/>}/> {}
         <Route path='/member-manage' element={<MemberManagement/>}/> {}
         <Route path='/equipment-manage' element={<EquipmentManagement/>}/> {}
-        <Route path='/class-mannage' element={<RoomManagement/>}/> {}
+        <Route path='/room-mannage' element={<RoomManagement/>}/> {}
         <Route path='/complaint-handle' element={<ComplaintHandling/>}/> {}
         <Route path='/member-create' element={<MemberCreate/>}/> {}
-        {/* <Route path='/picture-create' element={<PictureCreate/>}/> {}
-        <Route path='/equipment-create' element={<EquipmentCreate/>}/> {} */}
         <Route path="/member/update/:id" element={<MemberUpdate/>}/> {}
         <Route path="/picture/update/:id" element={<PictureEquipmentUpdate/>}/> {}
         <Route path="/equipment/update/:id" element={<EquipmentUpdate/>}/> {}
