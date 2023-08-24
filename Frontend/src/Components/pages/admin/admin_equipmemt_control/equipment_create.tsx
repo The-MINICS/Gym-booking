@@ -140,7 +140,7 @@ function EquipmentCreate({ onClose }: any ){
 
     async function submit() {
         let data = {
-            Equipments: equipment.Equipments?? "",
+            Name: equipment.Name?? "",
             PictureID: convertType(equipment.PictureID),
             RoomID: convertType(equipment.RoomID),
             MemberID: convertType(equipment.MemberID),
@@ -217,12 +217,12 @@ function EquipmentCreate({ onClose }: any ){
                                 <p className="text-lg font-semibold">Title</p>
                                 <TextField
                                     required
-                                    id="Equipment"
+                                    id="Name"
                                     variant="outlined"
                                     type="string"
                                     size="medium"
                                     placeholder="Please fill Equipment name"
-                                    value={equipment.Equipments || ""}
+                                    value={equipment.Name || ""}
                                     onChange={handleInputChange} 
                                 />
                             </FormControl>

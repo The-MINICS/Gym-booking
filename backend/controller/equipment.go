@@ -40,10 +40,10 @@ func CreateEquipment(c *gin.Context) {
 
 	// 14: สร้าง  equipmentr
 	eqi := entity.Equipment{
-		Equipments: equipment.Equipments,
-		Picture:    picture,
-		Room:       room,
-		Member:     member,
+		Name:    equipment.Name,
+		Picture: picture,
+		Room:    room,
+		Member:  member,
 	}
 
 	// การ validate
@@ -66,7 +66,7 @@ func CreateEquipment(c *gin.Context) {
 func GetEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	id := c.Param("id")
-	if err := entity.DB().Preload("Picture").Preload("Admin").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
+	if err := entity.DB().Preload("Picture").Preload("Member").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -75,12 +75,12 @@ func GetEquipment(c *gin.Context) {
 
 // GET--equipments--
 func ListEquipments(c *gin.Context) {
-	var equipmets []entity.Equipment
-	if err := entity.DB().Preload("Picture").Preload("Member").Raw("SELECT * FROM equipment").Find(&equipmets).Error; err != nil {
+	var equipments []entity.Equipment
+	if err := entity.DB().Preload("Picture").Preload("Member").Raw("SELECT * FROM equipment").Find(&equipments).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": equipmets})
+	c.JSON(http.StatusOK, gin.H{"data": equipments})
 }
 
 // PATCH--equipment
@@ -95,7 +95,7 @@ func UpdateEquipment(c *gin.Context) {
 		return
 	}
 
-	var new_equipment = equipment.Equipments
+	var new_equipment = equipment.Name
 
 	if tx := entity.DB().Where("id = ?", equipment.PictureID).First(&picture); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Picture not found"})
@@ -118,11 +118,11 @@ func UpdateEquipment(c *gin.Context) {
 	}
 
 	update_equipment := entity.Equipment{
-		Model:      gorm.Model{ID: equipment.ID},
-		Equipments: new_equipment,
-		Picture:    picture,
-		Room:       room,
-		Member:     member,
+		Model:   gorm.Model{ID: equipment.ID},
+		Name:    new_equipment,
+		Picture: picture,
+		Room:    room,
+		Member:  member,
 	}
 
 	if _, err := govalidator.ValidateStruct(update_equipment); err != nil {

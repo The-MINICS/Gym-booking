@@ -94,7 +94,7 @@ function AllEquipment() {
                                             key={row.ID}
                                         >
                                             <TableCell align="center">{row.ID}</TableCell>
-                                            <TableCell align="center">{row.Equipments}</TableCell>
+                                            <TableCell align="center">{row.Name}</TableCell>
                                             <TableCell align="center">{row.Member?.Firstname} {row.Member?.Lastname}</TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>

@@ -4,7 +4,7 @@ import { RoomInterface } from "./IRoom";
 
 export interface EquipmentInterface {
     ID?: number,
-    Equipments?: string;
+    Name?: string;
 
     PictureID?: number;
     Picture?: PictureInterface;

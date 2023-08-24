@@ -86,7 +86,7 @@ type Picture struct {
 // Equipment
 type Equipment struct {
 	gorm.Model
-	Equipments string
+	Name string
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
