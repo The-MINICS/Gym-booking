@@ -9,6 +9,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// func MemberHasBooking(memberID, timeSlot string)bool{
+// 	var booking entity.Booking
+// 	var timeproportion entity.TimeProportion
+// 	for _,bk1 := range booking.ID {
+// 		if memberID == memberID && timeproportion.Proportion == timeSlot{
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
 // POST /booking
 func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
@@ -16,6 +27,7 @@ func CreateBooking(c *gin.Context) {
 	var room entity.Room
 	var timeproportion entity.TimeProportion
 	var equipment entity.Equipment
+	//var bookingsMutex = sync.Mutex
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -46,7 +58,15 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	room.Quantity += 1
+	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
+	if room.Quantity >= room.Capacity {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Room is fully booked"})
+		return
+	}
+
+	// Update room booking status
+	room.Quantity++
+
 	// 14: สร้าง  booking
 	bk := entity.Booking{
 		Datetime:       booking.Datetime,
