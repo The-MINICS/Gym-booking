@@ -8,7 +8,6 @@ import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ButtonGroup from "@mui/material/ButtonGroup";
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import BuildIcon from '@mui/icons-material/Build';
 import HomeIcon from '@mui/icons-material/Home';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
@@ -20,12 +19,18 @@ import {
 } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 import { RoomInterface } from "@/interfaces/IRoom";
+import RoomCreate from "./room_create";
 
 function RoomManagement() {
     const navigate = useNavigate();
+    const [showRoomCreate, setShowRoomCreate] = useState(false);
     const [Rooms, setRooms] = useState<RoomInterface[]>([]);
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
+
+    const handleOnClose = () => {
+        setShowRoomCreate(false);
+    }
 
     const getRooms = async () => {
         let res = await GetRooms();
@@ -114,11 +119,13 @@ function RoomManagement() {
                     </Link>
                 </button>
                 <button className="bg-slate-300 rounded-xl px-5 py-3 hover:bg-orange-500
-                hover:text-white active:scale-[.98] active:duration-75 transition-all">
-                    <Link to="/member-create" className="flex items-center justify-center gap-2">
+                hover:text-white active:scale-[.98] active:duration-75 transition-all"
+                    onClick={() => setShowRoomCreate(true)}
+                >
+                    <div className="flex items-center justify-center gap-2">
                         <SelfImprovementIcon/>
                         <p className="font-bold text-xl">Add Room</p>
-                    </Link>
+                    </div>
                 </button>
                 <button className="bg-slate-300 rounded-xl px-5 py-3 hover:bg-purple-500
                 hover:text-white active:scale-[.98] active:duration-75 transition-all">
@@ -181,7 +188,7 @@ function RoomManagement() {
                                                     startIcon={<EditIcon />}
                                                     className="hover:bg-blue-500 cursor-pointer"
                                                     onClick={() =>
-                                                        navigate({ pathname: `/member/update/${row.ID}` })
+                                                        navigate({ pathname: `/room/update/${row.ID}` })
                                                     }
                                                         >Edit
                                                     </Button>
@@ -200,6 +207,7 @@ function RoomManagement() {
                     </Table>
                 </TableContainer>
             </motion.div>
+
             <Dialog
                 open={openDelete}
                 onClose={handleDialogDeleteclose}
@@ -222,6 +230,9 @@ function RoomManagement() {
                         </Button>
                     </DialogActions>
             </Dialog>
+
+            {/* Create New Recreation Room */}
+            { showRoomCreate && <RoomCreate onClose={handleOnClose}/>}
         </section>
     )
 }

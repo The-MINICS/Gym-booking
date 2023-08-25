@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { EquipmentInterface } from "@/interfaces/IEquipment";
 import { GetMemberByMID } from "@/services/HttpClientService";
 import { Select, SelectChangeEvent } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 
 function EquipmentUpdate(){
@@ -231,7 +232,7 @@ function EquipmentUpdate(){
                             anchorOrigin={{ vertical: "top", horizontal: "center" }}
                             >
                             <Alert onClose={handleClose} severity="success">
-                                Equipment Created
+                                Equipment is Created
                             </Alert>
                         </Snackbar>
                         <Snackbar
@@ -242,7 +243,7 @@ function EquipmentUpdate(){
                             anchorOrigin={{ vertical: "top", horizontal: "center" }}
                             >
                             <Alert onClose={handleClose} severity="error">
-                                Can not create the the equipment! : {errorMessage}
+                                Can not create the equipment! : {errorMessage}
                             </Alert>
                         </Snackbar>
 
@@ -321,6 +322,12 @@ function EquipmentUpdate(){
                             </Grid>
                             
                             <Grid item xs={12}>
+                                <Button style={{ float: "left" }}
+                                    component={RouterLink} to="/equipment-manage"
+                                    variant="contained"
+                                    color="inherit"
+                                >Quit
+                                </Button>
                                 <Button style={{ float: "right" }}
                                     onClick={submit}
                                     variant="contained"

@@ -3,7 +3,6 @@ import EquipmentIcon2 from "@/assets/stationary-bicycle.png";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import BuildIcon from '@mui/icons-material/Build';
 import HomeIcon from '@mui/icons-material/Home';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';

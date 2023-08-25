@@ -193,7 +193,7 @@ function PictureCreate({ onClose, nextPage }: any ){
                                     onClick={submit}
                                     variant="contained"
                                     color="primary"
-                                >Continue
+                                    >Continue
                                 </Button>
                             </Grid>
                         </Grid>

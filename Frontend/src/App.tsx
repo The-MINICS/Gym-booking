@@ -24,6 +24,7 @@ import MemberCreate from "./Components/pages/admin/admin_member_control/member_c
 import MemberUpdate from "./Components/pages/admin/admin_member_control/member_update";
 import PictureEquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/picture_update";
 import EquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/equipment_update";
+import RoomUpdate from './Components/pages/admin/admin_room_control/room_update';
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -63,6 +64,7 @@ function App() {
         <Route path="/member/update/:id" element={<MemberUpdate/>}/> {}
         <Route path="/picture/update/:id" element={<PictureEquipmentUpdate/>}/> {}
         <Route path="/equipment/update/:id" element={<EquipmentUpdate/>}/> {}
+        <Route path="/room/update/:id" element={<RoomUpdate/>}/> {}
       </Routes>
       <Footer />
   </Router>

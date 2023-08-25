@@ -3,8 +3,10 @@ package controller
 import (
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // POST--room--
@@ -22,8 +24,7 @@ func CreateRoom(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": room})
 }
 
-//GET--room id--
-
+// GET--room id--
 func GetRoom(c *gin.Context) {
 	var room entity.Room
 	id := c.Param("id")
@@ -57,19 +58,50 @@ func DeleteRoom(c *gin.Context) {
 // PATCH--room--
 func UpdateRoom(c *gin.Context) {
 	var room entity.Room
+
 	if err := c.ShouldBindJSON(&room); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	var new_room_activity = room.Activity
+	var new_room_number = room.Number
+	var new_room_quantity = room.Quantity
+	var new_room_capacity = room.Capacity
+	var new_room_attendant = room.Attendant
+	var new_room_illustration = room.Illustration
+	var new_room_caption = room.Caption
 
 	if tx := entity.DB().Where("id = ?", room.ID).First(&room); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "room not found"})
 		return
 	}
 
-	if err := entity.DB().Save(&room).Error; err != nil {
+	room_update := entity.Room{
+		Model:        gorm.Model{ID: room.ID},
+		Activity:     new_room_activity,
+		Number:       new_room_number,
+		Quantity:     new_room_quantity,
+		Capacity:     new_room_capacity,
+		Attendant:    new_room_attendant,
+		Illustration: new_room_illustration,
+		Caption:      new_room_caption,
+	}
+
+	if _, err := govalidator.ValidateStruct(room_update); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": room})
+
+	if err := entity.DB().Save(&room_update).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := entity.DB().Where("id = ?", room.ID).Updates(&room_update).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": room_update})
 }
