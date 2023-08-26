@@ -51,7 +51,7 @@ func CreateContactus(c *gin.Context) {
 func GetContactus(c *gin.Context) {
 	var contactus entity.Contactus
 	id := c.Param("id")
-	if tx := entity.DB().Preload("Member").Raw("SELECT * FROM contactuses WHERE id = ?", id).Find(&contactus).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Raw("SELECT * FROM contactus WHERE id = ?", id).Find(&contactus).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "contactus not found"})
 		return
 	}
@@ -62,7 +62,7 @@ func GetContactus(c *gin.Context) {
 func ListContactuses(c *gin.Context) {
 	var contactuses []entity.Contactus
 
-	if err := entity.DB().Preload("Member").Raw("SELECT * FROM contactuses").Find(&contactuses).Error; err != nil {
+	if err := entity.DB().Preload("Member").Raw("SELECT * FROM contactus").Find(&contactuses).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -81,7 +81,7 @@ func UpdateContactus(c *gin.Context) {
 
 	// ค้นหา member ด้วย id
 	if tx := entity.DB().Where("id = ?", contactus.MemberID).First(&member); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "member not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ContactUs not found"})
 		return
 	}
 	update_contactus := entity.Contactus{
@@ -108,17 +108,10 @@ func UpdateContactus(c *gin.Context) {
 func DeleteContactus(c *gin.Context) {
 	id := c.Param("id")
 
-	//ลบเมื่อ
-	if err := entity.DB().Exec("DELETE FROM contactuses WHERE contactus_id = ?", id).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if tx := entity.DB().Exec("DELETE FROM contactus WHERE id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ContactUs not found"})
 		return
 	}
-
-	if tx := entity.DB().Exec("DELETE FROM contactuses WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "contactuses not found"})
-		return
-	}
-
 	c.JSON(http.StatusOK, gin.H{"data": id})
 
 }

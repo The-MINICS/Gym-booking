@@ -181,6 +181,27 @@ const PictureDelete = async (ID: number) => {
   return res
 };
 
+const ContactUsDelete = async (ID: number) => {
+  console.log(ID)
+  const requestOptions = {
+      method: "DELETE",
+      headers: { 
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json", 
+      },
+  };
+  let res = await fetch(`http://localhost:9999/contactuses/`+ID, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+          if(res.data){
+              return res.data
+          } else{
+              return false
+          }
+  })
+  return res
+};
+
 async function GetEquipments() {
   const requestOptions = {
     method: "GET",
@@ -247,6 +268,28 @@ async function GetRooms() {
   return res;
 }
 
+async function GetContactUs() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/contactuses`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 export {
   Login,
   Members,
@@ -256,7 +299,9 @@ export {
   RoomDelete,
   EquipmentDelete,
   PictureDelete,
+  ContactUsDelete,
   GetEquipments,
   GetPictures,
   GetRooms,
+  GetContactUs
 };
