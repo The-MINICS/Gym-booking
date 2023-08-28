@@ -1,6 +1,7 @@
 import { MemberInterface } from "./IMember";
 import { EquipmentInterface } from "./IEquipment";
 import { RoomInterface } from "./IRoom";
+import { TimeProportionInterface } from "./ITimeProportion";
 
 export interface BookingInterface {
     ID?: number,
@@ -14,4 +15,7 @@ export interface BookingInterface {
 
     EquipmentID?: number;
     Equipment?: EquipmentInterface;
+
+    TimeProportionID?: number;
+    TimeProportion?: TimeProportionInterface;
 }
