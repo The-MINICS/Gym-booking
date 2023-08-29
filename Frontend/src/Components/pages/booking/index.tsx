@@ -8,11 +8,14 @@ import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
+import { TimeProportionInterface } from "@/interfaces/ITimeProportion";
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
+    const [proPortion, setProPortion] = useState<TimeProportionInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
+    const [roomState, setRoomState] = useState("")
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -21,10 +24,13 @@ function Booking() {
 
     const handleChange = (event: SelectChangeEvent) => {
         const name = event.target.name as keyof typeof books;
+        const roomState = event.target.value;
         setBooks({
           ...books,
           [name]: event.target.value,
         });
+        setRoomState(roomState)
+        console.log(roomState)
     };
 
     const handleClose = (
@@ -60,6 +66,28 @@ function Booking() {
         return res;
     }
 
+    async function GetProportion() {
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        };
+      
+        let res = await fetch(`${apiUrl}/timeproportions`, requestOptions)
+          .then((response) => response.json())
+          .then((res) => {
+            if (res.data) {
+              return res.data;
+            } else {
+              return false;
+            }
+          });
+      
+        return res;
+    }
+
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
         ref
@@ -82,9 +110,23 @@ function Booking() {
         }
     };
 
+    const getProportion = async () => {
+        let res = await GetProportion();
+        if (res) {
+            setProPortion(res);
+        }
+    };
+
+    const convertType = (data: string | number | undefined) => {
+        let val = typeof data === "string" ? parseInt(data) : data;
+        return val;
+    };
+
+
     useEffect(() => {
         getMembers();
         getRooms();
+        getProportion();
     }, []);
 
     return (
@@ -141,7 +183,7 @@ function Booking() {
                             </div>
                             <div className="mb-3">
                                 <FormControl fullWidth variant="standard">
-                                    <Select
+                                    <Select className="bg-white"
                                         native
                                         value={books.RoomID + ""}
                                         onChange={handleChange}
@@ -162,7 +204,7 @@ function Booking() {
                                     Booking Schedule
                                 </h1>
                             </div>
-                            <div className="text-left mb-3">
+                            <div className="text-left">
                                 {AfterSelect()}
                             </div>
                         </Grid>
@@ -201,14 +243,93 @@ function Booking() {
   );
   
   function AfterSelect() {
-    if (books.RoomID === 1) {
+    if (roomState === "1") {
+        books.RoomID = convertType(roomState);
         return (
             <Paper className="rounded p-2">
-                <p>Yoga room booking</p>
-                <p>Yoga room booking</p>
-                <p>Yoga room booking</p>
-                <p>Yoga room booking</p>
-                <p>Yoga room booking</p>
+                <p className="text-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
+                {proPortion.map((item: TimeProportionInterface) => (
+                    <ul className="my-2">
+                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                    </ul>
+                ))}
+            </Paper>
+        )
+    }
+    else if (roomState === "2") {
+        books.RoomID = convertType(roomState);
+        return (
+            <Paper className="rounded p-2">
+                <p className="text-bold text-center items-center text-red-700">R202 Aerobic Room Booking</p>
+                {proPortion.map((item: TimeProportionInterface) => (
+                    <ul className="my-2">
+                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                    </ul>
+                ))}
+            </Paper>
+        )
+    }
+    else if (roomState === "3") {
+        books.RoomID = convertType(roomState);
+        return (
+            <Paper className="rounded p-2">
+                <p className="text-bold text-center items-center text-red-700">R203 Pilates Room Booking</p>
+                {proPortion.map((item: TimeProportionInterface) => (
+                    <ul className="my-2">
+                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                    </ul>
+                ))}
+            </Paper>
+        )
+    }
+    else if (roomState === "4") {
+        books.RoomID = convertType(roomState);
+        return (
+            <Paper className="rounded p-2">
+                <p className="text-bold text-center items-center text-red-700">R204 Taekwondo Room Booking</p>
+                {proPortion.map((item: TimeProportionInterface) => (
+                    <ul className="my-2">
+                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                    </ul>
+                ))}
+            </Paper>
+        )
+    }
+    else if (roomState === "5") {
+        books.RoomID = convertType(roomState);
+        return (
+            <Paper className="rounded p-2">
+                <p className="text-bold text-center items-center text-red-700">R205 Fitness Booking</p>
+                {proPortion.map((item: TimeProportionInterface) => (
+                    <ul className="my-2">
+                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                    </ul>
+                ))}
+            </Paper>
+        )
+    }
+    else {
+        return (
+            <Paper className="rounded p-2">
+                <p className="italic text-red-600">
+                    Sorry! We haven't got any booking yet
+                    Please choose the services!
+                </p>
             </Paper>
         )
     }
