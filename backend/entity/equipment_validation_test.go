@@ -42,6 +42,6 @@ func TestEquipment(t *testing.T) {
 		ok, err := govalidator.ValidateStruct(equipment)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter equipment name."))
+		g.Expect(err.Error()).To(Equal("Please fill the equipment name."))
 	})
 }

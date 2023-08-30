@@ -86,7 +86,7 @@ type Picture struct {
 // Equipment
 type Equipment struct {
 	gorm.Model
-	Name string `valid:"required~Please enter equipment name." `
+	Name string `valid:"required~Please fill the equipment name." `
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
