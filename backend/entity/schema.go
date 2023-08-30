@@ -61,13 +61,13 @@ type TimeProportion struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity     string
-	Number       string
+	Activity     string `valid:"required~Please enter an activity., matches(^(R)([0-9]{3}$))~Please enter the correct format." `
+	Number       string `valid:"required~Please enter a room number." `
 	Quantity     int16
-	Capacity     int16
-	Attendant    string
-	Illustration string
-	Caption      string
+	Capacity     int16  `valid:"range(1|100)~Please enter a number not less than 0 and not more than 100." `
+	Attendant    string `valid:"required~Please enter an attendant." `
+	Illustration string `valid:"required~Please enter a illustration." `
+	Caption      string `valid:"required~Please enter a caption., maxstringlength(500)~It is too many characters, please enter again." `
 
 	Booking   []Booking   `gorm:"foreignKey:RoomID"`
 	Equipment []Equipment `gorm:"foreignKey:RoomID"`
@@ -76,9 +76,9 @@ type Room struct {
 // Picture
 type Picture struct {
 	gorm.Model
-	Picture  string
-	Title    string
-	Describe string
+	Picture  string `valid:"required~Please enter picture." `
+	Title    string `valid:"required~Please enter title." `
+	Describe string `valid:"required~Please enter describe., maxstringlength(500)~It is too many characters, please enter again. " `
 
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
@@ -86,7 +86,7 @@ type Picture struct {
 // Equipment
 type Equipment struct {
 	gorm.Model
-	Name string
+	Name string `valid:"required~Please enter equipment name." `
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
