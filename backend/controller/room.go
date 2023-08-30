@@ -12,7 +12,14 @@ import (
 // POST--room--
 func CreateRoom(c *gin.Context) {
 	var room entity.Room
+
 	if err := c.ShouldBindJSON(&room); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// การ validate
+	if _, err := govalidator.ValidateStruct(room); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

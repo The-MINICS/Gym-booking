@@ -12,7 +12,14 @@ import (
 // POST--picture--
 func CreatePicture(c *gin.Context) {
 	var picture entity.Picture
+
 	if err := c.ShouldBindJSON(&picture); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// การ validate
+	if _, err := govalidator.ValidateStruct(picture); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
