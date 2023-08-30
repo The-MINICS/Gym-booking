@@ -61,13 +61,13 @@ type TimeProportion struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity     string
-	Number       string
+	Activity     string `valid:"required~Please fill activity about the room." `
+	Number       string `valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
 	Quantity     int16
-	Capacity     int16
-	Attendant    string
-	Illustration string
-	Caption      string
+	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
+	Attendant    string `valid:"required~Please fill the room attendant." `
+	Illustration string `valid:"required~Please select a illustration." `
+	Caption      string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
 
 	Booking   []Booking   `gorm:"foreignKey:RoomID"`
 	Equipment []Equipment `gorm:"foreignKey:RoomID"`
@@ -76,9 +76,9 @@ type Room struct {
 // Picture
 type Picture struct {
 	gorm.Model
-	Picture  string
-	Title    string
-	Describe string
+	Picture  string `valid:"required~Please select the picture." `
+	Title    string `valid:"required~Please fill the equipment name." `
+	Describe string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
 
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
@@ -86,7 +86,7 @@ type Picture struct {
 // Equipment
 type Equipment struct {
 	gorm.Model
-	Name string
+	Name string `valid:"required~Please fill the equipment name." `
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
@@ -140,10 +140,8 @@ func init() {
 		match, _ := regexp.MatchString("^[ก-๛a-zA-Z\\s]+$", s)
 		return match
 	}))
-}
 
-// ฟังก์ชันที่จะใช่ในการ validation EntryTime
-func init() {
+	// ฟังก์ชันที่จะใช่ในการ validation EntryTime
 	govalidator.CustomTypeTagMap.Set("Past", func(i interface{}, context interface{}) bool {
 		t := i.(time.Time)
 		return t.After(time.Now().Add(time.Minute*-2)) || t.Equal(time.Now())

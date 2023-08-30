@@ -9,17 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// func MemberHasBooking(memberID, timeSlot string)bool{
-// 	var booking entity.Booking
-// 	var timeproportion entity.TimeProportion
-// 	for _,bk1 := range booking.ID {
-// 		if memberID == memberID && timeproportion.Proportion == timeSlot{
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
-
 // POST /booking
 func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
@@ -27,7 +16,6 @@ func CreateBooking(c *gin.Context) {
 	var room entity.Room
 	var timeproportion entity.TimeProportion
 	var equipment entity.Equipment
-	//var bookingsMutex = sync.Mutex
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
