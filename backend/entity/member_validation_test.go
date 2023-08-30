@@ -8,7 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestWriterCorrect(t *testing.T) {
+func TestMemberCorrect(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	t.Run("Check format Member", func(t *testing.T) {
