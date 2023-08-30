@@ -35,6 +35,26 @@ function Booking() {
         console.log(roomState)
     };
 
+    const handleBook = () => {
+        if (books.Room?.Quantity === 0) {
+            return (
+                <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                    disabled
+                    >
+                        <AssignmentTurnedInIcon/> Book
+                </button>
+            )
+        } 
+        else {
+             return (
+                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                    <AssignmentTurnedInIcon/> Book
+                </button>
+             )
+        }
+    }
+
     const handleClose = (
         event?: React.SyntheticEvent | Event,
         reason?: string
@@ -252,23 +272,27 @@ function Booking() {
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
-                    <Grid container>
-                        <Grid item xs={9}>
-                            <ul className="my-2 bg-pink-50 px-2 py-3">
+                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
+                        <Grid item xs={3}>
+                            <div className="flex items-center justify-center py-5 mt-1">
+                                <p className="text-center text-5xl text-slate-600">0/30</p>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ul>
                                 <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
-                                <li><span className="font-semibold">Capacity: </span>{books.RoomID}</li>
-                                <li><span className="font-semibold">Capacity: </span>{books.RoomID}</li>
+                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
                             </ul>  
                         </Grid>
                         <Grid item xs={3}>
-                            <div className="my-2 bg-pink-50 pr-1 py-6 text-center">
-                                <button className="rounded px-2 py-1 mb-2 bg-pink-400 text-white font-semibold">
+                            <div className="text-center py-4">
+                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
                                     View People
                                 </button>
-                                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold">
-                                    <AssignmentTurnedInIcon/> Book
-                                </button>
+                                {handleBook()}
                             </div>
                         </Grid>
                     </Grid>
@@ -282,13 +306,31 @@ function Booking() {
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R202 Aerobic Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
-                    <ul className="my-2">
-                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
-                    </ul>
-                ))}
+                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
+                        <Grid item xs={3}>
+                            <div className="flex items-center justify-center py-5 mt-1">
+                                <p className="text-center text-5xl text-slate-600">0/30</p>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ul>
+                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
+                            </ul>  
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div className="text-center py-4">
+                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                                    View People
+                                </button>
+                                {handleBook()}
+                            </div>
+                        </Grid>
+                    </Grid>
+                ))}  
             </Paper>
         )
     }
@@ -298,13 +340,31 @@ function Booking() {
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R203 Pilates Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
-                    <ul className="my-2">
-                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
-                    </ul>
-                ))}
+                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
+                        <Grid item xs={3}>
+                            <div className="flex items-center justify-center py-5 mt-1">
+                                <p className="text-center text-5xl text-slate-600">0/30</p>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ul>
+                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
+                            </ul>  
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div className="text-center py-4">
+                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                                    View People
+                                </button>
+                                {handleBook()}
+                            </div>
+                        </Grid>
+                    </Grid>
+                ))}  
             </Paper>
         )
     }
@@ -314,13 +374,31 @@ function Booking() {
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R204 Taekwondo Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
-                    <ul className="my-2">
-                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
-                    </ul>
-                ))}
+                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
+                        <Grid item xs={3}>
+                            <div className="flex items-center justify-center py-5 mt-1">
+                                <p className="text-center text-5xl text-slate-600">0/30</p>
+                            </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ul>
+                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
+                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
+                            </ul>  
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div className="text-center py-4">
+                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                                    View People
+                                </button>
+                                {handleBook()}
+                            </div>
+                        </Grid>
+                    </Grid>
+                ))}  
             </Paper>
         )
     }
@@ -329,14 +407,6 @@ function Booking() {
         return (
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R205 Fitness Booking</p>
-                {proPortion.map((item: TimeProportionInterface) => (
-                    <ul className="my-2">
-                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
-                    </ul>
-                ))}
             </Paper>
         )
     }
