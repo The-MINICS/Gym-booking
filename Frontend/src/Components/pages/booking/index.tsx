@@ -2,13 +2,15 @@ import React from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { Container, Divider, FormControl, Grid, Paper, Select, SelectChangeEvent } from "@mui/material";
+import { Divider, FormControl, Grid, Paper, Select, SelectChangeEvent } from "@mui/material";
 import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
 import { TimeProportionInterface } from "@/interfaces/ITimeProportion";
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
@@ -154,9 +156,10 @@ function Booking() {
                 enhance customer satisfaction, and boost your business's efficiency.
                 </p>
             </motion.div>
+
             {/* Services */}
             <motion.div
-            className="bg-slate-50 rounded-xl mt-5 text-center"
+            className="bg-slate-50 rounded-xl my-5 text-center pb-5"
             initial="hidden" 
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
@@ -166,7 +169,7 @@ function Booking() {
                 visible: { opacity: 1, x:-0 }
             }}
             >
-                <Container>
+                <div className="px-3">
                     <Grid container sx={{ padding: 1 }} columnSpacing={5}>
                         {/* Left hand side */}
                         <Grid item xs={6}>
@@ -183,7 +186,7 @@ function Booking() {
                             </div>
                             <div className="mb-3">
                                 <FormControl fullWidth variant="standard">
-                                    <Select className="bg-white"
+                                    <Select className="bg-pink-50 p-2"
                                         native
                                         value={books.RoomID + ""}
                                         onChange={handleChange}
@@ -200,7 +203,7 @@ function Booking() {
                                 </FormControl>
                             </div>
                             <div className="text-left mb-1">
-                                <h1 className="font-medium text-base">
+                                <h1 className="font-bold text-base">
                                     Booking Schedule
                                 </h1>
                             </div>
@@ -235,7 +238,7 @@ function Booking() {
                             </div>
                         </Grid>
                     </Grid>
-                </Container>
+                </div>
             </motion.div>
         </motion.div>
     </div>
@@ -246,30 +249,44 @@ function Booking() {
     if (roomState === "1") {
         books.RoomID = convertType(roomState);
         return (
-            <Paper className="rounded p-2">
-                <p className="text-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
+            <Paper className="rounded p-3">
+                <p className="font-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
-                    <ul className="my-2">
-                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
-                    </ul>
-                ))}
+                    <Grid container>
+                        <Grid item xs={9}>
+                            <ul className="my-2 bg-pink-50 px-2 py-3">
+                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Capacity: </span>{books.RoomID}</li>
+                                <li><span className="font-semibold">Capacity: </span>{books.RoomID}</li>
+                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
+                            </ul>  
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div className="my-2 bg-pink-50 pr-1 py-6 text-center">
+                                <button className="rounded px-2 py-1 mb-2 bg-pink-400 text-white font-semibold">
+                                    View People
+                                </button>
+                                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold">
+                                    <AssignmentTurnedInIcon/> Book
+                                </button>
+                            </div>
+                        </Grid>
+                    </Grid>
+                ))}  
             </Paper>
         )
     }
     else if (roomState === "2") {
         books.RoomID = convertType(roomState);
         return (
-            <Paper className="rounded p-2">
-                <p className="text-bold text-center items-center text-red-700">R202 Aerobic Room Booking</p>
+            <Paper className="rounded p-3">
+                <p className="font-bold text-center items-center text-red-700">R202 Aerobic Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
                     <ul className="my-2">
-                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
                     </ul>
                 ))}
             </Paper>
@@ -278,14 +295,14 @@ function Booking() {
     else if (roomState === "3") {
         books.RoomID = convertType(roomState);
         return (
-            <Paper className="rounded p-2">
-                <p className="text-bold text-center items-center text-red-700">R203 Pilates Room Booking</p>
+            <Paper className="rounded p-3">
+                <p className="font-bold text-center items-center text-red-700">R203 Pilates Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
                     <ul className="my-2">
-                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
                     </ul>
                 ))}
             </Paper>
@@ -294,14 +311,14 @@ function Booking() {
     else if (roomState === "4") {
         books.RoomID = convertType(roomState);
         return (
-            <Paper className="rounded p-2">
-                <p className="text-bold text-center items-center text-red-700">R204 Taekwondo Room Booking</p>
+            <Paper className="rounded p-3">
+                <p className="font-bold text-center items-center text-red-700">R204 Taekwondo Room Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
                     <ul className="my-2">
-                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
                     </ul>
                 ))}
             </Paper>
@@ -310,14 +327,14 @@ function Booking() {
     else if (roomState === "5") {
         books.RoomID = convertType(roomState);
         return (
-            <Paper className="rounded p-2">
-                <p className="text-bold text-center items-center text-red-700">R205 Fitness Booking</p>
+            <Paper className="rounded p-3">
+                <p className="font-bold text-center items-center text-red-700">R205 Fitness Booking</p>
                 {proPortion.map((item: TimeProportionInterface) => (
                     <ul className="my-2">
-                        <li className="bg-slate-100 px-2 py-1">Time: {item.Proportion}</li>
-                        <li className="bg-slate-100 px-2 py-1">Capacity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Quantity: {books.RoomID}</li>
-                        <li className="bg-slate-100 px-2 py-1">Attendant: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Time: {item.Proportion}</li>
+                        <li className="bg-slate-100 px-2">Capacity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Quantity: {books.RoomID}</li>
+                        <li className="bg-slate-100 px-2">Attendant: {books.RoomID}</li>
                     </ul>
                 ))}
             </Paper>
@@ -325,9 +342,9 @@ function Booking() {
     }
     else {
         return (
-            <Paper className="rounded p-2">
+            <Paper className="rounded p-3">
                 <p className="italic text-red-600">
-                    Sorry! We haven't got any booking yet
+                    Sorry! We haven't got any booking yet,
                     Please choose the services!
                 </p>
             </Paper>
