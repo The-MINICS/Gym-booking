@@ -76,9 +76,9 @@ type Room struct {
 // Picture
 type Picture struct {
 	gorm.Model
-	Picture  string `valid:"required~Please enter picture." `
-	Title    string `valid:"required~Please enter title." `
-	Describe string `valid:"required~Please enter describe., maxstringlength(500)~It is too many characters, please enter again. " `
+	Picture  string `valid:"required~Please select the picture." `
+	Title    string `valid:"required~Please fill the equipment name." `
+	Describe string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
 
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
