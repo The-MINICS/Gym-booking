@@ -160,7 +160,7 @@ func TestMember(t *testing.T) {
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your firstname"))
+		g.Expect(err.Error()).To(Equal("Please enter your firstname."))
 	})
 
 	t.Run("Check lastname not blank ", func(t *testing.T) {
@@ -178,7 +178,7 @@ func TestMember(t *testing.T) {
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your lastname"))
+		g.Expect(err.Error()).To(Equal("Please enter your lastname."))
 	})
 
 	t.Run("Tel. is not correct. ", func(t *testing.T) {

@@ -32,8 +32,8 @@ type Member struct {
 	Username        string `gorm:"uniqueIndex" valid:"required~Please enter your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
 	Email           string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please enter your email."`
 	Password        string `valid:"required~Please enter your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
-	Firstname       string `valid:"required~Please enter your firstname"`
-	Lastname        string `valid:"required~Please enter your lastname"`
+	Firstname       string `valid:"required~Please enter your firstname."`
+	Lastname        string `valid:"required~Please enter your lastname."`
 	Phonenumber     string `valid:"matches(^0([6|8|9])([0-9]{8}$))~Phone number is not correct."`
 	Age             int32
 	Weight          int32
@@ -66,7 +66,7 @@ type Room struct {
 	Quantity     int16
 	Capacity     int16  `valid:"range(1|100)~Please enter a number not less than 0 and not more than 100." `
 	Attendant    string `valid:"required~Please enter an attendant." `
-	Illustration string `valid:"required~Please enter a illustration." `
+	Illustration string `valid:"-" `
 	Caption      string `valid:"required~Please enter a caption., maxstringlength(500)~It is too many characters, please enter again." `
 
 	Booking   []Booking   `gorm:"foreignKey:RoomID"`
@@ -80,7 +80,7 @@ type Picture struct {
 	Title    string `valid:"required~Please enter title." `
 	Describe string `valid:"required~Please enter describe., maxstringlength(500)~It is too many characters, please enter again. " `
 
-	Equipment []Equipment `gorm:"foreignKey:PictureID"`
+	Equipment []Equipment `gorm:"foreignKey:PictureID" `
 }
 
 // Equipment
