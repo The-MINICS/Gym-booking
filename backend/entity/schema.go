@@ -32,8 +32,8 @@ type Member struct {
 	Username        string `gorm:"uniqueIndex" valid:"required~Please enter your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
 	Email           string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please enter your email."`
 	Password        string `valid:"required~Please enter your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
-	Firstname       string `valid:"required~Please enter your firstname."`
-	Lastname        string `valid:"required~Please enter your lastname."`
+	Firstname       string `valid:"required~Please enter your firstname"`
+	Lastname        string `valid:"required~Please enter your lastname"`
 	Phonenumber     string `valid:"matches(^0([6|8|9])([0-9]{8}$))~Phone number is not correct."`
 	Age             int32
 	Weight          int32
@@ -61,13 +61,13 @@ type TimeProportion struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity     string `valid:"required~Please enter an activity., matches(^(R)([0-9]{3}$))~Please enter the correct format." `
-	Number       string `valid:"required~Please enter a room number." `
+	Activity     string `valid:"required~Please fill activity about the room." `
+	Number       string `valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
 	Quantity     int16
-	Capacity     int16  `valid:"range(1|100)~Please enter a number not less than 0 and not more than 100." `
-	Attendant    string `valid:"required~Please enter an attendant." `
-	Illustration string `valid:"-" `
-	Caption      string `valid:"required~Please enter a caption., maxstringlength(500)~It is too many characters, please enter again." `
+	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
+	Attendant    string `valid:"required~Please fill the room attendant." `
+	Illustration string `valid:"required~Please select a illustration." `
+	Caption      string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
 
 	Booking   []Booking   `gorm:"foreignKey:RoomID"`
 	Equipment []Equipment `gorm:"foreignKey:RoomID"`
@@ -80,7 +80,7 @@ type Picture struct {
 	Title    string `valid:"required~Please enter title." `
 	Describe string `valid:"required~Please enter describe., maxstringlength(500)~It is too many characters, please enter again. " `
 
-	Equipment []Equipment `gorm:"foreignKey:PictureID" `
+	Equipment []Equipment `gorm:"foreignKey:PictureID"`
 }
 
 // Equipment
@@ -140,10 +140,8 @@ func init() {
 		match, _ := regexp.MatchString("^[ก-๛a-zA-Z\\s]+$", s)
 		return match
 	}))
-}
 
-// ฟังก์ชันที่จะใช่ในการ validation EntryTime
-func init() {
+	// ฟังก์ชันที่จะใช่ในการ validation EntryTime
 	govalidator.CustomTypeTagMap.Set("Past", func(i interface{}, context interface{}) bool {
 		t := i.(time.Time)
 		return t.After(time.Now().Add(time.Minute*-2)) || t.Equal(time.Now())
