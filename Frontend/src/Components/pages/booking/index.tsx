@@ -7,13 +7,13 @@ import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
-import { GetMemberByMID } from "@/services/HttpClientService";
+import { GetBooks, GetMemberByMID } from "@/services/HttpClientService";
 import { TimeslotInterface } from "@/interfaces/ITimeslot";
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
+    const [book, setBook] = useState<BookingInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
@@ -36,7 +36,7 @@ function Booking() {
     };
 
     const handleBook = () => {
-        if (books.Room?.Quantity === 0) {
+        if (books.Room?.Remain === 0) {
             return (
                 <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
                     disabled
@@ -139,6 +139,13 @@ function Booking() {
         }
     };
 
+    const getBook = async () => {
+        let res = await GetBooks();
+        if (res) {
+            setBook(res);
+      }
+    };
+
     const convertType = (data: string | number | undefined) => {
         let val = typeof data === "string" ? parseInt(data) : data;
         return val;
@@ -149,6 +156,7 @@ function Booking() {
         getMembers();
         getRooms();
         getSlots();
+        getBook();
     }, []);
 
     return (
@@ -267,11 +275,12 @@ function Booking() {
   
   function AfterSelect() {
     if (roomState === "1") {
-        books.RoomID = convertType(roomState);
+        books.RoomID = convertType(roomState);    
         return (
             <Paper className="rounded p-3">
-                <p className="font-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
                 {slot.map((item: TimeslotInterface) => (
+                    <>
+                    <p className="font-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
                     <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
                         <Grid item xs={3}>
                             <div className="flex items-center justify-center py-5 mt-1">
@@ -296,131 +305,13 @@ function Booking() {
                             </div>
                         </Grid>
                     </Grid>
+                    </>
                 ))}  
             </Paper>
+            
         )
-    }
-    else if (roomState === "2") {
-        books.RoomID = convertType(roomState);
-        return (
-            <Paper className="rounded p-3">
-                <p className="font-bold text-center items-center text-red-700">R202 Aerobic Room Booking</p>
-                {slot.map((item: TimeslotInterface) => (
-                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
-                        <Grid item xs={3}>
-                            <div className="flex items-center justify-center py-5 mt-1">
-                                <p className="text-center text-5xl text-slate-600">0/30</p>
-                            </div>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
-                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
-                            </ul>  
-                        </Grid>
-                        <Grid item xs={3}>
-                            <div className="text-center py-4">
-                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
-                                    View People
-                                </button>
-                                {handleBook()}
-                            </div>
-                        </Grid>
-                    </Grid>
-                ))}  
-            </Paper>
-        )
-    }
-    else if (roomState === "3") {
-        books.RoomID = convertType(roomState);
-        return (
-            <Paper className="rounded p-3">
-                <p className="font-bold text-center items-center text-red-700">R203 Pilates Room Booking</p>
-                {slot.map((item: TimeslotInterface) => (
-                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
-                        <Grid item xs={3}>
-                            <div className="flex items-center justify-center py-5 mt-1">
-                                <p className="text-center text-5xl text-slate-600">0/30</p>
-                            </div>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
-                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
-                            </ul>  
-                        </Grid>
-                        <Grid item xs={3}>
-                            <div className="text-center py-4">
-                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
-                                    View People
-                                </button>
-                                {handleBook()}
-                            </div>
-                        </Grid>
-                    </Grid>
-                ))}  
-            </Paper>
-        )
-    }
-    else if (roomState === "4") {
-        books.RoomID = convertType(roomState);
-        return (
-            <Paper className="rounded p-3">
-                <p className="font-bold text-center items-center text-red-700">R204 Taekwondo Room Booking</p>
-                {slot.map((item: TimeslotInterface) => (
-                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
-                        <Grid item xs={3}>
-                            <div className="flex items-center justify-center py-5 mt-1">
-                                <p className="text-center text-5xl text-slate-600">0/30</p>
-                            </div>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
-                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
-                            </ul>  
-                        </Grid>
-                        <Grid item xs={3}>
-                            <div className="text-center py-4">
-                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
-                                    View People
-                                </button>
-                                {handleBook()}
-                            </div>
-                        </Grid>
-                    </Grid>
-                ))}  
-            </Paper>
-        )
-    }
-    else if (roomState === "5") {
-        books.RoomID = convertType(roomState);
-        return (
-            <Paper className="rounded p-3">
-                <p className="font-bold text-center items-center text-red-700">R205 Fitness Booking</p>
-            </Paper>
-        )
-    }
-    else {
-        return (
-            <Paper className="rounded p-3">
-                <p className="italic text-red-600">
-                    Sorry! We haven't got any booking yet,
-                    Please choose the services!
-                </p>
-            </Paper>
-        )
-    }
-  }
+        }
+    }        
 }
 
 export default Booking;

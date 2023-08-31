@@ -58,6 +58,11 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
+	if &timeslot.ID == booking.TimeslotID {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You already booked for this time slot"})
+		return
+	}
+
 	// 14: สร้าง  booking
 	bk := entity.Booking{
 		Datetime:  booking.Datetime,
