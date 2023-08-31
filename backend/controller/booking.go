@@ -86,7 +86,7 @@ func CreateBooking(c *gin.Context) {
 func GetBooking(c *gin.Context) {
 	var booking entity.Booking
 	id := c.Param("id")
-	if tx := entity.DB().Preload("Member").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Preload("Room").Preload("Timeslot").Preload("Equipment").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "booking not found"})
 		return
 	}
