@@ -8,14 +8,14 @@ import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
-import { TimeProportionInterface } from "@/interfaces/ITimeProportion";
+import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
-    const [proPortion, setProPortion] = useState<TimeProportionInterface[]>([]);
+    const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
     const [roomState, setRoomState] = useState("")
 
@@ -88,7 +88,7 @@ function Booking() {
         return res;
     }
 
-    async function GetProportion() {
+    async function GetSlot() {
         const requestOptions = {
           method: "GET",
           headers: {
@@ -97,7 +97,7 @@ function Booking() {
           },
         };
       
-        let res = await fetch(`${apiUrl}/timeproportions`, requestOptions)
+        let res = await fetch(`${apiUrl}/timeslots`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             if (res.data) {
@@ -132,10 +132,10 @@ function Booking() {
         }
     };
 
-    const getProportion = async () => {
-        let res = await GetProportion();
+    const getSlots = async () => {
+        let res = await GetSlot();
         if (res) {
-            setProPortion(res);
+            setSlot(res);
         }
     };
 
@@ -148,7 +148,7 @@ function Booking() {
     useEffect(() => {
         getMembers();
         getRooms();
-        getProportion();
+        getSlots();
     }, []);
 
     return (
@@ -271,7 +271,7 @@ function Booking() {
         return (
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
-                {proPortion.map((item: TimeProportionInterface) => (
+                {slot.map((item: TimeslotInterface) => (
                     <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
                         <Grid item xs={3}>
                             <div className="flex items-center justify-center py-5 mt-1">
@@ -280,7 +280,7 @@ function Booking() {
                         </Grid>
                         <Grid item xs={6}>
                             <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
                                 <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
@@ -305,7 +305,7 @@ function Booking() {
         return (
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R202 Aerobic Room Booking</p>
-                {proPortion.map((item: TimeProportionInterface) => (
+                {slot.map((item: TimeslotInterface) => (
                     <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
                         <Grid item xs={3}>
                             <div className="flex items-center justify-center py-5 mt-1">
@@ -314,7 +314,7 @@ function Booking() {
                         </Grid>
                         <Grid item xs={6}>
                             <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
                                 <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
@@ -339,7 +339,7 @@ function Booking() {
         return (
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R203 Pilates Room Booking</p>
-                {proPortion.map((item: TimeProportionInterface) => (
+                {slot.map((item: TimeslotInterface) => (
                     <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
                         <Grid item xs={3}>
                             <div className="flex items-center justify-center py-5 mt-1">
@@ -348,7 +348,7 @@ function Booking() {
                         </Grid>
                         <Grid item xs={6}>
                             <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
                                 <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
@@ -373,7 +373,7 @@ function Booking() {
         return (
             <Paper className="rounded p-3">
                 <p className="font-bold text-center items-center text-red-700">R204 Taekwondo Room Booking</p>
-                {proPortion.map((item: TimeProportionInterface) => (
+                {slot.map((item: TimeslotInterface) => (
                     <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
                         <Grid item xs={3}>
                             <div className="flex items-center justify-center py-5 mt-1">
@@ -382,7 +382,7 @@ function Booking() {
                         </Grid>
                         <Grid item xs={6}>
                             <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Proportion}</li>
+                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
                                 <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
                                 <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>

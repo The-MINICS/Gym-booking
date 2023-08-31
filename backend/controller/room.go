@@ -74,6 +74,7 @@ func UpdateRoom(c *gin.Context) {
 	var new_room_activity = room.Activity
 	var new_room_number = room.Number
 	var new_room_quantity = room.Quantity
+	var new_room_remain = room.Remain
 	var new_room_capacity = room.Capacity
 	var new_room_attendant = room.Attendant
 	var new_room_illustration = room.Illustration
@@ -89,6 +90,7 @@ func UpdateRoom(c *gin.Context) {
 		Activity:     new_room_activity,
 		Number:       new_room_number,
 		Quantity:     new_room_quantity,
+		Remain:       new_room_remain,
 		Capacity:     new_room_capacity,
 		Attendant:    new_room_attendant,
 		Illustration: new_room_illustration,

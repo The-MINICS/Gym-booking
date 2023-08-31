@@ -14,7 +14,7 @@ func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
 	var member entity.Member
 	var room entity.Room
-	var timeproportion entity.TimeProportion
+	var timeslot entity.Timeslot
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -34,8 +34,8 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา timeproportion ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.TimeProportionID).First(&timeproportion); tx.RowsAffected == 0 {
+	// ค้นหา timeslot ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.TimeslotID).First(&timeslot); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a time"})
 		return
 	}
@@ -46,22 +46,25 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
+	// Update room booking status
+	room.Quantity++
+
+	//คำนวณ remain ของ quantity
+	room.Remain = room.Capacity - room.Quantity
+
 	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
 	if room.Quantity >= room.Capacity {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Room is fully booked"})
 		return
 	}
 
-	// Update room booking status
-	room.Quantity++
-
 	// 14: สร้าง  booking
 	bk := entity.Booking{
-		Datetime:       booking.Datetime,
-		Member:         member,
-		Room:           room,
-		TimeProportion: timeproportion,
-		Equipment:      equipment,
+		Datetime:  booking.Datetime,
+		Member:    member,
+		Room:      room,
+		Timeslot:  timeslot,
+		Equipment: equipment,
 	}
 
 	// การ validate
@@ -94,7 +97,7 @@ func GetBooking(c *gin.Context) {
 func ListBookings(c *gin.Context) {
 	var bookings []entity.Booking
 
-	if err := entity.DB().Preload("Member").Preload("Room").Preload("TimeProportion").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
+	if err := entity.DB().Preload("Member").Preload("Room").Preload("Timeslot").Preload("Equipment").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -106,7 +109,7 @@ func UpdateBooking(c *gin.Context) {
 	var booking entity.Booking
 	var member entity.Member
 	var room entity.Room
-	var timeproportion entity.TimeProportion
+	var timeslot entity.Timeslot
 	var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -126,8 +129,8 @@ func UpdateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา timeproportion ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.TimeProportionID).First(&timeproportion); tx.RowsAffected == 0 {
+	// ค้นหา timeslot ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.TimeslotID).First(&timeslot); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a time"})
 		return
 	}
@@ -139,12 +142,12 @@ func UpdateBooking(c *gin.Context) {
 	}
 
 	update_booking := entity.Booking{
-		Model:          gorm.Model{ID: booking.ID},
-		Datetime:       booking.Datetime,
-		Member:         member,
-		Room:           room,
-		TimeProportion: timeproportion,
-		Equipment:      equipment,
+		Model:     gorm.Model{ID: booking.ID},
+		Datetime:  booking.Datetime,
+		Member:    member,
+		Room:      room,
+		Timeslot:  timeslot,
+		Equipment: equipment,
 	}
 
 	// การ validate

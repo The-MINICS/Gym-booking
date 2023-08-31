@@ -50,12 +50,12 @@ type Member struct {
 	Equipment []Equipment `gorm:"foreignKey:MemberID"`
 }
 
-// Proportion
-type TimeProportion struct {
+// Timeslot
+type Timeslot struct {
 	gorm.Model
-	Proportion string
+	Slot string
 
-	Booking []Booking `gorm:"foreignKey:TimeProportionID"`
+	Booking []Booking `gorm:"foreignKey:TimeslotID"`
 }
 
 // Room
@@ -64,6 +64,7 @@ type Room struct {
 	Activity     string `valid:"required~Please fill activity about the room." `
 	Number       string `valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
 	Quantity     int16
+	Remain       int16
 	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `
@@ -112,8 +113,8 @@ type Booking struct {
 	RoomID *uint
 	Room   Room `gorm:"references:id"`
 
-	TimeProportionID *uint
-	TimeProportion   TimeProportion `gorm:"references:id" valid:"-"`
+	TimeslotID *uint
+	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
 	EquipmentID *uint
 	Equipment   Equipment `gorm:"references:id"`
