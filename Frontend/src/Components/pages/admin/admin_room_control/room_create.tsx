@@ -24,7 +24,6 @@ function RoomCreate({ onClose }:any){
 
     const onImgChange = (event: any) => {
         const image = event.target.files[0];
-  
         const reader = new FileReader();
         reader.readAsDataURL(image);
         reader.onload = () => {

@@ -7,13 +7,13 @@ import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
-import { GetBooks, GetMemberByMID } from "@/services/HttpClientService";
+import { GetMemberByMID } from "@/services/HttpClientService";
 import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import Snackbar from "@mui/material/Snackbar";
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
-    const [book, setBook] = useState<BookingInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
@@ -32,7 +32,6 @@ function Booking() {
           [name]: event.target.value,
         });
         setRoomState(roomState)
-        console.log(roomState)
     };
 
     const handleBook = () => {
@@ -48,7 +47,8 @@ function Booking() {
         else {
              return (
                 <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                     >
                     <AssignmentTurnedInIcon/> Book
                 </button>
              )
@@ -139,25 +139,53 @@ function Booking() {
         }
     };
 
-    const getBook = async () => {
-        let res = await GetBooks();
-        if (res) {
-            setBook(res);
-      }
-    };
-
     const convertType = (data: string | number | undefined) => {
         let val = typeof data === "string" ? parseInt(data) : data;
         return val;
     };
 
-
     useEffect(() => {
         getMembers();
         getRooms();
         getSlots();
-        getBook();
     }, []);
+
+    async function Submit() {
+        let data = {
+            TimeslotID: convertType(books.TimeslotID),
+            RoomID: convertType(books.RoomID),
+            MemberID: convertType(books.MemberID),
+        };
+        console.log(data)
+        const apiUrl = "http://localhost:9999";
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        };
+      
+        fetch(`${apiUrl}/bookings`, requestOptions)
+          .then((response) => response.json())
+          .then((res) => {
+            console.log(res)
+            if (res.data) {
+              console.log("seved")
+              setSuccess(true);
+              setErrorMessage("")
+              setTimeout(() => {
+                window.location.href = "/bookings";
+            }, 500);
+            } else {
+              console.log("save failured!")
+              setError(true);
+              setErrorMessage(res.error)
+            }
+        });
+    }
 
     return (
     <section>
@@ -199,6 +227,28 @@ function Booking() {
             >
                 <div className="px-3">
                     <Grid container sx={{ padding: 1 }} columnSpacing={5}>
+                        <Snackbar
+                            id="success"
+                            open={success}
+                            autoHideDuration={3000}
+                            onClose={handleClose}
+                            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                            >
+                            <Alert onClose={handleClose} severity="success">
+                                Booked!
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar
+                            id="error"
+                            open={error}
+                            autoHideDuration={6000}
+                            onClose={handleClose}
+                            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                            >
+                            <Alert onClose={handleClose} severity="error">
+                                {errorMessage}
+                            </Alert>
+                        </Snackbar>
                         {/* Left hand side */}
                         <Grid item xs={6}>
                             <div className="justify-center items-center text-center my-3">
@@ -274,44 +324,58 @@ function Booking() {
   );
   
   function AfterSelect() {
-    if (roomState === "1") {
-        books.RoomID = convertType(roomState);    
+    books.RoomID = convertType(roomState)
+    if (roomState) {
         return (
+            <section>
             <Paper className="rounded p-3">
                 {slot.map((item: TimeslotInterface) => (
                     <>
-                    <p className="font-bold text-center items-center text-red-700">R201 Yoga Room Booking</p>
-                    <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3">
-                        <Grid item xs={3}>
-                            <div className="flex items-center justify-center py-5 mt-1">
-                                <p className="text-center text-5xl text-slate-600">0/30</p>
-                            </div>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <ul>
-                                <li><span className="font-semibold">Time: </span>{item.Slot}</li>
-                                <li><span className="font-semibold">Capacity: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Remain: </span>{books.RoomID} persons</li>
-                                <li><span className="font-semibold">Attendant: </span>{books.RoomID}</li>
-                            </ul>  
-                        </Grid>
-                        <Grid item xs={3}>
-                            <div className="text-center py-4">
-                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
-                                    View People
-                                </button>
-                                {handleBook()}
-                            </div>
-                        </Grid>
-                    </Grid>
+                    {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
+                        .map((rooms) => (
+                            <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={rooms.ID}>
+                                <Grid item xs={3}>
+                                    <div className="flex items-center justify-center py-5 mt-1">
+                                        <p className="text-center text-5xl text-slate-600">{rooms.Quantity}/{rooms.Capacity}</p>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ul>
+                                        <li><span className="font-semibold">Time: </span>{item.Slot}</li>
+                                        <li><span className="font-semibold">Room: </span>{rooms.Activity}</li>
+                                        <li><span className="font-semibold">Capacity: </span>{rooms.Capacity} persons</li>
+                                        <li><span className="font-semibold">Remain: </span>{rooms.Remain} persons</li>
+                                        <li><span className="font-semibold">Attendant: </span>{rooms.Attendant}</li>
+                                    </ul>  
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <div className="text-center py-6">
+                                        <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                                            View People
+                                        </button>
+                                        {handleBook()}
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        ))
+                    }
                     </>
-                ))}  
+                ))} 
             </Paper>
-            
+            </section>
         )
-        }
-    }        
+    } else {
+        return (
+            <Paper className="rounded p-3">
+                <p className="italic text-red-600">
+                    Sorry! We haven't got any booking on this section yet,
+                    Please choose the services!
+                </p>
+            </Paper>
+        )
+    }
+  }
 }
 
 export default Booking;

@@ -173,8 +173,8 @@ function EquipmentCreate({ onClose }: any ){
               setError(true);
               setErrorMessage(res.error)
             }
-          });
-        }
+        });
+    }
 
     return (
     <section>
