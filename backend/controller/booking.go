@@ -15,7 +15,7 @@ func CreateBooking(c *gin.Context) {
 	var member entity.Member
 	var room entity.Room
 	var timeslot entity.Timeslot
-	var equipment entity.Equipment
+	//var equipmentbooking entity.EquipmentBooking
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -40,11 +40,11 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา equipment ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.EquipmentID).First(&equipment); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
-		return
-	}
+	// // ค้นหา equipmentbooking ด้วย id
+	// if tx := entity.DB().Where("id = ?", booking.EquipmentBookingID).First(&equipmentbooking); tx.RowsAffected == 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
+	// 	return
+	// }
 
 	// Update room booking status
 	room.Quantity++
@@ -65,11 +65,11 @@ func CreateBooking(c *gin.Context) {
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
-		Datetime:  booking.Datetime,
-		Member:    member,
-		Room:      room,
-		Timeslot:  timeslot,
-		Equipment: equipment,
+		Datetime: booking.Datetime,
+		Member:   member,
+		Room:     room,
+		Timeslot: timeslot,
+		//Equipment: equipment,
 	}
 
 	// การ validate
@@ -115,7 +115,7 @@ func UpdateBooking(c *gin.Context) {
 	var member entity.Member
 	var room entity.Room
 	var timeslot entity.Timeslot
-	var equipment entity.Equipment
+	//var equipment entity.Equipment
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -140,19 +140,19 @@ func UpdateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา equipment ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.EquipmentID).First(&equipment); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
-		return
-	}
+	// // ค้นหา equipment ด้วย id
+	// if tx := entity.DB().Where("id = ?", booking.EquipmentID).First(&equipment); tx.RowsAffected == 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
+	// 	return
+	// }
 
 	update_booking := entity.Booking{
-		Model:     gorm.Model{ID: booking.ID},
-		Datetime:  booking.Datetime,
-		Member:    member,
-		Room:      room,
-		Timeslot:  timeslot,
-		Equipment: equipment,
+		Model:    gorm.Model{ID: booking.ID},
+		Datetime: booking.Datetime,
+		Member:   member,
+		Room:     room,
+		Timeslot: timeslot,
+		//Equipment: equipment,
 	}
 
 	// การ validate

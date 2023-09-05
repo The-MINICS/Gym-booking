@@ -72,12 +72,26 @@ func main() {
 			protected.PATCH("/timeslots", controller.UpdateTimeslot)
 			protected.DELETE("/timeslots/:id", controller.DeleteTimeslot)
 
+			// Equipment Timeslot Routes
+			protected.POST("/equipmenttimeslots", controller.CreateEquipmentTimeslot)
+			protected.GET("/equipmenttimeslots", controller.ListEquipmentTimeslots)
+			protected.GET("/equipmenttimeslot/:id", controller.GetEquipmentTimeslot)
+			protected.PATCH("/equipmenttimeslots", controller.UpdateEquipmentTimeslot)
+			protected.DELETE("/equipmenttimeslots/:id", controller.DeleteEquipmentTimeslot)
+
 			// Booking Routes
 			protected.POST("/bookings", controller.CreateBooking)
 			protected.GET("/bookings", controller.ListBookings)
 			protected.GET("/booking/:id", controller.GetBooking)
 			protected.PATCH("/bookings", controller.UpdateBooking)
 			protected.DELETE("/bookings/:id", controller.DeleteBooking)
+
+			// Equipment Booking Routes
+			protected.POST("/equipmentbookings", controller.CreateEquipmentBooking)
+			protected.GET("/equipmentbookings", controller.ListEquipmentBookings)
+			protected.GET("/equipmentbooking/:id", controller.GetEquipmentBooking)
+			protected.PATCH("/equipmentbookings", controller.UpdateEquipmentBooking)
+			protected.DELETE("/equipmentbookings/:id", controller.DeleteEquipmentBooking)
 
 			// Contactus Routes
 			protected.POST("/contactuses", controller.CreateContactus)

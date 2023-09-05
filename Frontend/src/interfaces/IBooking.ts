@@ -1,5 +1,5 @@
 import { MemberInterface } from "./IMember";
-import { EquipmentInterface } from "./IEquipment";
+//import { EquipmentInterface } from "./IEquipment";
 import { RoomInterface } from "./IRoom";
 import { TimeslotInterface } from "./ITimeslot";
 
@@ -13,8 +13,8 @@ export interface BookingInterface {
     RoomID?: number;
     Room?: RoomInterface;
 
-    EquipmentID?: number;
-    Equipment?: EquipmentInterface;
+    // EquipmentBookingID?: number;
+    // EquipmentBooking?: EquipmentInterface;
 
     TimeslotID?: number;
     Timeslot?: TimeslotInterface;
