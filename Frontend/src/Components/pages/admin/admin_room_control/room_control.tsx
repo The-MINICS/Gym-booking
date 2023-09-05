@@ -14,8 +14,8 @@ import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import {  
     Button, Dialog, DialogActions, DialogContent,
-    DialogContentText,  DialogTitle, Slide,  
-    Table,  TableBody,  TableCell,  TableContainer, TableHead,  TableRow,    
+    DialogContentText,  DialogTitle, Slide, Table,  TableBody,  
+    TableCell,  TableContainer, TableHead,  TableRow,    
 } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 import { RoomInterface } from "@/interfaces/IRoom";
@@ -42,14 +42,14 @@ function RoomManagement() {
     const handleDialogDeleteOpen = (ID: number) => {
         setDeleteID(ID)
         setOpenDelete(true)
-      }
-      const handleDialogDeleteclose = () => {
+    }
+    const handleDialogDeleteclose = () => {
         setOpenDelete(false)
         setTimeout(() => {
             setDeleteID(0)
         }, 500)
-      }
-      const handleDelete = async () => {
+    }
+    const handleDelete = async () => {
         let res = await RoomDelete(deleteID)
         if (res) {
             console.log(res.data)
@@ -61,7 +61,7 @@ function RoomManagement() {
         setTimeout(() => {
           window.location.href = "/room-mannage";
         }, 500);
-      }
+    }
   
       useEffect(() => {
         getRooms();

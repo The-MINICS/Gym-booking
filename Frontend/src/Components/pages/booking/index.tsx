@@ -2,22 +2,35 @@ import React from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { Divider, FormControl, Grid, Paper, Select, SelectChangeEvent } from "@mui/material";
+import { 
+        Dialog, DialogActions, DialogContent, DialogContentText,  
+        DialogTitle, Divider, FormControl, Grid, Paper, Select, 
+        SelectChangeEvent, Button, Slide
+} from "@mui/material";
 import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
-import { GetMemberByMID } from "@/services/HttpClientService";
+import { BookDelete, GetBooks, GetMemberByMID } from "@/services/HttpClientService";
 import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
+import { TransitionProps } from "@mui/material/transitions";
+import CancelIcon from '@mui/icons-material/Cancel';
+import dayjs from "dayjs";
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
+    const [book, setBook] = useState<BookingInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
-    const [roomState, setRoomState] = useState("")
+    const [roomState, setRoomState] = useState("");
+    const [deleteID, setDeleteID] = useState<number>(0);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openBooking, setOpenBooking] = useState(false);
+    const [dialogWidth, setDialogWidth] = useState<number | string>('auto');
+    const dialogContentRef = React.createRef<HTMLDivElement>();
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -34,25 +47,44 @@ function Booking() {
         setRoomState(roomState)
     };
 
-    const handleBook = () => {
-        if (books.Room?.Remain === 0) {
-            return (
-                <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
-                    disabled
-                    >
-                        <AssignmentTurnedInIcon/> Book
-                </button>
-            )
-        } 
-        else {
-             return (
-                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                     >
-                    <AssignmentTurnedInIcon/> Book
-                </button>
-             )
+    const handleDialogDeleteOpen = (ID: number) => {
+        setDeleteID(ID)
+        setOpenDelete(true)
+    }
+    const handleDialogDeleteclose = () => {
+        setOpenDelete(false)
+        setTimeout(() => {
+            setDeleteID(0)
+        }, 500)
+    }
+    const handleDelete = async () => {
+        let res = await BookDelete(deleteID)
+        if (res) {
+            console.log(res.data)
+        } else {
+            console.log(res.data)
         }
+        getRooms();
+        setOpenDelete(false)
+        setTimeout(() => {
+          window.location.href = "/bookings";
+        }, 500);
+    }
+
+    const handleDialogBookingOpen = () => {
+        // Close the dialog before computing the new width
+        setOpenBooking(false);
+        const contentWidth = dialogContentRef.current?.scrollWidth;
+        if (contentWidth) {
+            // Set the width of the dialog to match the content
+            setDialogWidth(contentWidth);
+        }
+        // Open the dialog
+        setOpenBooking(true);
+    }
+
+    const handleDialogBookingClose = () => {
+        setOpenBooking(false)
     }
 
     const handleClose = (
@@ -139,6 +171,13 @@ function Booking() {
         }
     };
 
+    const getBook = async () => {
+        let res = await GetBooks();
+        if (res) {
+            setBook(res);
+      }
+    };
+
     const convertType = (data: string | number | undefined) => {
         let val = typeof data === "string" ? parseInt(data) : data;
         return val;
@@ -148,6 +187,7 @@ function Booking() {
         getMembers();
         getRooms();
         getSlots();
+        getBook();
     }, []);
 
     async function Submit() {
@@ -187,6 +227,15 @@ function Booking() {
         });
     }
 
+    const Transition = React.forwardRef(function Transition(
+        props: TransitionProps & {
+          children: React.ReactElement<any, any>;
+        },
+        ref: React.Ref<unknown>,
+      ) {
+        return <Slide direction="up" ref={ref} {...props} />;
+      });
+
     return (
     <section>
     <div className="w-full">
@@ -202,7 +251,7 @@ function Booking() {
                     hidden: { opacity: 0, x:-50 },
                     visible: { opacity: 1, x:-0 }
                 }}
-            >
+                >
                 <HText>
                     <span className="text-red-500">Booking System</span>
                 </HText>
@@ -307,11 +356,32 @@ function Booking() {
                             </div>
                             <div className="text-left mb-3">
                                 <Paper className="rounded p-2">
-                                    <p>My booking List (spacing)</p>
-                                    <p>My booking List (spacing)</p>
-                                    <p>My booking List (spacing)</p>
-                                    <p>My booking List (spacing)</p>
-                                    <p>My booking List (spacing)</p>
+                                    <>
+                                        {book.filter((booking:BookingInterface) => (booking.MemberID) === members?.ID)
+                                            .map((booking) => (
+                                                <Grid container className="bg-gray-50 my-2 px-2 py-2 rounded-lg mx-auto">
+                                                    <Grid item xs={10}>
+                                                        <ul className="px-2">
+                                                            <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
+                                                            <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
+                                                            <li><span className="font-semibold">Date: </span>
+                                                                {dayjs(booking.Datetime).format('YYYY-MM-DD HH:mm')}
+                                                            </li>
+                                                        </ul> 
+                                                    </Grid>
+                                                    <Grid item xs={2}>
+                                                        <button className="cursor-pointer text-right text-red-500
+                                                        active:scale-[.98] active:duration-75 transition-all"
+                                                        onClick={() => { handleDialogDeleteOpen(Number(booking.ID)) }}
+                                                        >
+                                                            Cancel <CancelIcon/>
+                                                        </button>
+                                                    </Grid>
+                                                </Grid>
+                                                
+                                            ))
+                                        }
+                                    </>
                                 </Paper>
                             </div>
                         </Grid>
@@ -319,6 +389,83 @@ function Booking() {
                 </div>
             </motion.div>
         </motion.div>
+
+        <Dialog
+            open={openDelete}
+            onClose={handleDialogDeleteclose}
+            TransitionComponent={Transition}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            >
+            <DialogTitle id="alert-dialog-title">
+                Ticket Delete
+            </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        If you delete this ticket then you won't be able to recover any more. 
+                        Do you want to delete this ticket?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button color= "error" onClick={handleDialogDeleteclose}>Cancel</Button>
+                    <Button color= "secondary" onClick={handleDelete} className="bg-red-500" autoFocus>
+                        Confirm
+                    </Button>
+                </DialogActions>
+        </Dialog>
+
+        { openBooking && (
+            <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
+                <dialog
+                    open={openBooking}
+                    style={{
+                        width: dialogWidth,
+                        border: '1px solid #ccc',
+                        padding: '20px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        borderRadius: '8px',
+                        zIndex: 1000,
+                    }}
+                    >
+                    <div ref={dialogContentRef}
+                    >
+                        <div>
+                            <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
+                                Let's book now and workout with us
+                            </h1>
+                            <Divider/>
+                        </div>
+                        <div className="my-5">
+                            <p>Booking space options</p>
+                            <p>Booking space options</p>
+                            <p>Booking space options</p>
+                            <p>Booking space options</p>
+                            <p>Booking space options</p>
+                            <p>Booking space options</p>
+                        </div>
+                        <div className="flex justify-center items-center gap-3 my-3">
+                            <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
+                                onClick={handleDialogBookingClose}
+                            >
+                                <CancelIcon/> Cancel
+                            </button>
+                            <button className="rounded px-2 py-1 text-white font-semibold
+                                bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
+                                onClick={Submit} 
+                                autoFocus
+                            >
+                                <AssignmentTurnedInIcon/> Book Now
+                            </button>
+                        </div>
+                    </div>
+                </dialog>
+            </div>
+        )}
     </div>
     </section>
   );
@@ -349,12 +496,25 @@ function Booking() {
                                     </ul>  
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <div className="text-center py-6">
+                                    <div className="text-center pt-7">
                                         <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
                                             View People
                                         </button>
-                                        {handleBook()}
+                                        {(rooms.Remain === 0) ? (
+                                            <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                                                disabled
+                                                >
+                                                    <AssignmentTurnedInIcon/> Book
+                                            </button>
+                                        ):(
+                                            <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                            onClick={handleDialogBookingOpen}
+                                            >
+                                                <AssignmentTurnedInIcon/> Book
+                                            </button>
+                                        )}
                                     </div>
                                 </Grid>
                             </Grid>
