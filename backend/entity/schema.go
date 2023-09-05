@@ -58,6 +58,14 @@ type Timeslot struct {
 	Booking []Booking `gorm:"foreignKey:TimeslotID"`
 }
 
+// Equipment Timeslot
+type EquipmentTimeslot struct {
+	gorm.Model
+	Equipmentslot string
+
+	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentTimeslotID"`
+}
+
 // Room
 type Room struct {
 	gorm.Model
@@ -98,11 +106,11 @@ type Equipment struct {
 	MemberID *uint
 	Member   Member `gorm:"references:id" valid:"-"`
 
-	Booking []Booking `gorm:"foreignKey:EquipmentID"`
+	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentID"`
 }
 
-// / Booking
-// Member เป็นคนสร้าง ใช้จอง
+// Booking
+// Member เป็นคนสร้าง ใช้จองห้อง
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
@@ -116,8 +124,23 @@ type Booking struct {
 	TimeslotID *uint
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
+	EquipmentBookingID *uint
+	EquipmentBooking   EquipmentBooking `gorm:"references:id"`
+}
+
+// Booking
+// Member เป็นคนสร้าง ใช้จองอุปกรณ์
+type EquipmentBooking struct {
+	gorm.Model
+	EquipmentDatetime time.Time
+
+	EquipmentTimeslotID *uint
+	EquipmentTimeslot   EquipmentTimeslot `gorm:"references:id" valid:"-"`
+
 	EquipmentID *uint
 	Equipment   Equipment `gorm:"references:id"`
+
+	Booking []Booking `gorm:"foreignKey:EquipmentBookingID"`
 }
 
 // Contact us
