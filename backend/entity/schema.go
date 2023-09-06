@@ -70,7 +70,7 @@ type EquipmentTimeslot struct {
 type Room struct {
 	gorm.Model
 	Activity     string `valid:"required~Please fill activity about the room." `
-	Number       string `valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
+	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
 	Quantity     int16
 	Remain       int16
 	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
@@ -114,7 +114,7 @@ type Equipment struct {
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
-	Note     string
+	Note     string `valid:"required~Leave note message., maxstringlength(500)~It is too many characters." `
 
 	MemberID *uint
 	Member   Member `gorm:"references:id"`
