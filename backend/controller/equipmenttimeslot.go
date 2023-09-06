@@ -27,7 +27,7 @@ func CreateEquipmentTimeslot(c *gin.Context) {
 func GetEquipmentTimeslot(c *gin.Context) {
 	var equipmenttimeslot entity.EquipmentTimeslot
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM equipmenttimeslots WHERE id = ?", id).Scan(&equipmenttimeslot).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM equipment_timeslots WHERE id = ?", id).Scan(&equipmenttimeslot).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -37,7 +37,7 @@ func GetEquipmentTimeslot(c *gin.Context) {
 // GET--equipmenttimeslots--
 func ListEquipmentTimeslots(c *gin.Context) {
 	var equipmenttimeslots []entity.EquipmentTimeslot
-	if err := entity.DB().Raw("SELECT * FROM equipmenttimeslots").Scan(&equipmenttimeslots).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM equipment_timeslots").Scan(&equipmenttimeslots).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -47,7 +47,7 @@ func ListEquipmentTimeslots(c *gin.Context) {
 // DELETE--equipmenttimeslot id--
 func DeleteEquipmentTimeslot(c *gin.Context) {
 	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM equipmenttimeslots WHERE id = ?", id); tx.RowsAffected == 0 {
+	if tx := entity.DB().Exec("DELETE FROM equipment_timeslots WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Time slot not found"})
 		return
 	}

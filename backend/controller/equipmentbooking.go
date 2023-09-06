@@ -75,7 +75,7 @@ func CreateEquipmentBooking(c *gin.Context) {
 func GetEquipmentBooking(c *gin.Context) {
 	var equipmentbooking entity.EquipmentBooking
 	id := c.Param("id")
-	if tx := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Raw("SELECT * FROM equipmentbookings WHERE id = ?", id).Find(&equipmentbooking).Error; tx != nil {
+	if tx := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Raw("SELECT * FROM equipment_bookings WHERE id = ?", id).Find(&equipmentbooking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "equipment booking not found"})
 		return
 	}
@@ -86,7 +86,7 @@ func GetEquipmentBooking(c *gin.Context) {
 func ListEquipmentBookings(c *gin.Context) {
 	var equipmentbookings []entity.EquipmentBooking
 
-	if err := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Raw("SELECT * FROM equipmentbookings").Find(&equipmentbookings).Error; err != nil {
+	if err := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Raw("SELECT * FROM equipment_bookings").Find(&equipmentbookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -141,13 +141,13 @@ func DeleteEquipmentBooking(c *gin.Context) {
 	id := c.Param("id")
 
 	//ลบเมื่อ
-	if err := entity.DB().Exec("DELETE FROM equipmentbookings WHERE equipmentbooking_id = ?", id).Error; err != nil {
+	if err := entity.DB().Exec("DELETE FROM equipment_bookings WHERE equipment_booking_id = ?", id).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Exec("DELETE FROM equipmentbookings WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "equipmentbookings not found"})
+	if tx := entity.DB().Exec("DELETE FROM equipment_bookings WHERE id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "equipment bookings not found"})
 		return
 	}
 
