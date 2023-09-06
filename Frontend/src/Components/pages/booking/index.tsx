@@ -18,6 +18,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { TransitionProps } from "@mui/material/transitions";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
+import TextField from "@mui/material/TextField";
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
@@ -31,6 +32,7 @@ function Booking() {
     const [openBooking, setOpenBooking] = useState(false);
     const [dialogWidth, setDialogWidth] = useState<number | string>('auto');
     const dialogContentRef = React.createRef<HTMLDivElement>();
+    const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -45,6 +47,14 @@ function Booking() {
           [name]: event.target.value,
         });
         setRoomState(roomState)
+    };
+
+    const handleInputChange = (
+        event: React.ChangeEvent<{ id?: string; value: any }>
+    ) => {
+        const id = event.target.id as keyof typeof Booking;
+        const { value } = event.target;
+        setBooks({ ...books, [id]: value });
     };
 
     const handleDialogDeleteOpen = (ID: number) => {
@@ -72,14 +82,11 @@ function Booking() {
     }
 
     const handleDialogBookingOpen = () => {
-        // Close the dialog before computing the new width
         setOpenBooking(false);
         const contentWidth = dialogContentRef.current?.scrollWidth;
         if (contentWidth) {
-            // Set the width of the dialog to match the content
             setDialogWidth(contentWidth);
         }
-        // Open the dialog
         setOpenBooking(true);
     }
 
@@ -188,13 +195,20 @@ function Booking() {
         getRooms();
         getSlots();
         getBook();
+        //CurrentDateTime
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 500);
+        return () => clearInterval(intervalId);
     }, []);
 
     async function Submit() {
         let data = {
+            Note: books.Note?? "",
             TimeslotID: convertType(books.TimeslotID),
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
+            // EquipmentBookingID: convertType(books.EquipmentBookingID),
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -253,7 +267,7 @@ function Booking() {
                 }}
                 >
                 <HText>
-                    <span className="text-red-500">Booking System</span>
+                    <span className="text-red-500">Room Booking</span>
                 </HText>
                 <p className="mt-5">
                 Are you tired of the hassle that comes with managing reservations and appointments? 
@@ -281,7 +295,7 @@ function Booking() {
                             open={success}
                             autoHideDuration={3000}
                             onClose={handleClose}
-                            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                             >
                             <Alert onClose={handleClose} severity="success">
                                 Booked!
@@ -292,7 +306,7 @@ function Booking() {
                             open={error}
                             autoHideDuration={6000}
                             onClose={handleClose}
-                            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                             >
                             <Alert onClose={handleClose} severity="error">
                                 {errorMessage}
@@ -340,33 +354,52 @@ function Booking() {
                         </Grid>
                         {/* Right hand side */}
                         <Grid item xs={6}>
+                            {/* Header */}
                             <div className="justify-center items-center text-center my-3">
                                 <h1 className="font-bold text-xl text-orange-700 mb-3">
                                     My Bookings
                                 </h1>
                                 <Divider/>
                             </div>
-                            <div className="text-left mb-1 flex items-center justify-start gap-2">
-                                <h1 className="font-semibold text-lg">
-                                    Service List:
-                                </h1>
-                                <h1 className="font-semibold text-base text-black">
-                                    {members?.Firstname} {members?.Lastname}
-                                </h1>
+                            <div className="text-left mb-1">
+                                <div className="flex items-center justify-start gap-2">
+                                    <h1 className="font-semibold text-lg">
+                                        Service List:
+                                    </h1>
+                                    <h1 className="font-semibold text-base text-black">
+                                        {members?.Firstname} {members?.Lastname}
+                                    </h1>
+                                </div>
+                                <div className="flex items-center justify-start gap-2">
+                                    <h1 className="font-semibold">Date:</h1>
+                                    <p className="text-green-700">{currentDateTime.toLocaleString()}</p>
+                                </div>
                             </div>
-                            <div className="text-left mb-3">
+                            {/* Booking Schedule */}
+                            <motion.div 
+                                className="text-left mb-3"
+                                initial="hidden" 
+                                whileInView="visible"
+                                viewport={{ once: true, amount: 0.5 }}
+                                transition={{ delay: 0.2, duration: 0.5 }}
+                                variants={{
+                                    hidden: { opacity: 0, y: 50 },
+                                    visible: { opacity: 1, y: 0 }
+                                }}
+                            >
                                 <Paper className="rounded p-2">
                                     <>
                                         {book.filter((booking:BookingInterface) => (booking.MemberID) === members?.ID)
                                             .map((booking) => (
-                                                <Grid container className="bg-gray-50 my-2 px-2 py-2 rounded-lg mx-auto">
+                                                <Grid container className="bg-yellow-50 my-2 px-2 py-2 rounded-lg mx-auto">
                                                     <Grid item xs={10}>
                                                         <ul className="px-2">
                                                             <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
                                                             <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
-                                                            <li><span className="font-semibold">Date: </span>
+                                                            <li><span className="font-semibold">Booking Date: </span>
                                                                 {dayjs(booking.Datetime).format('YYYY-MM-DD HH:mm')}
                                                             </li>
+                                                            <li><span className="font-semibold">Note: </span>{booking.Note}</li>
                                                         </ul> 
                                                     </Grid>
                                                     <Grid item xs={2}>
@@ -378,12 +411,11 @@ function Booking() {
                                                         </button>
                                                     </Grid>
                                                 </Grid>
-                                                
                                             ))
                                         }
                                     </>
                                 </Paper>
-                            </div>
+                            </motion.div>
                         </Grid>
                     </Grid>
                 </div>
@@ -414,6 +446,7 @@ function Booking() {
                 </DialogActions>
         </Dialog>
 
+        {/* Booking Dialog */}
         { openBooking && (
             <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
                 <dialog
@@ -440,14 +473,68 @@ function Booking() {
                             </h1>
                             <Divider/>
                         </div>
-                        <div className="my-5">
-                            <p>Booking space options</p>
-                            <p>Booking space options</p>
-                            <p>Booking space options</p>
-                            <p>Booking space options</p>
-                            <p>Booking space options</p>
-                            <p>Booking space options</p>
+                        <div className="my-3">
+                            <>
+                                {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
+                                    .map((rooms) => (
+                                        <h1 className="text-orange-600 font-medium text-lg text-center">{rooms.Number} {rooms.Activity} room booking</h1>
+                                    ))
+                                }
+                                <div className="flex items-center justify-start gap-2 my-2">
+                                    <h1 className="font-semibold">Date:</h1>
+                                    <p className="text-green-700">{currentDateTime.toLocaleString()}</p>
+                                </div>
+                                <div className="flex items-center justify-start gap-2 my-2">
+                                    <h1 className="font-semibold">TimeSlot: -</h1>
+                                    {/* <Select
+                                        native
+                                        value={books.TimeslotID + ""}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                            name: "TimeslotID",
+                                        }}>
+                                        {slot.map((item: TimeslotInterface) => (
+                                            <option value={item.ID} key={item.ID}>
+                                                {item.Slot}
+                                            </option>
+                                        ))}
+                                    </Select> */}
+                                </div>
+                                <div className="flex justify-start items-center gap-2 my-2">
+                                    <p className="text-lg font-semibold">Booker: </p>
+                                    <Select
+                                        disabled
+                                        native
+                                        value={books.MemberID + ""}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                            name: "MemberID",
+                                        }}>
+                                        <option value={members?.ID} key={members?.ID}>
+                                            {members?.Firstname} {members?.Lastname}
+                                        </option> 
+                                    </Select>
+                                </div>
+                                <div className="my-2">
+                                    <div className="flex justify-start items-center gap-2">
+                                        <p className="text-lg font-semibold">Description</p>
+                                        <p className="text-red-500 italic">(Limit: 500 characters)</p>
+                                    </div>
+                                    <textarea
+                                        className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50"
+                                        autoFocus
+                                        placeholder="Leave Note Message"
+                                        id="Note"
+                                        name="note"
+                                        rows={4}
+                                        cols={50}
+                                        value={books.Note || ""}
+                                        onChange={handleInputChange} 
+                                    />
+                                </div> 
+                            </>
                         </div>
+                        <Divider/>
                         <div className="flex justify-center items-center gap-3 my-3">
                             <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
                                 onClick={handleDialogBookingClose}

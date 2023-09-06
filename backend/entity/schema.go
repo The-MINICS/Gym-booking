@@ -114,6 +114,7 @@ type Equipment struct {
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
+	Note     string
 
 	MemberID *uint
 	Member   Member `gorm:"references:id"`

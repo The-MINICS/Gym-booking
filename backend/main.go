@@ -83,7 +83,6 @@ func main() {
 			protected.POST("/bookings", controller.CreateBooking)
 			protected.GET("/bookings", controller.ListBookings)
 			protected.GET("/booking/:id", controller.GetBooking)
-			protected.PATCH("/bookings", controller.UpdateBooking)
 			protected.DELETE("/bookings/:id", controller.DeleteBooking)
 
 			// Equipment Booking Routes
