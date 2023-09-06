@@ -24,6 +24,7 @@ func CreateRoom(c *gin.Context) {
 		return
 	}
 
+	room.Remain = room.Capacity
 	if err := entity.DB().Create(&room).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
