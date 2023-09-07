@@ -5,7 +5,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { 
         Dialog, DialogActions, DialogContent, DialogContentText,  
         DialogTitle, Divider, FormControl, Grid, Paper, Select, 
-        SelectChangeEvent, Button, Slide
+        SelectChangeEvent, Button
 } from "@mui/material";
 import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
@@ -15,7 +15,6 @@ import { BookDelete, GetBooks, GetMemberByMID } from "@/services/HttpClientServi
 import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
-import { TransitionProps } from "@mui/material/transitions";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
 
@@ -30,6 +29,7 @@ function Booking() {
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
     const [openBooking, setOpenBooking] = useState(false);
+    const [openBookerList, setOpenBookerList] = useState(false);
     const [dialogWidth, setDialogWidth] = useState<number | string>('auto');
     const dialogContentRef = React.createRef<HTMLDivElement>();
     const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
@@ -242,16 +242,6 @@ function Booking() {
             }
         });
     }
-
-    const Transition = React.forwardRef(function Transition(
-        props: TransitionProps & {
-          children: React.ReactElement<any, any>;
-        },
-        ref: React.Ref<unknown>,
-      ) {
-        return <Slide direction="up" ref={ref} {...props} />;
-    });
-
     return (
     <section>
     <div className="w-full">
@@ -397,6 +387,7 @@ function Booking() {
                                                     <Grid item xs={10}>
                                                         <ul className="px-2">
                                                             <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
+                                                            <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
                                                             <li><span className="font-semibold">Booking Date: </span>
                                                                 {dayjs(booking.Datetime).format('YYYY-MM-DD HH:mm')}
                                                             </li>
@@ -405,8 +396,8 @@ function Booking() {
                                                     </Grid>
                                                     <Grid item xs={2}>
                                                         <button className="cursor-pointer text-right text-red-500
-                                                        active:scale-[.98] active:duration-75 transition-all"
-                                                        onClick={() => { handleDialogDeleteOpen(Number(booking.ID)) }}
+                                                            active:scale-[.98] active:duration-75 transition-all"
+                                                            onClick={() => { handleDialogDeleteOpen(Number(booking.ID)) }}
                                                         >
                                                             Cancel <CancelIcon/>
                                                         </button>
@@ -426,7 +417,6 @@ function Booking() {
         <Dialog
             open={openDelete}
             onClose={handleDialogDeleteclose}
-            TransitionComponent={Transition}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             >
@@ -545,6 +535,7 @@ function Booking() {
                 </dialog>
             </div>
         )}
+        {/* Show booker list */}
     </div>
     </section>
   );
