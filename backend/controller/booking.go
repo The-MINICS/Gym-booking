@@ -14,7 +14,7 @@ func CreateBooking(c *gin.Context) {
 	var booking entity.Booking
 	var member entity.Member
 	var room entity.Room
-	// var timeslot entity.Timeslot
+	var timeslot entity.Timeslot
 	// var equipmentbooking entity.EquipmentBooking
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
@@ -35,10 +35,10 @@ func CreateBooking(c *gin.Context) {
 	}
 
 	// ค้นหา timeslot ด้วย id
-	// if tx := entity.DB().Where("id = ?", booking.TimeslotID).First(&timeslot); tx.RowsAffected == 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a time"})
-	// 	return
-	// }
+	if tx := entity.DB().Where("id = ?", booking.TimeslotID).First(&timeslot); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a time"})
+		return
+	}
 
 	// ค้นหา equipmentbooking ด้วย id
 	// if tx := entity.DB().Where("id = ?", booking.EquipmentBookingID).First(&equipmentbooking); tx.RowsAffected == 0 {
@@ -69,7 +69,7 @@ func CreateBooking(c *gin.Context) {
 		Note:     booking.Note,
 		Member:   member,
 		Room:     room,
-		// Timeslot: timeslot,
+		Timeslot: timeslot,
 		// EquipmentBooking: equipmentbooking,
 	}
 
@@ -92,7 +92,7 @@ func CreateBooking(c *gin.Context) {
 func GetBooking(c *gin.Context) {
 	var booking entity.Booking
 	id := c.Param("id")
-	if tx := entity.DB().Preload("Member").Preload("Room").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
+	if tx := entity.DB().Preload("Member").Preload("Room").Preload("Timeslot").Raw("SELECT * FROM bookings WHERE id = ?", id).Find(&booking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "booking not found"})
 		return
 	}
@@ -103,7 +103,7 @@ func GetBooking(c *gin.Context) {
 func ListBookings(c *gin.Context) {
 	var bookings []entity.Booking
 
-	if err := entity.DB().Preload("Member").Preload("Room").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
+	if err := entity.DB().Preload("Member").Preload("Room").Preload("Timeslot").Raw("SELECT * FROM bookings").Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

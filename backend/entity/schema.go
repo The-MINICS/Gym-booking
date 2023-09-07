@@ -55,7 +55,7 @@ type Timeslot struct {
 	gorm.Model
 	Slot string
 
-	// Booking []Booking `gorm:"foreignKey:TimeslotID"`
+	Booking []Booking `gorm:"foreignKey:TimeslotID"`
 }
 
 // Equipment Timeslot
@@ -122,8 +122,8 @@ type Booking struct {
 	RoomID *uint
 	Room   Room `gorm:"references:id"`
 
-	// TimeslotID *uint
-	// Timeslot   Timeslot `gorm:"references:id" valid:"-"`
+	TimeslotID *uint
+	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
 	// EquipmentBookingID *uint
 	// EquipmentBooking   EquipmentBooking `gorm:"references:id"`

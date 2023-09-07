@@ -26,6 +26,7 @@ function Booking() {
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
     const [roomState, setRoomState] = useState("");
+    const [TimeSlotState, setTimeSlotState] = useState("");
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
     const [openBooking, setOpenBooking] = useState(false);
@@ -45,7 +46,7 @@ function Booking() {
           ...books,
           [name]: event.target.value,
         });
-        setRoomState(roomState)
+        setRoomState(roomState);
     };
 
     const handleInputChange = (
@@ -194,6 +195,7 @@ function Booking() {
         getRooms();
         getSlots();
         getBook();
+
         //CurrentDateTime
         const intervalId = setInterval(() => {
             setCurrentDateTime(new Date());
@@ -204,10 +206,8 @@ function Booking() {
     async function Submit() {
         let data = {
             Note: books.Note?? "",
-            // TimeslotID: convertType(books.TimeslotID),
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
-            // EquipmentBookingID: convertType(books.EquipmentBookingID),
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -247,7 +247,7 @@ function Booking() {
         ref: React.Ref<unknown>,
       ) {
         return <Slide direction="up" ref={ref} {...props} />;
-      });
+    });
 
     return (
     <section>
@@ -482,21 +482,14 @@ function Booking() {
                                     <h1 className="font-semibold">Date:</h1>
                                     <p className="text-green-700">{currentDateTime.toLocaleString()}</p>
                                 </div>
-                                {/* <div className="flex items-center justify-start gap-2 my-2">
-                                    <h1 className="font-semibold">TimeSlot: </h1>
-                                    <Select
-                                        disabled
-                                        native
-                                        value={books.TimeslotID + ""}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                            name: "TimeslotID",
-                                        }}>
-                                        <option value={slot.} key={item.ID}>
-                                            {item.Slot}
-                                        </option>
-                                    </Select>
-                                </div> */}
+                                {slot.filter((timeslot: TimeslotInterface) => (timeslot.ID) === books.TimeslotID)
+                                    .map((timeslot) => (
+                                        <div className="flex items-center justify-start gap-2 my-2">
+                                            <h1 className="font-semibold">TimeSlot:</h1>
+                                            <p className="text-green-700">{timeslot.Slot}</p>
+                                        </div>
+                                    ))
+                                }
                                 <div className="flex justify-start items-center gap-2 my-2">
                                     <p className="text-lg font-semibold">Booker: </p>
                                     <Select
@@ -540,8 +533,7 @@ function Booking() {
                             </button>
                             <button className="rounded px-2 py-1 text-white font-semibold
                                 bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
-                                onClick={Submit} 
-                                autoFocus
+                                onClick={Submit}
                             >
                                 <AssignmentTurnedInIcon/> Book Now
                             </button>
@@ -556,6 +548,7 @@ function Booking() {
   
   function AfterSelect() {
     books.RoomID = convertType(roomState)
+    books.TimeslotID = convertType(TimeSlotState)
     if (roomState) {
         return (
             <section>
@@ -572,7 +565,10 @@ function Booking() {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <ul>
-                                        <li><span className="font-semibold">Time: </span>{item.Slot}</li>
+                                        <li value={item.ID}>
+                                            <span className="font-semibold">Time: </span>
+                                            {item.Slot}
+                                        </li>
                                         <li><span className="font-semibold">Room: </span>{rooms.Activity}</li>
                                         <li><span className="font-semibold">Capacity: </span>{rooms.Capacity} persons</li>
                                         <li><span className="font-semibold">Remain: </span>{rooms.Remain} persons</li>
