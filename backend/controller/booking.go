@@ -40,7 +40,7 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา equipmentbooking ด้วย id
+	// //ค้นหา equipmentbooking ด้วย id
 	// if tx := entity.DB().Where("id = ?", booking.EquipmentBookingID).First(&equipmentbooking); tx.RowsAffected == 0 {
 	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
 	// 	return
@@ -58,10 +58,10 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// if &timeslot.ID == booking.TimeslotID {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "You already booked for this time slot"})
-	// 	return
-	// }
+	if &timeslot.ID == booking.TimeslotID {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You already booked for this time slot"})
+		return
+	}
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{

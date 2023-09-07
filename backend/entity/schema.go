@@ -117,10 +117,10 @@ type Booking struct {
 	Note     string `valid:"maxstringlength(500)~It is too many characters." `
 
 	MemberID *uint
-	Member   Member `gorm:"references:id"`
+	Member   Member `gorm:"references:id" valid:"-"`
 
 	RoomID *uint
-	Room   Room `gorm:"references:id"`
+	Room   Room `gorm:"references:id" valid:"-"`
 
 	TimeslotID *uint
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
