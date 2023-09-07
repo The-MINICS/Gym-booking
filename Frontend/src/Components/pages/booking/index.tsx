@@ -81,13 +81,15 @@ function Booking() {
         }, 500);
     }
 
-    const handleDialogBookingOpen = () => {
+    const handleDialogBookingOpen = (value: any) => {
         setOpenBooking(false);
         const contentWidth = dialogContentRef.current?.scrollWidth;
         if (contentWidth) {
             setDialogWidth(contentWidth);
         }
         setOpenBooking(true);
+        setTimeSlotState(value);
+        console.log(value);
     }
 
     const handleDialogBookingClose = () => {
@@ -208,6 +210,7 @@ function Booking() {
             Note: books.Note?? "",
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
+            TimeslotID: convertType(books.TimeslotID),
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -480,13 +483,13 @@ function Booking() {
                                 }
                                 <div className="flex items-center justify-start gap-2 my-2">
                                     <h1 className="font-semibold">Date:</h1>
-                                    <p className="text-green-700">{currentDateTime.toLocaleString()}</p>
+                                    <p className="font-medium text-red-950">{currentDateTime.toLocaleString()}</p>
                                 </div>
                                 {slot.filter((timeslot: TimeslotInterface) => (timeslot.ID) === books.TimeslotID)
                                     .map((timeslot) => (
                                         <div className="flex items-center justify-start gap-2 my-2">
                                             <h1 className="font-semibold">TimeSlot:</h1>
-                                            <p className="text-green-700">{timeslot.Slot}</p>
+                                            <p className="font-medium text-red-950">{timeslot.Slot}</p>
                                         </div>
                                     ))
                                 }
@@ -511,7 +514,7 @@ function Booking() {
                                         <p className="text-red-500 italic">(Limit: 500 characters)</p>
                                     </div>
                                     <textarea
-                                        className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50"
+                                        className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
                                         autoFocus
                                         placeholder="Leave Note Message"
                                         id="Note"
@@ -547,8 +550,8 @@ function Booking() {
   );
   
   function AfterSelect() {
-    books.RoomID = convertType(roomState)
-    books.TimeslotID = convertType(TimeSlotState)
+    books.RoomID = convertType(roomState);
+    books.TimeslotID = convertType(TimeSlotState);
     if (roomState) {
         return (
             <section>
@@ -565,7 +568,7 @@ function Booking() {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <ul>
-                                        <li value={item.ID}>
+                                        <li>
                                             <span className="font-semibold">Time: </span>
                                             {item.Slot}
                                         </li>
@@ -590,7 +593,7 @@ function Booking() {
                                         ):(
                                             <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
                                              hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                            onClick={handleDialogBookingOpen}
+                                            onClick={() => handleDialogBookingOpen(item.ID)}
                                             >
                                                 <AssignmentTurnedInIcon/> Book
                                             </button>
