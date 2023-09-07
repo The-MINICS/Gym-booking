@@ -18,7 +18,6 @@ import Snackbar from "@mui/material/Snackbar";
 import { TransitionProps } from "@mui/material/transitions";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
-import TextField from "@mui/material/TextField";
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
@@ -205,7 +204,7 @@ function Booking() {
     async function Submit() {
         let data = {
             Note: books.Note?? "",
-            TimeslotID: convertType(books.TimeslotID),
+            // TimeslotID: convertType(books.TimeslotID),
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
             // EquipmentBookingID: convertType(books.EquipmentBookingID),
@@ -395,7 +394,6 @@ function Booking() {
                                                     <Grid item xs={10}>
                                                         <ul className="px-2">
                                                             <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
-                                                            <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
                                                             <li><span className="font-semibold">Booking Date: </span>
                                                                 {dayjs(booking.Datetime).format('YYYY-MM-DD HH:mm')}
                                                             </li>
@@ -484,22 +482,21 @@ function Booking() {
                                     <h1 className="font-semibold">Date:</h1>
                                     <p className="text-green-700">{currentDateTime.toLocaleString()}</p>
                                 </div>
-                                <div className="flex items-center justify-start gap-2 my-2">
-                                    <h1 className="font-semibold">TimeSlot: -</h1>
-                                    {/* <Select
+                                {/* <div className="flex items-center justify-start gap-2 my-2">
+                                    <h1 className="font-semibold">TimeSlot: </h1>
+                                    <Select
+                                        disabled
                                         native
                                         value={books.TimeslotID + ""}
                                         onChange={handleChange}
                                         inputProps={{
                                             name: "TimeslotID",
                                         }}>
-                                        {slot.map((item: TimeslotInterface) => (
-                                            <option value={item.ID} key={item.ID}>
-                                                {item.Slot}
-                                            </option>
-                                        ))}
-                                    </Select> */}
-                                </div>
+                                        <option value={slot.} key={item.ID}>
+                                            {item.Slot}
+                                        </option>
+                                    </Select>
+                                </div> */}
                                 <div className="flex justify-start items-center gap-2 my-2">
                                     <p className="text-lg font-semibold">Booker: </p>
                                     <Select
