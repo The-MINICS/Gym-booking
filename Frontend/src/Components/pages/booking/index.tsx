@@ -96,6 +96,19 @@ function Booking() {
         setOpenBooking(false)
     }
 
+    const BookerListOpen = () => {
+        setOpenBookerList(false);
+        const contentWidth = dialogContentRef.current?.scrollWidth;
+        if (contentWidth) {
+            setDialogWidth(contentWidth);
+        }
+        setOpenBookerList(true);
+    }
+
+    const BookerListClose = () => {
+        setOpenBookerList(false)
+    }
+
     const handleClose = (
         event?: React.SyntheticEvent | Event,
         reason?: string
@@ -536,6 +549,97 @@ function Booking() {
             </div>
         )}
         {/* Show booker list */}
+        { openBookerList && (
+            <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
+            <dialog
+                open={openBooking}
+                style={{
+                    width: dialogWidth,
+                    border: '1px solid #ccc',
+                    padding: '20px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    backgroundColor: 'white',
+                    borderRadius: '8px',
+                    zIndex: 1000,
+                }}
+                >
+                <div ref={dialogContentRef}
+                >
+                    <div>
+                        <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
+                            Let's book now and workout with us
+                        </h1>
+                        <Divider/>
+                    </div>
+                    <div className="my-3">
+                        <>
+                            {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
+                                .map((rooms) => (
+                                    <h1 className="text-orange-600 font-medium text-lg text-center">{rooms.Number} {rooms.Activity} room booking</h1>
+                                ))
+                            }
+                            <div className="flex items-center justify-start gap-2 my-2">
+                                <h1 className="font-semibold">Date:</h1>
+                                <p className="font-medium text-red-950">{currentDateTime.toLocaleString()}</p>
+                            </div>
+                            {slot.filter((timeslot: TimeslotInterface) => (timeslot.ID) === books.TimeslotID)
+                                .map((timeslot) => (
+                                    <div className="flex items-center justify-start gap-2 my-2">
+                                        <h1 className="font-semibold">TimeSlot:</h1>
+                                        <p className="font-medium text-red-950">{timeslot.Slot}</p>
+                                    </div>
+                                ))
+                            }
+                            <div className="flex justify-start items-center gap-2 my-2">
+                                <p className="text-lg font-semibold">Booker: </p>
+                                <Select
+                                    disabled
+                                    native
+                                    value={books.MemberID + ""}
+                                    onChange={handleChange}
+                                    inputProps={{
+                                        name: "MemberID",
+                                    }}>
+                                    <option value={members?.ID} key={members?.ID}>
+                                        {members?.Firstname} {members?.Lastname}
+                                    </option> 
+                                </Select>
+                            </div>
+                            <div className="my-2">
+                                <div className="flex justify-start items-center gap-2">
+                                    <p className="text-lg font-semibold">Description</p>
+                                    <p className="text-red-500 italic">(Limit: 500 characters)</p>
+                                </div>
+                                <textarea
+                                    className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
+                                    autoFocus
+                                    placeholder="Leave Note Message"
+                                    id="Note"
+                                    name="note"
+                                    rows={4}
+                                    cols={50}
+                                    value={books.Note || ""}
+                                    onChange={handleInputChange} 
+                                />
+                            </div> 
+                        </>
+                    </div>
+                    <Divider/>
+                    <div className="flex justify-center items-center gap-3 my-3">
+                        <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
+                            onClick={BookerListClose}
+                        >
+                            <CancelIcon/> Close
+                        </button>
+                    </div>
+                </div>
+            </dialog>
+        </div>
+        )}
     </div>
     </section>
   );
