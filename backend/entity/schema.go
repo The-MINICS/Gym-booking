@@ -72,7 +72,6 @@ type Room struct {
 	Activity     string `valid:"required~Please fill activity about the room." `
 	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
 	Quantity     int16
-	Remain       int16
 	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `

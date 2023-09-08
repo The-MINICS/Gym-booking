@@ -669,7 +669,6 @@ function Booking() {
                                         </li>
                                         <li><span className="font-semibold">Room: </span>{rooms.Activity}</li>
                                         <li><span className="font-semibold">Capacity: </span>{rooms.Capacity} persons</li>
-                                        <li><span className="font-semibold">Remain: </span>{rooms.Remain} persons</li>
                                         <li><span className="font-semibold">Attendant: </span>{rooms.Attendant}</li>
                                     </ul>  
                                 </Grid>
@@ -679,7 +678,7 @@ function Booking() {
                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
                                             View People
                                         </button>
-                                        {(rooms.Remain === 0) ? (
+                                        {/* {(rooms.Remain === 0) ? (
                                             <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
                                                 disabled
                                                 >
@@ -692,7 +691,13 @@ function Booking() {
                                             >
                                                 <AssignmentTurnedInIcon/> Book
                                             </button>
-                                        )}
+                                        )} */}
+                                        <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                            onClick={() => handleDialogBookingOpen(item.ID)}
+                                            >
+                                                <AssignmentTurnedInIcon/> Book
+                                        </button>
                                     </div>
                                 </Grid>
                             </Grid>

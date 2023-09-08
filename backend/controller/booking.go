@@ -49,9 +49,6 @@ func CreateBooking(c *gin.Context) {
 	// Update room booking status
 	room.Quantity++
 
-	//คำนวณ remain ของ quantity
-	room.Remain = room.Capacity - room.Quantity
-
 	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
 	if room.Quantity >= room.Capacity {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Room is fully booked"})
