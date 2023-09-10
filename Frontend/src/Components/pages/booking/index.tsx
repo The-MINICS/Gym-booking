@@ -2,10 +2,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import equipmentPhoto from "@/assets/equipments.png";
 import { 
         Dialog, DialogActions, DialogContent, DialogContentText,  
         DialogTitle, Divider, FormControl, Grid, Paper, Select, 
-        SelectChangeEvent, Button
+        SelectChangeEvent, Button,
+        Table,  TableBody,  TableCell,  TableContainer, TableHead,  TableRow,
 } from "@mui/material";
 import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
@@ -17,6 +19,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 function Booking() {
     const [books, setBooks] = useState<BookingInterface>({});
@@ -96,18 +99,25 @@ function Booking() {
         setOpenBooking(false)
     }
 
-    const BookerListOpen = () => {
+    const BookerListOpen = (value: any) => {
         setOpenBookerList(false);
         const contentWidth = dialogContentRef.current?.scrollWidth;
         if (contentWidth) {
             setDialogWidth(contentWidth);
         }
         setOpenBookerList(true);
+        setTimeSlotState(value);
     }
 
     const BookerListClose = () => {
         setOpenBookerList(false)
     }
+
+    // const EquipmentBooking = (room: RoomInterface) => {
+    //     if (room.ID === 1 && room.Activity === "fitness") {
+    //         setEquipmentBooking(true)
+    //     }  
+    // }
 
     const handleClose = (
         event?: React.SyntheticEvent | Event,
@@ -247,7 +257,7 @@ function Booking() {
               setErrorMessage("")
               setTimeout(() => {
                 window.location.href = "/bookings";
-            }, 500);
+            }, 1000);
             } else {
               console.log("save failured!")
               setError(true);
@@ -255,6 +265,29 @@ function Booking() {
             }
         });
     }
+
+    const BookerList = () => {
+        for (let i = 1; i <= rooms.length; i++) {
+            for (let j = 1; j <= slot.length; j++) {
+                if (books.RoomID === i && books.TimeslotID === j) {
+                    return (
+                        <TableBody className="py-2 bg-white">
+                            {book.filter((rows: BookingInterface) => (rows.RoomID === i) && (rows.TimeslotID === j))
+                                .map((rows) => (
+                                    <TableRow className="py-2 hover:bg-yellow-100 cursor-pointer">
+                                        <TableCell align="center">{rows.Member?.Username}</TableCell>
+                                        <TableCell align="center">{rows.Member?.Firstname} {rows.Member?.Lastname}</TableCell>
+                                        <TableCell align="center">{rows.Note}</TableCell>
+                                    </TableRow>
+                                ))
+                            }
+                        </TableBody>
+                    )
+                }
+            }
+        }
+    }
+
     return (
     <section>
     <div className="w-full">
@@ -303,7 +336,7 @@ function Booking() {
                             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                             >
                             <Alert onClose={handleClose} severity="success">
-                                Booked!
+                                You have booked the room
                             </Alert>
                         </Snackbar>
                         <Snackbar
@@ -377,9 +410,10 @@ function Booking() {
                                 </div>
                                 <div className="flex items-center justify-start gap-2">
                                     <h1 className="font-semibold">Date:</h1>
-                                    <p className="text-green-700">{currentDateTime.toLocaleString()}</p>
+                                    <p className="text-red-500">{currentDateTime.toLocaleString()}</p>
                                 </div>
                             </div>
+
                             {/* Booking Schedule */}
                             <motion.div 
                                 className="text-left mb-3"
@@ -392,34 +426,55 @@ function Booking() {
                                     visible: { opacity: 1, y: 0 }
                                 }}
                             >
-                                <Paper className="rounded p-2">
-                                    <>
+                                <div>
+                                    <section>
                                         {book.filter((booking:BookingInterface) => (booking.MemberID) === members?.ID)
                                             .map((booking) => (
-                                                <Grid container className="bg-yellow-50 my-2 px-2 py-2 rounded-lg mx-auto">
-                                                    <Grid item xs={10}>
+                                                <>
+                                                <Grid container className="bg-pink-100 my-2 px-2 py-2 rounded-lg mx-auto">
+                                                    <Grid item xs={9}>
                                                         <ul className="px-2">
                                                             <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
                                                             <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
                                                             <li><span className="font-semibold">Booking Date: </span>
                                                                 {dayjs(booking.Datetime).format('YYYY-MM-DD HH:mm')}
                                                             </li>
-                                                            <li><span className="font-semibold">Note: </span>{booking.Note}</li>
+                                                            <li className="text-green-700"><span className="font-semibold">Leave Note: </span>{booking.Note}</li>
                                                         </ul> 
                                                     </Grid>
-                                                    <Grid item xs={2}>
-                                                        <button className="cursor-pointer text-right text-red-500
-                                                            active:scale-[.98] active:duration-75 transition-all"
+                                                    <Grid item xs={3} style={{ textAlign: "right" }}>
+                                                        <button className="cursor-pointer active:scale-[.98] active:duration-75 transition-all mb-2"
                                                             onClick={() => { handleDialogDeleteOpen(Number(booking.ID)) }}
                                                         >
-                                                            Cancel <CancelIcon/>
+                                                            <CancelIcon/>
                                                         </button>
                                                     </Grid>
                                                 </Grid>
+                                                <div className="text-right">
+                                                    {(booking.Room?.ID === 5 && booking.Room.Activity === "fitness") ? (
+                                                        <>
+                                                            <p className="text-red-500 italic my-2 text-sm">
+                                                                According to your room booking, You have booked a fitness room,
+                                                                For the convenience of using the room and equipment,
+                                                                Please click on the "Equipment Booking" button to continue booking equipment in the fitness room.
+                                                            </p>
+                                                            <button className="cursor-pointer text-white bg-green-500 rounded-lg py-2 px-2
+                                                                active:scale-[.98] active:duration-75 transition-all font-bold hover:bg-yellow-500">
+                                                                <Link to="/equipment-booking" className="flex items-center justify-center gap-1">
+                                                                    <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
+                                                                    <p>Equipment Booking ...</p>
+                                                                </Link>
+                                                            </button>
+                                                        </>
+                                                        ) : ("")
+                                                    }
+                                                </div>
+                                                
+                                                </>
                                             ))
                                         }
-                                    </>
-                                </Paper>
+                                    </section>
+                                </div>
                             </motion.div>
                         </Grid>
                     </Grid>
@@ -427,6 +482,7 @@ function Booking() {
             </motion.div>
         </motion.div>
 
+        {/* Delete Dialog */}
         <Dialog
             open={openDelete}
             onClose={handleDialogDeleteclose}
@@ -513,8 +569,8 @@ function Booking() {
                                 </div>
                                 <div className="my-2">
                                     <div className="flex justify-start items-center gap-2">
-                                        <p className="text-lg font-semibold">Description</p>
-                                        <p className="text-red-500 italic">(Limit: 500 characters)</p>
+                                        <p className="text-lg font-semibold">Leave Note</p>
+                                        <p className="text-red-500 italic">(Limit: 30 characters)</p>
                                     </div>
                                     <textarea
                                         className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
@@ -548,11 +604,12 @@ function Booking() {
                 </dialog>
             </div>
         )}
+
         {/* Show booker list */}
         { openBookerList && (
             <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
             <dialog
-                open={openBooking}
+                open={openBookerList}
                 style={{
                     width: dialogWidth,
                     border: '1px solid #ccc',
@@ -571,66 +628,28 @@ function Booking() {
                 >
                     <div>
                         <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
-                            Let's book now and workout with us
+                            List of Bookers
                         </h1>
                         <Divider/>
                     </div>
                     <div className="my-3">
-                        <>
-                            {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
-                                .map((rooms) => (
-                                    <h1 className="text-orange-600 font-medium text-lg text-center">{rooms.Number} {rooms.Activity} room booking</h1>
-                                ))
-                            }
-                            <div className="flex items-center justify-start gap-2 my-2">
-                                <h1 className="font-semibold">Date:</h1>
-                                <p className="font-medium text-red-950">{currentDateTime.toLocaleString()}</p>
-                            </div>
-                            {slot.filter((timeslot: TimeslotInterface) => (timeslot.ID) === books.TimeslotID)
-                                .map((timeslot) => (
-                                    <div className="flex items-center justify-start gap-2 my-2">
-                                        <h1 className="font-semibold">TimeSlot:</h1>
-                                        <p className="font-medium text-red-950">{timeslot.Slot}</p>
-                                    </div>
-                                ))
-                            }
-                            <div className="flex justify-start items-center gap-2 my-2">
-                                <p className="text-lg font-semibold">Booker: </p>
-                                <Select
-                                    disabled
-                                    native
-                                    value={books.MemberID + ""}
-                                    onChange={handleChange}
-                                    inputProps={{
-                                        name: "MemberID",
-                                    }}>
-                                    <option value={members?.ID} key={members?.ID}>
-                                        {members?.Firstname} {members?.Lastname}
-                                    </option> 
-                                </Select>
-                            </div>
-                            <div className="my-2">
-                                <div className="flex justify-start items-center gap-2">
-                                    <p className="text-lg font-semibold">Description</p>
-                                    <p className="text-red-500 italic">(Limit: 500 characters)</p>
-                                </div>
-                                <textarea
-                                    className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
-                                    autoFocus
-                                    placeholder="Leave Note Message"
-                                    id="Note"
-                                    name="note"
-                                    rows={4}
-                                    cols={50}
-                                    value={books.Note || ""}
-                                    onChange={handleInputChange} 
-                                />
-                            </div> 
-                        </>
+                       {/* Table List */}
+                        <TableContainer sx={{ maxHeight: 640 }}>
+                            <Table className="hover:table-auto -ml-3" aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow className="py-2 text-lg font-bold bg-pink-200">
+                                        <TableCell><h4 className="font-semibold text-base font-sans text-center">UserID</h4></TableCell>
+                                        <TableCell><h4 className="font-semibold text-base font-sans text-center">Full-Name</h4></TableCell>
+                                        <TableCell><h4 className="font-semibold text-base font-sans text-center">Note</h4></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                {BookerList()}
+                            </Table>
+                        </TableContainer>
                     </div>
-                    <Divider/>
+                    <Divider />
                     <div className="flex justify-center items-center gap-3 my-3">
-                        <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
+                        <button className="rounded px-4 py-2 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
                             onClick={BookerListClose}
                         >
                             <CancelIcon/> Close
@@ -673,9 +692,11 @@ function Booking() {
                                     </ul>  
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <div className="text-center pt-7">
+                                    <div className="text-center pt-4">
                                         <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all">
+                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                            onClick={() => BookerListOpen(item.ID)}
+                                        >
                                             View People
                                         </button>
                                         {/* {(rooms.Remain === 0) ? (
