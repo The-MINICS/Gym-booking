@@ -40,34 +40,19 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// //ค้นหา equipmentbooking ด้วย id
-	// if tx := entity.DB().Where("id = ?", booking.EquipmentBookingID).First(&equipmentbooking); tx.RowsAffected == 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Please select an equipment"})
-	// 	return
-	// }
-
-	// // Update room booking status
-	if booking.RoomID == &room.ID {
-		TimeslotID := uint(1)
-		if room.ID == TimeslotID {
-			room.Quantity++
-		} else {
-			room.Quantity += 2
+	for i := 1; i <= int(room.ID); i++ {
+		for j := 1; j <= int(timeslot.ID); j++ {
+			if int(*booking.RoomID) == i && int(*booking.TimeslotID) == j {
+				room.Quantity++
+			}
 		}
 	}
 
-	// room.Quantity++
-
-	// //จำนวน member ที่จองห้องต้องไม่เกิน capacity
-	// if room.Quantity >= room.Capacity {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Room is fully booked"})
+	// // Check if a booking already exists for the selected Timeslot
+	// if tx := entity.DB().Where("timeslot_id = ?", booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 time slot"})
 	// 	return
 	// }
-
-	if &timeslot.ID == booking.TimeslotID {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You already booked for this time slot"})
-		return
-	}
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
@@ -81,6 +66,12 @@ func CreateBooking(c *gin.Context) {
 
 	// การ validate
 	if _, err := govalidator.ValidateStruct(booking); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Update the Timeslot with the incremented Quantity
+	if err := entity.DB().Save(&room).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

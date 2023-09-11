@@ -124,8 +124,7 @@ type Booking struct {
 	TimeslotID *uint
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
-	// EquipmentBookingID *uint
-	// EquipmentBooking   EquipmentBooking `gorm:"references:id"`
+	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentBookingID"`
 }
 
 // Booking
@@ -138,9 +137,10 @@ type EquipmentBooking struct {
 	EquipmentTimeslot   EquipmentTimeslot `gorm:"references:id" valid:"-"`
 
 	EquipmentID *uint
-	Equipment   Equipment `gorm:"references:id"`
+	Equipment   Equipment `gorm:"references:id" valid:"-"`
 
-	// Booking []Booking `gorm:"foreignKey:EquipmentBookingID"`
+	BookingID *uint
+	Booking   Booking `gorm:"references:id" valid:"-"`
 }
 
 // Contact us
