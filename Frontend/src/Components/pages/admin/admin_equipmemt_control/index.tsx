@@ -111,7 +111,7 @@ function EquipmentManagement() {
             <div className="mx-auto md:w-4/5 px-3 py-2 rounded mb-5 bg-gray-50">
                 <button className="flex font-semibold text-2xl py-1 text-red-700 
                     w-full text-left items-center justify-between px-2"
-                    onClick={()=> setExpanded(!Expanded)}
+                    onClick={() => setExpanded(!Expanded)}
                 >
                     List Of All Our Available Equipment
                     <div className="ml-2">

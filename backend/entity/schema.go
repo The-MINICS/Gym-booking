@@ -124,7 +124,7 @@ type Booking struct {
 	TimeslotID *uint
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
-	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentBookingID"`
+	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:BookingID"`
 }
 
 // Booking

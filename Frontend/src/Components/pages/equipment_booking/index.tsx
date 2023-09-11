@@ -9,10 +9,8 @@ import MuiAlert from "@mui/material/Alert";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { PictureInterface } from "@/interfaces/IPicture";
 import { GetBooks, GetPictures } from "@/services/HttpClientService";
-import { useParams } from "react-router-dom";
 
 function EquipmentBooking() {
-    let { id } = useParams();
     const [equipmentBook, setEquipmentBook] = useState<EquipmentBookingInterface>({});
     const [TimeSlot, setTimeSlot] = useState<EquipmentTimeslotInterface[]>([]);
     const [books, setBooks] = useState<BookingInterface[]>([]);
