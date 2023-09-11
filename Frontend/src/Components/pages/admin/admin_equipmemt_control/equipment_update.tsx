@@ -67,9 +67,9 @@ function EquipmentUpdate(){
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
           },
-      };
+        };
       
-      let res = await fetch(`${apiUrl}/equipment/`+id, requestOptions)
+        let res = await fetch(`${apiUrl}/equipment/`+id, requestOptions)
           .then((response) => response.json())
           .then((res) => {
           if (res.data) {
@@ -78,7 +78,7 @@ function EquipmentUpdate(){
               return false;
           }
           });
-          return res;
+        return res;
     }
 
     async function GetRooms() {

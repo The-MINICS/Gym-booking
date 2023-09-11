@@ -19,9 +19,11 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function Booking() {
+    const navigate = useNavigate();
     const [books, setBooks] = useState<BookingInterface>({});
     const [book, setBook] = useState<BookingInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
@@ -36,6 +38,7 @@ function Booking() {
     const [dialogWidth, setDialogWidth] = useState<number | string>('auto');
     const dialogContentRef = React.createRef<HTMLDivElement>();
     const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
+    
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -112,12 +115,6 @@ function Booking() {
     const BookerListClose = () => {
         setOpenBookerList(false)
     }
-
-    // const EquipmentBooking = (room: RoomInterface) => {
-    //     if (room.ID === 1 && room.Activity === "fitness") {
-    //         setEquipmentBooking(true)
-    //     }  
-    // }
 
     const handleClose = (
         event?: React.SyntheticEvent | Event,
@@ -220,7 +217,6 @@ function Booking() {
         getRooms();
         getSlots();
         getBook();
-
         //CurrentDateTime
         const intervalId = setInterval(() => {
             setCurrentDateTime(new Date());
@@ -458,12 +454,18 @@ function Booking() {
                                                                 For the convenience of using the room and equipment,
                                                                 Please click on the "Equipment Booking" button to continue booking equipment in the fitness room.
                                                             </p>
-                                                            <button className="cursor-pointer text-white bg-green-500 rounded-lg py-2 px-2
-                                                                active:scale-[.98] active:duration-75 transition-all font-bold hover:bg-yellow-500">
-                                                                <Link to="/equipment-booking" className="flex items-center justify-center gap-1">
+                                                            <button className="cursor-pointer text-white bg-green-500 rounded-lg py-2 px-2 mb-4
+                                                                active:scale-[.98] active:duration-75 transition-all font-bold hover:bg-yellow-500"
+                                                                onClick={() => navigate({ pathname: `/booking/equipment/${booking.ID}` })}
+                                                                >
+                                                                    <div className="flex items-center justify-center gap-1">
+                                                                        <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
+                                                                        <p>Equipment Booking ...</p>
+                                                                    </div>
+                                                                {/* <Link to="/equipment-booking" className="flex items-center justify-center gap-1">
                                                                     <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
                                                                     <p>Equipment Booking ...</p>
-                                                                </Link>
+                                                                </Link> */}
                                                             </button>
                                                         </>
                                                         ) : ("")
@@ -570,7 +572,7 @@ function Booking() {
                                 <div className="my-2">
                                     <div className="flex justify-start items-center gap-2">
                                         <p className="text-lg font-semibold">Leave Note</p>
-                                        <p className="text-red-500 italic">(Limit: 30 characters)</p>
+                                        <p className="text-red-500 italic">(Limit: 50 characters)</p>
                                     </div>
                                     <textarea
                                         className="mb-3 w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
@@ -581,7 +583,7 @@ function Booking() {
                                         rows={4}
                                         cols={50}
                                         value={books.Note || ""}
-                                        onChange={handleInputChange} 
+                                        onChange={handleInputChange}
                                     />
                                 </div> 
                             </>
@@ -624,7 +626,7 @@ function Booking() {
                     zIndex: 1000,
                 }}
                 >
-                <div ref={dialogContentRef}
+                    <div ref={dialogContentRef}
                 >
                     <div>
                         <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
