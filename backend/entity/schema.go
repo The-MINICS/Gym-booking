@@ -113,7 +113,7 @@ type Equipment struct {
 type Booking struct {
 	gorm.Model
 	Datetime time.Time
-	Note     string `valid:"maxstringlength(500)~It is too many characters." `
+	Note     string `valid:"maxstringlength(50)~It is too many characters." `
 
 	MemberID *uint
 	Member   Member `gorm:"references:id" valid:"-"`

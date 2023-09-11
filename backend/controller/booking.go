@@ -46,14 +46,23 @@ func CreateBooking(c *gin.Context) {
 	// 	return
 	// }
 
-	// Update room booking status
-	room.Quantity++
-
-	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
-	if room.Quantity >= room.Capacity {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Room is fully booked"})
-		return
+	// // Update room booking status
+	if booking.RoomID == &room.ID {
+		TimeslotID := uint(1)
+		if room.ID == TimeslotID {
+			room.Quantity++
+		} else {
+			room.Quantity += 2
+		}
 	}
+
+	// room.Quantity++
+
+	// //จำนวน member ที่จองห้องต้องไม่เกิน capacity
+	// if room.Quantity >= room.Capacity {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Room is fully booked"})
+	// 	return
+	// }
 
 	if &timeslot.ID == booking.TimeslotID {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You already booked for this time slot"})
