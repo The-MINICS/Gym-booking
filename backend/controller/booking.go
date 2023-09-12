@@ -40,13 +40,7 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	for i := 1; i <= int(room.ID); i++ {
-		for j := 1; j <= int(timeslot.ID); j++ {
-			if int(*booking.RoomID) == i && int(*booking.TimeslotID) == j {
-				room.Quantity++
-			}
-		}
-	}
+	room.Quantity++
 
 	// // Check if a booking already exists for the selected Timeslot
 	// if tx := entity.DB().Where("timeslot_id = ?", booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
@@ -61,7 +55,6 @@ func CreateBooking(c *gin.Context) {
 		Member:   member,
 		Room:     room,
 		Timeslot: timeslot,
-		// EquipmentBooking: equipmentbooking,
 	}
 
 	// การ validate
