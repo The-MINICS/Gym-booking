@@ -41,11 +41,16 @@ func CreateBooking(c *gin.Context) {
 
 	timeslot.Quantity++
 
-	// // Check if a booking already exists for the selected Timeslot
-	// if tx := entity.DB().Where("timeslot_id = ?", booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 time slot"})
-	// 	return
-	// }
+	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 time slot"})
+		return
+	}
+
+	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
+	if timeslot.Quantity > room.Capacity {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "This time slot is fully booked"})
+		return
+	}
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
