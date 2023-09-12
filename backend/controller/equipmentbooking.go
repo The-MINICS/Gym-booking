@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
@@ -40,7 +41,7 @@ func CreateEquipmentBooking(c *gin.Context) {
 
 	// 14: สร้าง  booking
 	eqbk := entity.EquipmentBooking{
-		EquipmentDatetime: equipmentbooking.EquipmentDatetime,
+		EquipmentDatetime: time.Now(),
 		EquipmentTimeslot: equipmenttimeslot,
 		Equipment:         equipment,
 		Booking:           booking,

@@ -15,7 +15,6 @@ func CreateBooking(c *gin.Context) {
 	var member entity.Member
 	var room entity.Room
 	var timeslot entity.Timeslot
-	// var equipmentbooking entity.EquipmentBooking
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

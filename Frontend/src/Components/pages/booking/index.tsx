@@ -19,11 +19,9 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function Booking() {
-    const navigate = useNavigate();
     const [books, setBooks] = useState<BookingInterface>({});
     const [book, setBook] = useState<BookingInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
@@ -456,16 +454,11 @@ function Booking() {
                                                             </p>
                                                             <button className="cursor-pointer text-white bg-green-500 rounded-lg py-2 px-2 mb-4
                                                                 active:scale-[.98] active:duration-75 transition-all font-bold hover:bg-yellow-500"
-                                                                onClick={() => navigate({ pathname: `/booking/equipment/${booking.ID}` })}
                                                                 >
-                                                                    <div className="flex items-center justify-center gap-1">
+                                                                    <Link to="/equipment-booking" className="flex items-center justify-center gap-1">
                                                                         <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
                                                                         <p>Equipment Booking ...</p>
-                                                                    </div>
-                                                                {/* <Link to="/equipment-booking" className="flex items-center justify-center gap-1">
-                                                                    <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
-                                                                    <p>Equipment Booking ...</p>
-                                                                </Link> */}
+                                                                    </Link>
                                                             </button>
                                                         </>
                                                         ) : ("")
@@ -527,7 +520,7 @@ function Booking() {
                         zIndex: 1000,
                     }}
                     >
-                    <div ref={dialogContentRef}
+                        <div ref={dialogContentRef}
                     >
                         <div>
                             <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
