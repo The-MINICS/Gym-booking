@@ -621,14 +621,13 @@ function Booking() {
                 >
                     <div ref={dialogContentRef}
                 >
-                    <div>
-                        <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
-                            List of Bookers
-                        </h1>
-                        <Divider/>
-                    </div>
+                    <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
+                        List of Bookers
+                    </h1>
+                    <Divider/>
+
+                    {/* Table List */}
                     <div className="my-3">
-                       {/* Table List */}
                         <TableContainer sx={{ maxHeight: 640 }}>
                             <Table className="hover:table-auto -ml-3" aria-label="sticky table">
                                 <TableHead>
@@ -665,9 +664,10 @@ function Booking() {
         return (
             <section>
             <Paper className="rounded p-3">
-                {slot.map((item: TimeslotInterface) => (
-                    <>
-                    {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
+                {slot.filter((item: TimeslotInterface) => (item.RoomID) === books.RoomID)
+                    .map((item) => (
+                       <>
+                       {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
                         .map((rooms) => (
                             <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={rooms.ID}>
                                 <Grid item xs={3}>
@@ -694,7 +694,7 @@ function Booking() {
                                         >
                                             View People
                                         </button>
-                                        {/* {(rooms.Remain === 0) ? (
+                                        {(rooms.Capacity === item.Quantity) ? (
                                             <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
                                                 disabled
                                                 >
@@ -707,20 +707,13 @@ function Booking() {
                                             >
                                                 <AssignmentTurnedInIcon/> Book
                                             </button>
-                                        )} */}
-                                        <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                            onClick={() => handleDialogBookingOpen(item.ID)}
-                                            >
-                                                <AssignmentTurnedInIcon/> Book
-                                        </button>
+                                        )}
                                     </div>
                                 </Grid>
                             </Grid>
-                        ))
-                    }
+                       ))}
                     </>
-                ))} 
+                ))}
             </Paper>
             </section>
         )
