@@ -18,13 +18,28 @@ func CreateRoom(c *gin.Context) {
 		return
 	}
 
+	// 14: สร้าง  room
+	rm := entity.Room{
+		Activity:     room.Activity,
+		Number:       room.Number,
+		Capacity:     room.Capacity,
+		Attendant:    room.Attendant,
+		Illustration: room.Illustration,
+		Caption:      room.Caption,
+		Timeslots: []entity.Timeslot{
+			{Slot: "8:00 - 12:00", Quantity: 0},
+			{Slot: "13:00 - 16:00", Quantity: 0},
+			{Slot: "16:30 - 19:30", Quantity: 0},
+		},
+	}
+
 	// การ validate
 	if _, err := govalidator.ValidateStruct(room); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := entity.DB().Create(&room).Error; err != nil {
+	if err := entity.DB().Create(&rm).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -73,7 +88,7 @@ func UpdateRoom(c *gin.Context) {
 
 	var new_room_activity = room.Activity
 	var new_room_number = room.Number
-	var new_room_quantity = room.Quantity
+	// var new_room_quantity = room.Quantity
 	var new_room_capacity = room.Capacity
 	var new_room_attendant = room.Attendant
 	var new_room_illustration = room.Illustration
@@ -85,10 +100,10 @@ func UpdateRoom(c *gin.Context) {
 	}
 
 	room_update := entity.Room{
-		Model:        gorm.Model{ID: room.ID},
-		Activity:     new_room_activity,
-		Number:       new_room_number,
-		Quantity:     new_room_quantity,
+		Model:    gorm.Model{ID: room.ID},
+		Activity: new_room_activity,
+		Number:   new_room_number,
+		// Quantity:     new_room_quantity,
 		Capacity:     new_room_capacity,
 		Attendant:    new_room_attendant,
 		Illustration: new_room_illustration,

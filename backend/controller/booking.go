@@ -39,7 +39,7 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	room.Quantity++
+	timeslot.Quantity++
 
 	// // Check if a booking already exists for the selected Timeslot
 	// if tx := entity.DB().Where("timeslot_id = ?", booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
@@ -63,7 +63,7 @@ func CreateBooking(c *gin.Context) {
 	}
 
 	// Update the Timeslot with the incremented Quantity
-	if err := entity.DB().Save(&room).Error; err != nil {
+	if err := entity.DB().Save(&timeslot).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

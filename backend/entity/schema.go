@@ -53,7 +53,11 @@ type Member struct {
 // Timeslot
 type Timeslot struct {
 	gorm.Model
-	Slot string
+	Slot     string
+	Quantity int16
+
+	RoomID *uint
+	Room   Room `gorm:"references:id" valid:"-"`
 
 	Booking []Booking `gorm:"foreignKey:TimeslotID"`
 }
@@ -69,9 +73,9 @@ type EquipmentTimeslot struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity     string `valid:"required~Please fill activity about the room." `
-	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
-	Quantity     int16
+	Activity string `valid:"required~Please fill activity about the room." `
+	Number   string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
+	// Quantity     int16
 	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `
@@ -79,6 +83,7 @@ type Room struct {
 
 	Booking   []Booking   `gorm:"foreignKey:RoomID"`
 	Equipment []Equipment `gorm:"foreignKey:RoomID"`
+	Timeslots []Timeslot  `gorm:"foreignKey:RoomID"`
 }
 
 // Picture

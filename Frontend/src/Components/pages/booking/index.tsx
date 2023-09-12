@@ -672,7 +672,7 @@ function Booking() {
                             <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={rooms.ID}>
                                 <Grid item xs={3}>
                                     <div className="flex items-center justify-center py-5 mt-1">
-                                        <p className="text-center text-5xl text-slate-600">{rooms.Quantity}/{rooms.Capacity}</p>
+                                        <p className="text-center text-5xl text-slate-600">{item.Quantity}/{rooms.Capacity}</p>
                                     </div>
                                 </Grid>
                                 <Grid item xs={6}>
