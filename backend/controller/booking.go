@@ -41,6 +41,7 @@ func CreateBooking(c *gin.Context) {
 
 	timeslot.Quantity++
 
+	//Member จองแต่ละ time slot ได้แค่ 1 ครั้ง
 	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 time slot"})
 		return
@@ -106,11 +107,35 @@ func ListBookings(c *gin.Context) {
 }
 
 func DeleteBooking(c *gin.Context) {
+	var booking entity.Booking
+	var timeslot entity.Timeslot
+
 	id := c.Param("id")
+
+	if err := entity.DB().Where("id = ?", id).First(&booking).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Booking not found"})
+		return
+	}
+
+	if err := entity.DB().Where("id = ?", booking.TimeslotID).First(&timeslot).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Timeslot not found"})
+		return
+	}
+
+	if timeslot.Quantity > 0 {
+		timeslot.Quantity--
+	}
+
+	// Save the updated timeslot back to the database
+	if err := entity.DB().Save(&timeslot).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if tx := entity.DB().Exec("DELETE FROM bookings WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "bookings not found"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": id})
 
+	c.JSON(http.StatusOK, gin.H{"data": id})
 }
