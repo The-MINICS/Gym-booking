@@ -12,6 +12,9 @@ import {
 } from '@mui/material';
 import { EquipmentDelete, GetEquipments } from '@/services/HttpClientService';
 import { useNavigate } from "react-router-dom";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 function AllEquipment() {
     const navigate = useNavigate();
@@ -48,7 +51,15 @@ function AllEquipment() {
         setTimeout(() => {
           window.location.href = "/equipment-manage";
         }, 500);
-      }
+    }
+
+    const StatusSwitch = () => {
+        return (
+            <FormGroup style={{ alignContent: "center" }}>
+                <FormControlLabel control={<Switch defaultChecked />} label="Available"/>
+            </FormGroup>
+        )
+    }
   
       useEffect(() => {
         getEquipments();
@@ -85,6 +96,7 @@ function AllEquipment() {
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Equipment</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Responsibility</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Action</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Status</h4></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody className="py-2 bg-white">
@@ -98,6 +110,14 @@ function AllEquipment() {
                                             <TableCell align="center">{row.Member?.Firstname} {row.Member?.Lastname}</TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>
+                                                    {/* <Button
+                                                        className="hover:bg-blue-500 cursor-pointer"
+                                                        color="secondary"
+                                                        onClick={() =>
+                                                            navigate({ pathname: `/equipment/update/${row.ID}` })
+                                                        }
+                                                        >Available
+                                                    </Button> */}
                                                     <Button
                                                         startIcon={<EditIcon />}
                                                         className="hover:bg-blue-500 cursor-pointer"
@@ -115,6 +135,7 @@ function AllEquipment() {
                                                     </Button>
                                                 </ButtonGroup>
                                             </TableCell>
+                                            <TableCell align="center">{StatusSwitch()}</TableCell>
                                     </TableRow>
                                 ))}
                         </TableBody>

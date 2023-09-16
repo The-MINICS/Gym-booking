@@ -59,13 +59,17 @@ type Timeslot struct {
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
 
-	Booking []Booking `gorm:"foreignKey:TimeslotID"`
+	Booking           []Booking           `gorm:"foreignKey:TimeslotID"`
+	EquipmentTimeslot []EquipmentTimeslot `gorm:"foreignKey:TimeslotID"`
 }
 
 // Equipment Timeslot
 type EquipmentTimeslot struct {
 	gorm.Model
 	Equipmentslot string
+
+	TimeslotID *uint
+	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentTimeslotID"`
 }
@@ -109,6 +113,9 @@ type Equipment struct {
 
 	MemberID *uint
 	Member   Member `gorm:"references:id" valid:"-"`
+
+	StatusID *uint
+	Status Status `gorm:"references:id" valid:"-"`
 
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentID"`
 }
@@ -157,6 +164,14 @@ type Contactus struct {
 
 	MemberID *uint
 	Member   Member `gorm:"references:id" valid:"-"`
+}
+
+//status
+type Status struct{
+	gorm.Model
+	Status string
+
+	Equipment []Equipment `gorm:"foreignKey:StatusID"`
 }
 
 // ฟังก์ชันที่จะใช่ในการ validation ตัวอักษรพิเศษและตัวเลข
