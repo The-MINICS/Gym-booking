@@ -1,6 +1,7 @@
 import { MemberInterface } from "./IMember";
 import { PictureInterface } from "./IPicture";
 import { RoomInterface } from "./IRoom";
+import { StatusInterface } from "./IStatus";
 
 export interface EquipmentInterface {
     ID?: number,
@@ -13,5 +14,8 @@ export interface EquipmentInterface {
     Room?: RoomInterface;
 
     MemberID?: number;
-    Member?: MemberInterface
+    Member?: MemberInterface;
+
+    StatusID?: number;
+    Status?: StatusInterface;
 }

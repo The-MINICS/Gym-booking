@@ -333,6 +333,28 @@ async function GetContactUs() {
   return res;
 }
 
+async function GetSlot() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/timeslots`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 export {
   Login,
   Members,
@@ -348,5 +370,6 @@ export {
   GetPictures,
   GetRooms,
   GetBooks,
-  GetContactUs
+  GetContactUs,
+  GetSlot
 };

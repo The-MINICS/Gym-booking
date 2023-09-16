@@ -14,5 +14,4 @@ export interface EquipmentBookingInterface {
 
     BookingID?: number;
     Booking?: BookingInterface;
-
 }
