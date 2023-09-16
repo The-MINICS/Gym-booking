@@ -77,9 +77,8 @@ type EquipmentTimeslot struct {
 // Room
 type Room struct {
 	gorm.Model
-	Activity string `valid:"required~Please fill activity about the room." `
-	Number   string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
-	// Quantity     int16
+	Activity     string `valid:"required~Please fill activity about the room." `
+	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
 	Capacity     int16  `valid:"range(1|100)~Please fill a number is not less than 1 and not more than 100." `
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `
@@ -115,7 +114,7 @@ type Equipment struct {
 	Member   Member `gorm:"references:id" valid:"-"`
 
 	StatusID *uint
-	Status Status `gorm:"references:id" valid:"-"`
+	Status   Status `gorm:"references:id" valid:"-"`
 
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentID"`
 }
@@ -166,8 +165,8 @@ type Contactus struct {
 	Member   Member `gorm:"references:id" valid:"-"`
 }
 
-//status
-type Status struct{
+// status
+type Status struct {
 	gorm.Model
 	Status string
 

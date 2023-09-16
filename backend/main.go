@@ -91,6 +91,7 @@ func main() {
 			protected.POST("/equipmentbookings", controller.CreateEquipmentBooking)
 			protected.GET("/equipmentbookings", controller.ListEquipmentBookings)
 			protected.GET("/equipmentbooking/:id", controller.GetEquipmentBooking)
+			protected.PATCH("/equipmentbookings", controller.UpdateEquipmentBooking)
 			protected.DELETE("/equipmentbookings/:id", controller.DeleteEquipmentBooking)
 
 			// Contactus Routes

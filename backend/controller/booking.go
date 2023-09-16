@@ -79,6 +79,26 @@ func CreateBooking(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	if *booking.RoomID == uint(5) {
+		var equipmenttimeslot entity.EquipmentTimeslot
+		var equipment entity.Equipment
+
+		// Create an EquipmentBooking record
+		equipmentBooking := entity.EquipmentBooking{
+			EquipmentDatetime: time.Now(),
+			EquipmentTimeslot: equipmenttimeslot,
+			Equipment:         equipment,
+			BookingID:         &bk.ID,
+		}
+
+		// Save the EquipmentBooking record to the database
+		if err := entity.DB().Create(&equipmentBooking).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"data": bk})
 
 }
