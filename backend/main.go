@@ -5,6 +5,8 @@ import (
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/chonticha1844/Gym-booking/middlewares"
 	"github.com/gin-gonic/gin"
+	// "time"
+	// "fmt"
 )
 
 const PORT = "9999"
@@ -98,12 +100,49 @@ func main() {
 			protected.PATCH("/contactuses", controller.UpdateContactus)
 			protected.DELETE("/contactuses/:id", controller.DeleteContactus)
 
+			// Status Routes
+			protected.POST("/statuses", controller.CreateStatus)
+			protected.GET("/statuses", controller.ListStatuses)
+			protected.GET("/status/:id", controller.GetStatus)
+			protected.PATCH("/statuses", controller.UpdateStatus)
+			protected.DELETE("/statuses/:id", controller.DeleteStatus)
+
 		}
 	}
 
 	// Run the server go run main.go
 	r.Run("localhost: " + PORT)
 }
+
+// func Passthetime() {
+
+// 	timeslot1 := time.Time.Hour(2)
+//     // Defining duration parameter of
+//     // AfterFunc() method
+//     DurationOfTime := time.Duration(3) * time.Second
+
+//     // Defining function parameter of
+//     // AfterFunc() method
+//     f := func() {
+
+//         // Printed when its called by the
+//         // AfterFunc() method in the time
+//         // stated above
+//         fmt.Println("Function called by "+
+//             "AfterFunc() after 3 seconds")
+//     }
+
+//     // Calling AfterFunc() method with its
+//     // parameter
+//     Timer1 := time.AfterFunc(DurationOfTime, f)
+
+//     // Calling stop method
+//     // w.r.to Timer1
+//     defer Timer1.Stop()
+
+//     // Calling sleep method
+//     time.Sleep(10 * time.Second)
+// }
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
