@@ -2,6 +2,7 @@ import React from "react";
 import "@/Components/pages/equipment_booking/equipment-booking.css"
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
+import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useState } from "react";
 import { EquipmentBookingInterface } from "@/interfaces/IEquipmentBooking";
 import { EquipmentTimeslotInterface } from "@/interfaces/IEquipmentTimeslot";
@@ -9,13 +10,23 @@ import { AlertProps, SelectChangeEvent } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { PictureInterface } from "@/interfaces/IPicture";
-import { GetBooks, GetEquipments, GetPictures } from "@/services/HttpClientService";
+import { GetBooks, GetEquipments, GetPictures, GetSlot } from "@/services/HttpClientService";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { EquipmentInterface } from "@/interfaces/IEquipment";
+import { useParams } from "react-router-dom";
+import { TimeslotInterface } from "@/interfaces/ITimeslot";
 
-function EquipmentBooking() {
+type Props = {
+  bookingTime: any;
+  equipmentTime: any;
+}
+
+function EquipmentBooking({bookingTime, equipmentTime}: Props) {
+    let { id } = useParams();
     const [equipmentBook, setEquipmentBook] = useState<EquipmentBookingInterface>({});
-    const [TimeSlot, setTimeSlot] = useState<EquipmentTimeslotInterface[]>([]);
+    const [EquipmentBooks, setEquipmentBooks] = useState<EquipmentBookingInterface[]>([]);
+    const [TimeSlot, setTimeSlot] = useState<TimeslotInterface[]>([]);
+    const [EQTimeSlot, setEQTimeSlot] = useState<EquipmentTimeslotInterface[]>([]);
     const [books, setBooks] = useState<BookingInterface[]>([]);
     const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
     const [Pictures, setPictures] = useState<PictureInterface[]>([]);
@@ -26,6 +37,8 @@ function EquipmentBooking() {
     const [errorMessage, setErrorMessage] = useState("");
     const apiUrl = "http://localhost:9999";
 
+    bookingTime = equipmentBook.ID;
+
     const handleChange = (event: SelectChangeEvent) => {
         const name = event.target.name as keyof typeof equipmentBook;
         setEquipmentBook({
@@ -34,13 +47,37 @@ function EquipmentBooking() {
         });
     };
 
-    const handleInputChange = (
-        event: React.ChangeEvent<{ id?: string; value: any }>
+    const handleClose = (
+      event?: React.SyntheticEvent | Event,
+      reason?: string
     ) => {
-        const id = event.target.id as keyof typeof EquipmentBooking;
-        const { value } = event.target;
-        setEquipmentBook({ ...equipmentBook, [id]: value });
-    };
+      if (reason === "clickaway") {
+        return;
+      }
+      setSuccess(false);
+      setError(false);
+  };
+
+    async function EquipmentBookingByEBID() {
+      const requestOptions = {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+        },
+      };
+    
+      let res = await fetch(`${apiUrl}/equipmenttimeslot/`+id, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+        if (res.data) {
+            return res.data;
+        } else {
+            return false;
+        }
+        });
+      return res;
+  }
 
     async function GetEquipmentTimeSlot() {
         const requestOptions = {
@@ -64,6 +101,28 @@ function EquipmentBooking() {
         return res;
     }
 
+    async function GetEquipmentBookings() {
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      };
+    
+      let res = await fetch(`${apiUrl}/equipmentbookings`, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+          if (res.data) {
+            return res.data;
+          } else {
+            return false;
+          }
+        });
+    
+      return res;
+  }
+
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
         ref
@@ -71,31 +130,52 @@ function EquipmentBooking() {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
+    const getEquipmentBooking = async () => {
+      let res = await EquipmentBookingByEBID();
+      if (res) {
+        setEquipmentBook(res);
+      }
+    };
+
+    const getEquipmentBookings = async () => {
+      let res = await GetEquipmentBookings();
+      if (res) {
+        setEquipmentBooks(res);
+      }
+    };
+
     const getEquipments = async () => {
       let res = await GetEquipments();
       if (res) {
-          setEquipments(res);
+        setEquipments(res);
       }
     };
 
     const getPictures = async () => {
       let res = await GetPictures();
       if (res) {
-          setPictures(res);
-    }
+        setPictures(res);
+      }
     };
 
     const getEquipmentTimeSlot = async () => {
         let res = await GetEquipmentTimeSlot();
         if (res) {
-            setTimeSlot(res);
+          setEQTimeSlot(res);
         }
     };
 
     const getBooks = async () => {
         let res = await GetBooks();
         if (res) {
-            setBooks(res);
+          setBooks(res);
+      }
+    };
+
+    const getTimeSlot = async () => {
+      let res = await GetSlot();
+      if (res) {
+        setTimeSlot(res);
       }
     };
 
@@ -105,7 +185,10 @@ function EquipmentBooking() {
     };
 
     useEffect(() => {
+        getEquipmentBooking();
+        getEquipmentBookings();
         getEquipments();
+        getTimeSlot();
         getEquipmentTimeSlot();
         getBooks();
         getPictures();
@@ -135,9 +218,68 @@ function EquipmentBooking() {
       }
     }
 
+    async function submit() {
+      let data = {
+          ID: equipmentBook.ID,
+          EquipmentBookingID: convertType(equipmentBook.EquipmentBookingID),
+          EquipmentTimeslotID: convertType(equipmentBook.EquipmentTimeslotID),
+          BookingID: convertType(equipmentBook.BookingID),
+      };
+      console.log(data)
+
+      const requestOptions = {
+          method: "PATCH",
+          headers: { 
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+      };
+      fetch(`${apiUrl}/equipmentbookings`, requestOptions)
+          .then((response) => response.json())
+          .then((res) => {
+              console.log(res);
+              if (res.data) {
+              console.log("seved")
+              setSuccess(true);
+              setErrorMessage("")
+              // setTimeout(() => {
+              //     window.location.href = "/equipment-manage";
+              // }, 500);
+          } else {
+              console.log("save failured!")
+              setError(true);
+              setErrorMessage(res.error)
+          }
+      });
+  }
+
     return (
     <div className="w-full">
         <motion.div className="mx-auto w-5/6 pt-10 pb-5 bg-center">
+          {/* Snackbar */}
+              <Snackbar
+                  id="success"
+                  open={success}
+                  autoHideDuration={5000}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  >
+                    <Alert onClose={handleClose} severity="success">
+                      You've booked the equipment
+                    </Alert>
+              </Snackbar>
+              <Snackbar
+                  id="error"
+                  open={error}
+                  autoHideDuration={6000}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                >
+                  <Alert onClose={handleClose} severity="error">
+                    {errorMessage}
+                  </Alert>
+              </Snackbar>
+
             {/* Header */}
             <motion.div
                 className="justify-center items-center text-center"
@@ -165,33 +307,45 @@ function EquipmentBooking() {
               {/* Booking time */}
               <div className="EB-book-time">
                 <div className="flex EB-book-header">
-                  <div>
-                    <p>Booking Time</p>
-                  </div>
+                  {books.filter((BookTime: BookingInterface) => (BookTime.ID) === convertType(bookingTime))
+                    .map((BookTime) => (
+                      <>
+                        <p className="text-center font-bold text-lg">{BookTime.Timeslot?.Slot}</p>
+                        <p hidden>{equipmentTime = (BookTime.TimeslotID)}</p>
+                      </>
+                    ))
+                  }
                 </div>
               </div>
               {/* Equipment time */}
               <div className="EB-equipment-time">
                 <div className="flex EB-equipment-header">
                   {/* select time */}
-                  <div className="flex justify-center items-center gap-2">
-                    {TimeSlot.map((eqTime: EquipmentTimeslotInterface) => (
-                      <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
-                         hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all">
-                        <AccessTimeIcon/>
-                        <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
-                      </button>
-                    ))}
+                  <div className="flex gap-2">
+                    {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
+                      .map((eqTime) => (
+                        <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
+                          hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all">
+                          <AccessTimeIcon/>
+                          <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
+                        </button>
+                      ))
+                    }
                   </div>
                 </div>
               </div>
               <div className="EB-status">
-                <div className="EB-status-inside">
-                  <p>Status</p>
+                <div className="flex gap-2 EB-status-inside">
+                  {Pictures.map((EQTopic: PictureInterface) => (
+                    <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
+                        hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all">
+                        <p className="text-center font-medium">{EQTopic.Title}</p>
+                    </button>
+                  ))}
                 </div>
               </div>
-              <div className="EB-Area">
-                {EquipmentItems()}
+              <div className="EB-Area item-center justify-center">
+                <p className="text-center text-red-600 font-medium italic text-2xl">Please click the period and tittle of equipment group</p>
                 {/* {Equipments.map((eqBook: EquipmentInterface) => (
                   <div className="flex items-center justify-start gap-2">
                     <button className="bg-slate-100 rounded-md p-2 m-1 hover:bg-yellow-500 
@@ -204,7 +358,7 @@ function EquipmentBooking() {
             </div>
         </motion.div>
     </div>
-  )
+  );
 }
 
 export default EquipmentBooking;

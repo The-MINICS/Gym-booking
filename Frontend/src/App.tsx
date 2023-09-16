@@ -66,7 +66,7 @@ function App() {
         <Route path="/picture/update/:id" element={<PictureEquipmentUpdate/>}/> {}
         <Route path="/equipment/update/:id" element={<EquipmentUpdate/>}/> {}
         <Route path="/room/update/:id" element={<RoomUpdate/>}/> {}
-        <Route path="/equipment-booking" element={<EquipmentBooking/>}/> {}
+        <Route path="/equipmentbooking/update/:id" element={<EquipmentBooking bookingTime={undefined} equipmentTime={undefined}/>}/> {}
       </Routes>
       <Footer />
   </Router>
