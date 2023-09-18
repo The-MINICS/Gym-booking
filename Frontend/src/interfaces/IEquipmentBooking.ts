@@ -6,7 +6,7 @@ export interface EquipmentBookingInterface {
     ID?: number,
     EquipmentDatetime?: Date | null;
 
-    EquipmentBookingID?: number;
+    EquipmentID?: number;
     Equipment?: EquipmentInterface;
 
     EquipmentTimeslotID?: number;

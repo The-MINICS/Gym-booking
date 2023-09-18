@@ -19,9 +19,10 @@ import { TimeslotInterface } from "@/interfaces/ITimeslot";
 type Props = {
   bookingTime: any;
   equipmentTime: any;
+  roomTimeShow: any;
 }
 
-function EquipmentBooking({bookingTime, equipmentTime}: Props) {
+function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     let { id } = useParams();
     const [equipmentBook, setEquipmentBook] = useState<EquipmentBookingInterface>({});
     const [EquipmentBooks, setEquipmentBooks] = useState<EquipmentBookingInterface[]>([]);
@@ -31,6 +32,9 @@ function EquipmentBooking({bookingTime, equipmentTime}: Props) {
     const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
     const [Pictures, setPictures] = useState<PictureInterface[]>([]);
     const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
+    const [clickedButton, setClickedButton] = useState("");
+    const [clickedButtonEQTime, setClickedButtonEQTime] = useState("");
+    const [buttonAfterClicked, setButtonAfterClicked] = useState(false);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -45,6 +49,18 @@ function EquipmentBooking({bookingTime, equipmentTime}: Props) {
           ...equipmentBook,
           [name]: event.target.value,
         });
+    };
+
+    const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      const button: HTMLButtonElement = event.currentTarget;
+      setClickedButton(button.name);
+    };
+
+    const buttonEQtimeHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      const button: HTMLButtonElement = event.currentTarget;
+      setClickedButtonEQTime(button.name);
     };
 
     const handleClose = (
@@ -221,7 +237,7 @@ function EquipmentBooking({bookingTime, equipmentTime}: Props) {
     async function submit() {
       let data = {
           ID: equipmentBook.ID,
-          EquipmentBookingID: convertType(equipmentBook.EquipmentBookingID),
+          EquipmentID: convertType(equipmentBook.EquipmentID),
           EquipmentTimeslotID: convertType(equipmentBook.EquipmentTimeslotID),
           BookingID: convertType(equipmentBook.BookingID),
       };
@@ -306,26 +322,35 @@ function EquipmentBooking({bookingTime, equipmentTime}: Props) {
             <div className="EquipmentBookingArea">
               {/* Booking time */}
               <div className="EB-book-time">
+                <div className="text-center">
+                  <p className="font-bold text-base">Fitness Room Booking Period</p>
+                </div>
                 <div className="flex EB-book-header">
                   {books.filter((BookTime: BookingInterface) => (BookTime.ID) === convertType(bookingTime))
                     .map((BookTime) => (
                       <>
-                        <p className="text-center font-bold text-lg">{BookTime.Timeslot?.Slot}</p>
+                        <button disabled className="text-center font-bold text-lg text-white bg-orange-600 px-2 py-1 rounded-sm">
+                          {BookTime.Timeslot?.Slot}
+                        </button>
                         <p hidden>{equipmentTime = (BookTime.TimeslotID)}</p>
+                        <p hidden>{roomTimeShow = (BookTime.Timeslot?.Slot)}</p>
                       </>
                     ))
                   }
                 </div>
               </div>
-              {/* Equipment time */}
+              {/* Booking time */}
               <div className="EB-equipment-time">
+                <p className="font-bold text-base py-1">Equipment Booking Period:</p>
                 <div className="flex EB-equipment-header">
-                  {/* select time */}
                   <div className="flex gap-2">
                     {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
                       .map((eqTime) => (
                         <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
-                          hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all">
+                          hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all btn"
+                          onClick={buttonHandler}
+                          name={eqTime.Equipmentslot}
+                          >
                           <AccessTimeIcon/>
                           <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
                         </button>
@@ -334,15 +359,34 @@ function EquipmentBooking({bookingTime, equipmentTime}: Props) {
                   </div>
                 </div>
               </div>
-              <div className="EB-status">
-                <div className="flex gap-2 EB-status-inside">
+
+              {/* Equipment time */}
+              <div className="EB-topic-header">
+                <p className="font-bold text-base">Equipment Catergories:</p>
+              </div>
+              <div className="EB-topic">
+                <div className="flex gap-2 EB-topic-inside">
                   {Pictures.map((EQTopic: PictureInterface) => (
                     <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
-                        hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all">
+                        hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all btn"
+                        onClick={buttonEQtimeHandler}
+                        name={EQTopic.Title}
+                        >
                         <p className="text-center font-medium">{EQTopic.Title}</p>
                     </button>
                   ))}
                 </div>
+              </div>
+              <div className="EB-topic">
+                <ul className="p-2 flex gap-2">
+                  <li>Fitness Room Booking: <span className="text-yellow-500 italic">"{roomTimeShow}"</span>,</li>
+                  <li>Equipment Booking: <span className="text-yellow-500 italic">
+                    {clickedButton !== "" ? `"${clickedButton}"` : "No button clicked yet"}</span>,
+                  </li>
+                  <li>Equipment Catergory: <span className="text-yellow-500 italic">
+                    {clickedButtonEQTime !== "" ? `"${clickedButtonEQTime}"` : "No button clicked yet"}</span>
+                  </li>
+                </ul>
               </div>
               <div className="EB-Area item-center justify-center">
                 <p className="text-center text-red-600 font-medium italic text-2xl">Please click the period and tittle of equipment group</p>
