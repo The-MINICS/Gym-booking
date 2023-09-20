@@ -34,6 +34,7 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
     const [clickedButton, setClickedButton] = useState("");
     const [clickedButtonEQTime, setClickedButtonEQTime] = useState("");
+    const [holdStateButtonEQTime, setholdStateButtonEQTime] = useState(false);
     const [buttonAfterClicked, setButtonAfterClicked] = useState(false);
 
     const [success, setSuccess] = useState(false);
@@ -52,6 +53,7 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     };
 
     const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setholdStateButtonEQTime(!holdStateButtonEQTime)
       event.preventDefault();
       const button: HTMLButtonElement = event.currentTarget;
       setClickedButton(button.name);
@@ -346,14 +348,16 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                   <div className="flex gap-2">
                     {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
                       .map((eqTime) => (
-                        <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
-                          hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all btn"
-                          onClick={buttonHandler}
-                          name={eqTime.Equipmentslot}
-                          >
-                          <AccessTimeIcon/>
-                          <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
-                        </button>
+                        <div>
+                          <button className={holdStateButtonEQTime ? "button-beforeClick shadow hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all" :
+                            "button-afterClicked shadow active:scale-[.98] active:duration-75 transition-all"}
+                              onClick={buttonHandler}
+                              name={eqTime.Equipmentslot}
+                            >
+                              <AccessTimeIcon/>
+                              <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
+                          </button>
+                        </div>
                       ))
                     }
                   </div>
