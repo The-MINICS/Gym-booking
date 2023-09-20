@@ -20,6 +20,7 @@ import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { addDays, format, startOfToday } from 'date-fns';
 
 function Booking() {
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ function Booking() {
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
     const [roomState, setRoomState] = useState("");
+    const [roomDate, setDate] = useState("");
     const [TimeSlotState, setTimeSlotState] = useState("");
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
@@ -87,7 +89,7 @@ function Booking() {
         }, 500);
     }
 
-    const handleDialogBookingOpen = (value: any) => {
+    const handleDialogBookingOpen = (value: any, time: any) => {
         setOpenBooking(false);
         const contentWidth = dialogContentRef.current?.scrollWidth;
         if (contentWidth) {
@@ -95,6 +97,7 @@ function Booking() {
         }
         setOpenBooking(true);
         setTimeSlotState(value);
+        setDate(time);
         console.log(value);
     }
 
@@ -133,17 +136,17 @@ function Booking() {
         const currentMinutes = now.getMinutes();
     
         // Check if the current time is between 8:00 AM and 7:30 PM
-        if (currentHour >= 8 && currentHour < 12) {
-            const isBetween8AMand12PM = (currentHour >= 8 && currentHour < 12);
-            setButtonTime("8:00 - 12:00");
+        if (currentHour >= 7 && currentHour < 12) {
+            const isBetween8AMand12PM = (currentHour >= 7 && currentHour < 12);
+            setButtonTime("8:00 - 12:00" || "13:00 - 16:00" || "16:30 - 19:30");
             setShowButton(isBetween8AMand12PM);
         }
-        if (currentHour >= 13 && currentHour < 16) {
+        else if (currentHour >= 13 && currentHour < 16) {
             const isBetween1PMand4PM = (currentHour >= 13 && currentHour < 16);
-            setButtonTime("13:00 - 16:00");
+            setButtonTime("13:00 - 16:00" || "16:30 - 19:30");
             setShowButton(isBetween1PMand4PM);
         }
-        if ((currentHour === 16 && currentMinutes >= 0) || 
+        else if ((currentHour === 16 && currentMinutes >= 0) || 
             (currentHour > 16 && currentHour < 19) ||
             (currentHour === 19 && currentMinutes <= 30)) 
             {
@@ -154,7 +157,15 @@ function Booking() {
             setButtonTime("16:30 - 19:30");
             setShowButton(isBetween4PMand730PM);
         }
+        else {
+            setShowButton(false)
+        }
     };
+    const presentDate = startOfToday();
+    const datesArray = Array.from({ length: 4 }, (_, index) =>
+        format(addDays(presentDate, index), 'yyyy-MM-dd')
+    );
+    const PresentDate = format(presentDate, 'yyyy-MM-dd')
 
     async function GetRooms() {
         const requestOptions = {
@@ -236,6 +247,7 @@ function Booking() {
     async function Submit() {
         let data = {
             Note: books.Note?? "",
+            Datetime: books.Datetime,
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
             TimeslotID: convertType(books.TimeslotID),
@@ -365,7 +377,7 @@ function Booking() {
                             </div>
                             <div className="text-left mb-3">
                                 <h1 className="font-semibold text-lg">
-                                    All Services
+                                    All Services And Activities
                                 </h1>
                             </div>
                             <div className="mb-3">
@@ -377,17 +389,17 @@ function Booking() {
                                         inputProps={{
                                             name: "RoomID",
                                         }}>
-                                        <option aria-label="None" value="">Service Rooms</option>
+                                        <option aria-label="None" value="">All Activities</option>
                                         {rooms.map((item: RoomInterface) => (
                                             <option value={item.ID} key={item.ID}>
-                                                {item.Number} ({item.Activity})
+                                                {item.Activity}
                                             </option>
                                         ))}
                                     </Select>
                                 </FormControl>
                             </div>
                             <div className="text-left mb-1">
-                                <h1 className="font-bold text-base">
+                                <h1 className="font-bold text-lg">
                                     Booking Schedule
                                 </h1>
                             </div>
@@ -414,7 +426,7 @@ function Booking() {
                                     </h1>
                                 </div>
                                 <div className="flex items-center justify-start gap-2">
-                                    <h1 className="font-semibold">Date:</h1>
+                                    <h1 className="font-semibold">Today:</h1>
                                     <p className="text-red-500">{currentDateTime.toLocaleString()}</p>
                                 </div>
                             </div>
@@ -430,7 +442,7 @@ function Booking() {
                                     hidden: { opacity: 0, y: 50 },
                                     visible: { opacity: 1, y: 0 }
                                 }}
-                            >
+                                >
                                 <div>
                                     <section>
                                         {book.filter((booking:BookingInterface) => (booking.MemberID) === members?.ID)
@@ -442,14 +454,14 @@ function Booking() {
                                                             <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
                                                             <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
                                                             <li><span className="font-semibold">Booking Date: </span>
-                                                                {dayjs(booking.Datetime).format('YYYY-MM-DD HH:mm')}
+                                                                {dayjs(booking.Datetime).format('YYYY-MM-DD')}
                                                             </li>
                                                             <li className="text-green-700"><span className="font-semibold">Leave Note: </span>{booking.Note}</li>
                                                         </ul> 
                                                     </Grid>
                                                     <Grid item xs={3} style={{ textAlign: "right" }}>
                                                         <button className="cursor-pointer active:scale-[.98] active:duration-75 transition-all mb-2"
-                                                            onClick={() => { handleDialogDeleteOpen(Number(booking.ID)) }}
+                                                            onClick={() => {handleDialogDeleteOpen(Number(booking.ID))}}
                                                         >
                                                             <CancelIcon/>
                                                         </button>
@@ -469,10 +481,10 @@ function Booking() {
                                                                     navigate({ pathname: `/equipmentbooking/update/${booking.ID}` })
                                                                 }
                                                                 >
-                                                                    <div className="flex items-center justify-center gap-1">
-                                                                        <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
-                                                                        <p>Equipment Booking ...</p>
-                                                                    </div>
+                                                                <div className="flex items-center justify-center gap-1">
+                                                                    <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
+                                                                    <p>Equipment Booking ...</p>
+                                                                </div>
                                                             </button>
                                                         </>
                                                         ) : ("")
@@ -551,7 +563,7 @@ function Booking() {
                                 }
                                 <div className="flex items-center justify-start gap-2 my-2">
                                     <h1 className="font-semibold">Date:</h1>
-                                    <p className="font-medium text-red-950">{currentDateTime.toLocaleString()}</p>
+                                    <p className="font-medium text-red-950">{roomDate}</p>
                                 </div>
                                 {slot.filter((timeslot: TimeslotInterface) => (timeslot.ID) === books.TimeslotID)
                                     .map((timeslot) => (
@@ -674,75 +686,98 @@ function Booking() {
   function AfterSelect() {
     books.RoomID = convertType(roomState);
     books.TimeslotID = convertType(TimeSlotState);
+    books.Datetime = new Date(roomDate);
     if (roomState) {
         return (
             <section>
-            <Paper className="rounded p-3">
-                {slot.filter((item: TimeslotInterface) => (item.RoomID) === books.RoomID)
-                    .map((item) => (
-                       <>
-                       {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
-                        .map((rooms) => (
-                            <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={rooms.ID}>
-                                <Grid item xs={3}>
-                                    <div className="flex items-center justify-center py-5 mt-1">
-                                        <p className="text-center text-5xl text-slate-600">{item.Quantity}/{rooms.Capacity}</p>
-                                    </div>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <ul>
-                                        <li>
-                                            <span className="font-semibold">Time: </span>
-                                            {item.Slot}
-                                        </li>
-                                        <li><span className="font-semibold">Room: </span>{rooms.Activity}</li>
-                                        <li><span className="font-semibold">Capacity: </span>{rooms.Capacity} persons</li>
-                                        <li><span className="font-semibold">Attendant: </span>{rooms.Attendant}</li>
-                                    </ul>  
-                                </Grid>
-                                <Grid item xs={3}>
-                                    {showButton && 
-                                        (buttonTime === item.Slot) ? (
-                                            <div className="text-center pt-4">
-                                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                    onClick={() => BookerListOpen(item.ID)}
-                                                >
-                                                    View People
-                                                </button>
-                                                {(rooms.Capacity === item.Quantity) ? (
-                                                    <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
-                                                        disabled
+                <ul>
+                    {datesArray.map((date, index) => (
+                        <li key={index}>
+                            <Paper className="rounded-md p-3 my-3">
+                            <p className="font-bold text-xl text-red-500">Book For The Date: "{date}"</p>
+                            {slot.filter((item: TimeslotInterface) => (item.RoomID) === books.RoomID)
+                                .map((item) => (
+                                <>
+                                {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
+                                    .map((rooms) => (
+                                        <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={rooms.ID}>
+                                            <Grid item xs={3}>
+                                                <div className="flex items-center justify-center py-5 mt-1">
+                                                    <p className="text-center text-5xl text-slate-600">{item.Quantity}/{rooms.Capacity}</p>
+                                                </div>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <ul>
+                                                    <li>
+                                                        <span className="font-semibold">Time: </span>
+                                                        {item.Slot}
+                                                    </li>
+                                                    <li><span className="font-semibold">Room: </span>{rooms.Activity}</li>
+                                                    <li><span className="font-semibold">Capacity: </span>{rooms.Capacity} persons</li>
+                                                    <li><span className="font-semibold">Attendant: </span>{rooms.Attendant}</li>
+                                                </ul>  
+                                            </Grid>
+                                            <Grid item xs={3}>
+                                                {(showButton && (date === PresentDate) && (buttonTime === item.Slot)) && 
+                                                    (
+                                                        <div className="text-center pt-4">
+                                                            <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                                                hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                onClick={() => BookerListOpen(item.ID)}
+                                                            >
+                                                                View People
+                                                            </button>
+                                                            {(rooms.Capacity === item.Quantity) ? (
+                                                                <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                                                                    disabled
+                                                                    >
+                                                                        <AssignmentTurnedInIcon/> Book
+                                                                </button>
+                                                            ):(
+                                                                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                                                hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                    onClick={() => handleDialogBookingOpen(item.ID, date)}
+                                                                >
+                                                                    <AssignmentTurnedInIcon/> Book
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    )
+                                                }
+                                                {!showButton && (date === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
+                                                {!showButton && (date != PresentDate) && (
+                                                    <div className="text-center pt-4">
+                                                        <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                            onClick={() => BookerListOpen(item.ID)}
                                                         >
-                                                            <AssignmentTurnedInIcon/> Book
-                                                    </button>
-                                                ):(
-                                                    <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                        onClick={() => handleDialogBookingOpen(item.ID)}
-                                                    >
-                                                        <AssignmentTurnedInIcon/> Book
-                                                    </button>
+                                                            View People
+                                                        </button>
+                                                        {(rooms.Capacity === item.Quantity) ? (
+                                                            <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                                                                disabled
+                                                                >
+                                                                    <AssignmentTurnedInIcon/> Book
+                                                            </button>
+                                                        ):(
+                                                            <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                onClick={() => handleDialogBookingOpen(item.ID, date)}
+                                                            >
+                                                                <AssignmentTurnedInIcon/> Book
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 )}
-                                        </div>
-                                        ) : (
-                                            <div className="text-center pt-4">
-                                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                    onClick={() => BookerListOpen(item.ID)}
-                                                >
-                                                    View People
-                                                </button>
-                                            </div>
-                                        )
-                                    }
-                                    {!showButton && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
-                                </Grid>
-                            </Grid>
-                       ))}
-                    </>
-                ))}
-            </Paper>
+                                            </Grid>
+                                        </Grid>
+                                    ))}
+                                </>
+                            ))}
+                            </Paper>
+                        </li>
+                    ))}
+                </ul>
             </section>
         )
     } else {

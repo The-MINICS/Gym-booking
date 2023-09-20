@@ -351,7 +351,7 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                     {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
                       .map((eqTime) => (
                         <div>
-                          <button className={(holdStateButtonEQTime && (buttonAfterClicked !== equipmentTime)) ? "button-beforeClick shadow hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all" :
+                          <button className={(holdStateButtonEQTime) ? "button-beforeClick shadow hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all" :
                             "button-afterClicked shadow active:scale-[.98] active:duration-75 transition-all"}
                               onClick={buttonHandler}
                               name={eqTime.Equipmentslot}

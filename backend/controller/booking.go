@@ -55,7 +55,7 @@ func CreateBooking(c *gin.Context) {
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
-		Datetime: time.Now(),
+		Datetime: booking.Datetime,
 		Note:     booking.Note,
 		Member:   member,
 		Room:     room,
