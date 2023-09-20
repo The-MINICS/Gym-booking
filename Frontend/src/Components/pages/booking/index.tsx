@@ -704,28 +704,37 @@ function Booking() {
                                     {showButton && 
                                         (buttonTime === item.Slot) ? (
                                             <div className="text-center pt-4">
-                                            <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                                hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                onClick={() => BookerListOpen(item.ID)}
-                                            >
-                                                View People
-                                            </button>
-                                            {(rooms.Capacity === item.Quantity) ? (
-                                                <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
-                                                    disabled
+                                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                    onClick={() => BookerListOpen(item.ID)}
+                                                >
+                                                    View People
+                                                </button>
+                                                {(rooms.Capacity === item.Quantity) ? (
+                                                    <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                                                        disabled
+                                                        >
+                                                            <AssignmentTurnedInIcon/> Book
+                                                    </button>
+                                                ):(
+                                                    <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                        onClick={() => handleDialogBookingOpen(item.ID)}
                                                     >
                                                         <AssignmentTurnedInIcon/> Book
-                                                </button>
-                                            ):(
-                                                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                                                hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                    onClick={() => handleDialogBookingOpen(item.ID)}
-                                                >
-                                                    <AssignmentTurnedInIcon/> Book
-                                                </button>
-                                            )}
+                                                    </button>
+                                                )}
                                         </div>
-                                        ) : ("")
+                                        ) : (
+                                            <div className="text-center pt-4">
+                                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                    onClick={() => BookerListOpen(item.ID)}
+                                                >
+                                                    View People
+                                                </button>
+                                            </div>
+                                        )
                                     }
                                     {!showButton && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
                                 </Grid>

@@ -35,8 +35,7 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     const [clickedButton, setClickedButton] = useState("");
     const [clickedButtonEQTime, setClickedButtonEQTime] = useState("");
     const [holdStateButtonEQTime, setholdStateButtonEQTime] = useState(false);
-    const [buttonAfterClicked, setButtonAfterClicked] = useState(false);
-
+    const [buttonAfterClicked, setButtonAfterClicked] = useState("");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -53,7 +52,10 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     };
 
     const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-      setholdStateButtonEQTime(!holdStateButtonEQTime)
+      {EQTimeSlot.map((item: EquipmentTimeslotInterface) => (
+        setButtonAfterClicked(`${item.TimeslotID}`)
+      ))}
+      setholdStateButtonEQTime(!buttonAfterClicked)
       event.preventDefault();
       const button: HTMLButtonElement = event.currentTarget;
       setClickedButton(button.name);
@@ -349,7 +351,7 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                     {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
                       .map((eqTime) => (
                         <div>
-                          <button className={holdStateButtonEQTime ? "button-beforeClick shadow hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all" :
+                          <button className={(holdStateButtonEQTime && (buttonAfterClicked !== equipmentTime)) ? "button-beforeClick shadow hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all" :
                             "button-afterClicked shadow active:scale-[.98] active:duration-75 transition-all"}
                               onClick={buttonHandler}
                               name={eqTime.Equipmentslot}
