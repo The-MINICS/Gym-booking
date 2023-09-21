@@ -40,7 +40,7 @@ function Booking() {
     const dialogContentRef = React.createRef<HTMLDivElement>();
     const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
     const [showButton, setShowButton] = useState<boolean>(false);
-    const [buttonTime, setButtonTime] = useState("");
+    const [buttonTime, setButtonTime] = useState<string[]>([]);
     
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -138,12 +138,12 @@ function Booking() {
         // Check if the current time is between 8:00 AM and 7:30 PM
         if (currentHour >= 7 && currentHour < 12) {
             const isBetween8AMand12PM = (currentHour >= 7 && currentHour < 12);
-            setButtonTime("8:00 - 12:00" || "13:00 - 16:00" || "16:30 - 19:30");
+            setButtonTime(["8:00 - 12:00","13:00 - 16:00","16:30 - 19:30"]);
             setShowButton(isBetween8AMand12PM);
         }
         else if (currentHour >= 13 && currentHour < 16) {
             const isBetween1PMand4PM = (currentHour >= 13 && currentHour < 16);
-            setButtonTime("13:00 - 16:00" || "16:30 - 19:30");
+            setButtonTime(["13:00 - 16:00","16:30 - 19:30"]);
             setShowButton(isBetween1PMand4PM);
         }
         else if ((currentHour === 16 && currentMinutes >= 0) || 
@@ -154,7 +154,7 @@ function Booking() {
                 (currentHour === 16 && currentMinutes >= 0) ||
                 (currentHour > 16 && currentHour < 19) ||
                 (currentHour === 19 && currentMinutes <= 30);
-            setButtonTime("16:30 - 19:30");
+            setButtonTime(["16:30 - 19:30"]);
             setShowButton(isBetween4PMand730PM);
         }
         else {
@@ -165,7 +165,7 @@ function Booking() {
     const datesArray = Array.from({ length: 4 }, (_, index) =>
         format(addDays(presentDate, index), 'yyyy-MM-dd')
     );
-    const PresentDate = format(presentDate, 'yyyy-MM-dd')
+    const PresentDate = format(presentDate, 'yyyy-MM-dd');
 
     async function GetRooms() {
         const requestOptions = {
@@ -398,6 +398,29 @@ function Booking() {
                                     </Select>
                                 </FormControl>
                             </div>
+                            <div className="text-left mb-3">
+                                <h1 className="font-semibold text-lg">
+                                    Book For The Date:
+                                </h1>
+                            </div>
+                            {/* <div className="mb-3">
+                                <FormControl fullWidth variant="standard">
+                                    <Select className="bg-pink-50 p-2"
+                                        native
+                                        value={books.Datetime + ""}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                            name: "Datetime",
+                                        }}>
+                                        <option aria-label="None" value="">Choose The Date</option>
+                                        {rooms.map((item: RoomInterface) => (
+                                            <option value={item.ID} key={item.ID}>
+                                                {item.Activity}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div> */}
                             <div className="text-left mb-1">
                                 <h1 className="font-bold text-lg">
                                     Booking Schedule
@@ -718,34 +741,39 @@ function Booking() {
                                                 </ul>  
                                             </Grid>
                                             <Grid item xs={3}>
-                                                {(showButton && (date === PresentDate) && (buttonTime === item.Slot)) && 
-                                                    (
-                                                        <div className="text-center pt-4">
-                                                            <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                                                hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                onClick={() => BookerListOpen(item.ID)}
-                                                            >
-                                                                View People
-                                                            </button>
-                                                            {(rooms.Capacity === item.Quantity) ? (
-                                                                <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
-                                                                    disabled
+                                                <>
+                                                {buttonTime.map((element, index) => 
+                                                    <div key={index}>
+                                                        {(showButton && (date === PresentDate) && (element === item.Slot)) && 
+                                                            (
+                                                            <div className="text-center pt-4">
+                                                                <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                    onClick={() => BookerListOpen(item.ID)}
+                                                                >
+                                                                    View People
+                                                                </button>
+                                                                {(rooms.Capacity === item.Quantity) ? (
+                                                                    <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                                                                        disabled
+                                                                        >
+                                                                            <AssignmentTurnedInIcon/> Book
+                                                                    </button>
+                                                                ):(
+                                                                    <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                                                    hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                        onClick={() => handleDialogBookingOpen(item.ID, date)}
                                                                     >
                                                                         <AssignmentTurnedInIcon/> Book
-                                                                </button>
-                                                            ):(
-                                                                <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                                                                hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                    onClick={() => handleDialogBookingOpen(item.ID, date)}
-                                                                >
-                                                                    <AssignmentTurnedInIcon/> Book
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    )
-                                                }
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                )}
                                                 {!showButton && (date === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
-                                                {!showButton && (date != PresentDate) && (
+                                                {showButton && (date != PresentDate) && (
                                                     <div className="text-center pt-4">
                                                         <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
                                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
@@ -769,6 +797,7 @@ function Booking() {
                                                         )}
                                                     </div>
                                                 )}
+                                                </>
                                             </Grid>
                                         </Grid>
                                     ))}
