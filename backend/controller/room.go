@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
@@ -11,6 +12,7 @@ import (
 
 // POST--room--
 func CreateRoom(c *gin.Context) {
+	var date entity.Date
 	var room entity.Room
 
 	if err := c.ShouldBindJSON(&room); err != nil {
@@ -18,7 +20,7 @@ func CreateRoom(c *gin.Context) {
 		return
 	}
 
-	// 14: สร้าง  room
+	// Create a new room and associate it with the date
 	rm := entity.Room{
 		Activity:     room.Activity,
 		Number:       room.Number,
@@ -26,23 +28,53 @@ func CreateRoom(c *gin.Context) {
 		Attendant:    room.Attendant,
 		Illustration: room.Illustration,
 		Caption:      room.Caption,
-		Timeslots: []entity.Timeslot{
-			{Slot: "8:00 - 12:00", Quantity: 0},
-			{Slot: "13:00 - 16:00", Quantity: 0},
-			{Slot: "16:30 - 19:30", Quantity: 0},
-		},
 	}
 
-	// การ validate
-	if _, err := govalidator.ValidateStruct(room); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
+	// Insert the room into the database
 	if err := entity.DB().Create(&rm).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Get the current date
+	currentDate := time.Now()
+
+	// Create rooms for the current day and the next three days
+	for i := 0; i < 4; i++ {
+		// Generate date ID based on the current date and i
+		dateID := currentDate.AddDate(0, 0, i).Format("2006-01-02")
+
+		if err := entity.DB().Where("date_id = ?", dateID).First(&date).Error; err != nil {
+			// Date doesn't exist, so create a new Date record
+			date = entity.Date{
+				DateID: dateID,
+				Date:   currentDate.AddDate(0, 0, i),
+				Timeslots: []entity.Timeslot{
+					{
+						Slot:     "8:00 - 12:00",
+						Quantity: 0,
+					},
+					{
+						Slot:     "13:00 - 16:00",
+						Quantity: 0,
+					},
+					{
+						Slot:     "16:30 - 19:30",
+						Quantity: 0,
+					},
+				},
+				RoomID: &rm.ID,
+			}
+			if err := entity.DB().Create(&date).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+		} else {
+			// Date already exists, no need to create a duplicate
+			break
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": room})
 }
 
@@ -88,7 +120,6 @@ func UpdateRoom(c *gin.Context) {
 
 	var new_room_activity = room.Activity
 	var new_room_number = room.Number
-	// var new_room_quantity = room.Quantity
 	var new_room_capacity = room.Capacity
 	var new_room_attendant = room.Attendant
 	var new_room_illustration = room.Illustration
@@ -100,10 +131,9 @@ func UpdateRoom(c *gin.Context) {
 	}
 
 	room_update := entity.Room{
-		Model:    gorm.Model{ID: room.ID},
-		Activity: new_room_activity,
-		Number:   new_room_number,
-		// Quantity:     new_room_quantity,
+		Model:        gorm.Model{ID: room.ID},
+		Activity:     new_room_activity,
+		Number:       new_room_number,
 		Capacity:     new_room_capacity,
 		Attendant:    new_room_attendant,
 		Illustration: new_room_illustration,

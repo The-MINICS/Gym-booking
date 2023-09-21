@@ -50,11 +50,27 @@ type Member struct {
 	Equipment []Equipment `gorm:"foreignKey:MemberID"`
 }
 
+// date
+type Date struct {
+	gorm.Model
+	DateID string
+	Date   time.Time
+
+	RoomID *uint
+	Room   Room `gorm:"references:id" valid:"-"`
+
+	Timeslots []Timeslot `gorm:"foreignKey:DateID"`
+	Booking   []Booking  `gorm:"foreignKey:DateID"`
+}
+
 // Timeslot
 type Timeslot struct {
 	gorm.Model
 	Slot     string
 	Quantity int16
+
+	DateID *uint
+	Date   Date `gorm:"references:id" valid:"-"`
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
@@ -86,7 +102,8 @@ type Room struct {
 
 	Booking   []Booking   `gorm:"foreignKey:RoomID"`
 	Equipment []Equipment `gorm:"foreignKey:RoomID"`
-	Timeslots []Timeslot  `gorm:"foreignKey:RoomID"`
+	Dates     []Date      `gorm:"foreignKey:RoomID"`
+	Timeslot  []Timeslot  `gorm:"foreignKey:RoomID"`
 }
 
 // Picture
@@ -131,6 +148,9 @@ type Booking struct {
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
+
+	DateID *uint
+	Date   Date `gorm:"references:id" valid:"-"`
 
 	TimeslotID *uint
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`

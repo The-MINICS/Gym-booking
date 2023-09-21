@@ -5,8 +5,6 @@ import (
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/chonticha1844/Gym-booking/middlewares"
 	"github.com/gin-gonic/gin"
-	// "time"
-	// "fmt"
 )
 
 const PORT = "9999"
@@ -113,37 +111,32 @@ func main() {
 
 	// Run the server go run main.go
 	r.Run("localhost: " + PORT)
+
+	// // Create a new cron scheduler
+	// c := cron.New()
+	// //var booking entity.Booking
+	// var timeslot entity.Timeslot
+
+	// // Schedule the task to run at 12:00 AM daily mm/hh/dm/month/dw
+	// _, err := c.AddFunc("26 0 * * *", func() {
+	// 	// entity.DB().Where("Datetime <= ?", time.Now().Truncate(24*time.Hour)).Delete(&booking)
+	// 	// fmt.Println("Deleting Booking data at 12:00 AM")
+
+	// 	entity.DB().Model(&timeslot).Update("Quantity", 0)
+	// 	fmt.Println("Updating Timeslot at 12:00 AM")
+	// })
+
+	// if err != nil {
+	// 	fmt.Println("Error scheduling task:", err)
+	// 	return
+	// }
+
+	// // Start the cron scheduler
+	// c.Start()
+
+	// // Keep the program running
+	// select {}
 }
-
-// func Passthetime() {
-
-// 	timeslot1 := time.Time.Hour(2)
-//     // Defining duration parameter of
-//     // AfterFunc() method
-//     DurationOfTime := time.Duration(3) * time.Second
-
-//     // Defining function parameter of
-//     // AfterFunc() method
-//     f := func() {
-
-//         // Printed when its called by the
-//         // AfterFunc() method in the time
-//         // stated above
-//         fmt.Println("Function called by "+
-//             "AfterFunc() after 3 seconds")
-//     }
-
-//     // Calling AfterFunc() method with its
-//     // parameter
-//     Timer1 := time.AfterFunc(DurationOfTime, f)
-
-//     // Calling stop method
-//     // w.r.to Timer1
-//     defer Timer1.Stop()
-
-//     // Calling sleep method
-//     time.Sleep(10 * time.Second)
-// }
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
