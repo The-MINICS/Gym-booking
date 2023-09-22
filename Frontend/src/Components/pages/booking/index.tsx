@@ -21,6 +21,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { addDays, format, startOfToday } from 'date-fns';
+import { DateInterface } from "@/interfaces/IDate";
 
 function Booking() {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ function Booking() {
     const [book, setBook] = useState<BookingInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
+    const [dates, setDates] = useState<DateInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
     const [roomState, setRoomState] = useState("");
     const [roomDate, setDate] = useState("");
@@ -407,12 +409,12 @@ function Booking() {
                                 <FormControl fullWidth variant="standard">
                                     <Select className="bg-pink-50 p-2"
                                         native
-                                        value={books.Datetime + ""}
+                                        value={books.RoomID + ""}
                                         onChange={handleChange}
                                         inputProps={{
-                                            name: "Datetime",
+                                            name: "RoomID",
                                         }}>
-                                        <option aria-label="None" value="">Choose The Date</option>
+                                        <option aria-label="None" value="">All Activities</option>
                                         {rooms.map((item: RoomInterface) => (
                                             <option value={item.ID} key={item.ID}>
                                                 {item.Activity}

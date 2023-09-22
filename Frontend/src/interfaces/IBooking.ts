@@ -1,3 +1,4 @@
+import { DateInterface } from "./IDate";
 import { MemberInterface } from "./IMember";
 import { RoomInterface } from "./IRoom";
 import { TimeslotInterface } from "./ITimeslot";
@@ -15,4 +16,7 @@ export interface BookingInterface {
 
     TimeslotID?: number;
     Timeslot?: TimeslotInterface;
+
+    DateID?: number;
+    Date?: DateInterface;
 }

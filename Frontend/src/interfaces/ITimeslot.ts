@@ -1,3 +1,4 @@
+import { DateInterface } from "./IDate";
 import { RoomInterface } from "./IRoom";
 
 export interface TimeslotInterface {
@@ -7,4 +8,7 @@ export interface TimeslotInterface {
 
     RoomID?: number;
     Room?: RoomInterface;
+
+    DateID?: number;
+    Date?: DateInterface;
 }

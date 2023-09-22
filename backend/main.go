@@ -106,6 +106,12 @@ func main() {
 			protected.PATCH("/statuses", controller.UpdateStatus)
 			protected.DELETE("/statuses/:id", controller.DeleteStatus)
 
+			// Date Routes
+			protected.POST("/dates", controller.CreateDate)
+			protected.GET("/dates", controller.ListDates)
+			protected.GET("/date/:id", controller.GetDate)
+			protected.PATCH("/dates", controller.UpdateDate)
+			protected.DELETE("/dates/:id", controller.DeleteDate)
 		}
 	}
 

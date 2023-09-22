@@ -311,6 +311,28 @@ async function GetBooks() {
   return res;
 }
 
+async function GetDates() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/dates`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 async function GetContactUs() {
   const requestOptions = {
     method: "GET",
@@ -371,5 +393,6 @@ export {
   GetRooms,
   GetBooks,
   GetContactUs,
-  GetSlot
+  GetSlot,
+  GetDates
 };
