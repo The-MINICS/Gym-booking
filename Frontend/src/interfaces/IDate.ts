@@ -2,7 +2,7 @@ import { RoomInterface } from "./IRoom";
 
 export interface DateInterface {
     ID?: number,
-    DateID?: string;
+    DateCode?: string;
     Date?: Date | null;
 
     RoomID?: number;

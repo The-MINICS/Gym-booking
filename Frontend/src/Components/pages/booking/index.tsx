@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import equipmentPhoto from "@/assets/equipments.png";
 import { 
         Dialog, DialogActions, DialogContent, DialogContentText,  
-        DialogTitle, Divider, FormControl, Grid, Paper, Select, 
+        DialogTitle, Divider, Grid, Paper, Select, 
         SelectChangeEvent, Button,
         Table,  TableBody,  TableCell,  TableContainer, TableHead,  TableRow,
 } from "@mui/material";
@@ -13,14 +13,14 @@ import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { MemberInterface } from "@/interfaces/IMember";
-import { BookDelete, GetBooks, GetMemberByMID, GetSlot } from "@/services/HttpClientService";
+import { BookDelete, GetBooks, GetDates, GetMemberByMID, GetRooms, GetSlot } from "@/services/HttpClientService";
 import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { addDays, format, startOfToday } from 'date-fns';
+import { format, startOfToday } from 'date-fns';
 import { DateInterface } from "@/interfaces/IDate";
 
 function Booking() {
@@ -31,9 +31,10 @@ function Booking() {
     const [slot, setSlot] = useState<TimeslotInterface[]>([]);
     const [dates, setDates] = useState<DateInterface[]>([]);
     const [members, setMembers] = useState<MemberInterface>();
-    const [roomState, setRoomState] = useState("");
-    const [roomDate, setDate] = useState("");
+    const [roomState, setRoomState] = useState('');
     const [TimeSlotState, setTimeSlotState] = useState("");
+    const [roomDate, setRoomDate] = useState("");
+    const [selectedDate, setSelectedDate] = useState("");
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
     const [openBooking, setOpenBooking] = useState(false);
@@ -47,17 +48,24 @@ function Booking() {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const apiUrl = "http://localhost:9999";
 
     const handleChange = (event: SelectChangeEvent) => {
         const name = event.target.name as keyof typeof books;
-        const roomState = event.target.value;
         setBooks({
           ...books,
           [name]: event.target.value,
         });
-        setRoomState(roomState);
     };
+
+    const handleRoomChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const roomState = event.target.value;
+        setRoomState(roomState);
+    }
+
+    const handleDateChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const RoomDate = event.target.value;
+        setRoomDate(RoomDate);
+    }
 
     const handleInputChange = (
         event: React.ChangeEvent<{ id?: string; value: any }>
@@ -99,7 +107,7 @@ function Booking() {
         }
         setOpenBooking(true);
         setTimeSlotState(value);
-        setDate(time);
+        setSelectedDate(time);
         console.log(value);
     }
 
@@ -137,9 +145,9 @@ function Booking() {
         const currentHour = now.getHours();
         const currentMinutes = now.getMinutes();
     
-        // Check if the current time is between 8:00 AM and 7:30 PM
-        if (currentHour >= 7 && currentHour < 12) {
-            const isBetween8AMand12PM = (currentHour >= 7 && currentHour < 12);
+        // Check if the current time is between 6:00 AM and 7:30 PM
+        if (currentHour >= 6 && currentHour < 12) {
+            const isBetween8AMand12PM = (currentHour >= 6 && currentHour < 12);
             setButtonTime(["8:00 - 12:00","13:00 - 16:00","16:30 - 19:30"]);
             setShowButton(isBetween8AMand12PM);
         }
@@ -160,36 +168,11 @@ function Booking() {
             setShowButton(isBetween4PMand730PM);
         }
         else {
-            setShowButton(false)
+            setShowButton(false);
         }
     };
     const presentDate = startOfToday();
-    const datesArray = Array.from({ length: 4 }, (_, index) =>
-        format(addDays(presentDate, index), 'yyyy-MM-dd')
-    );
     const PresentDate = format(presentDate, 'yyyy-MM-dd');
-
-    async function GetRooms() {
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        };
-      
-        let res = await fetch(`${apiUrl}/rooms`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            if (res.data) {
-              return res.data;
-            } else {
-              return false;
-            }
-          });
-      
-        return res;
-    }
 
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
@@ -227,6 +210,13 @@ function Booking() {
       }
     };
 
+    const getDate = async () => {
+        let res = await GetDates();
+        if (res) {
+            setDates(res);
+      }
+    };
+
     const convertType = (data: string | number | undefined) => {
         let val = typeof data === "string" ? parseInt(data) : data;
         return val;
@@ -238,6 +228,7 @@ function Booking() {
         getSlots();
         getBook();
         checkTime();
+        getDate();
         //CurrentDateTime
         const intervalId = setInterval(() => {
             checkTime();
@@ -246,6 +237,8 @@ function Booking() {
         return () => clearInterval(intervalId);
     }, []);
 
+    const showRoomDate = dates.find((date: DateInterface) => date.ID === convertType(roomDate))
+
     async function Submit() {
         let data = {
             Note: books.Note?? "",
@@ -253,6 +246,7 @@ function Booking() {
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
             TimeslotID: convertType(books.TimeslotID),
+            DateID: convertType(books.DateID)
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -383,46 +377,39 @@ function Booking() {
                                 </h1>
                             </div>
                             <div className="mb-3">
-                                <FormControl fullWidth variant="standard">
-                                    <Select className="bg-pink-50 p-2"
-                                        native
-                                        value={books.RoomID + ""}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                            name: "RoomID",
-                                        }}>
-                                        <option aria-label="None" value="">All Activities</option>
-                                        {rooms.map((item: RoomInterface) => (
-                                            <option value={item.ID} key={item.ID}>
-                                                {item.Activity}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                <select id="activities" 
+                                    className="w-full h-full rounded p-2 font-medium cursor-pointer bg-slate-100"
+                                    onChange={handleRoomChange}
+                                    value={books.RoomID + ""}
+                                    >
+                                    <option>All Activities</option>
+                                    {rooms.map((item: RoomInterface) => (
+                                        <option value={item.ID} key={item.ID}>
+                                            {item.Activity}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="text-left mb-3">
                                 <h1 className="font-semibold text-lg">
                                     Book For The Date:
                                 </h1>
                             </div>
-                            {/* <div className="mb-3">
-                                <FormControl fullWidth variant="standard">
-                                    <Select className="bg-pink-50 p-2"
-                                        native
-                                        value={books.RoomID + ""}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                            name: "RoomID",
-                                        }}>
-                                        <option aria-label="None" value="">All Activities</option>
-                                        {rooms.map((item: RoomInterface) => (
-                                            <option value={item.ID} key={item.ID}>
-                                                {item.Activity}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </div> */}
+                            <div className="mb-3">
+                                <select id="dates"
+                                    className="w-full h-full rounded p-2 font-medium cursor-pointer bg-slate-100"
+                                    onChange={handleDateChange}
+                                    >
+                                    <option value="">Book for the date</option>
+                                        {dates.filter((item: DateInterface) => (item.RoomID) === convertType(roomState))
+                                            .map((item) => (
+                                                <option value={item.ID} key={item.ID} itemID={item.DateCode}>
+                                                    {item.DateCode}
+                                                </option>
+                                            ))
+                                        }
+                                </select>
+                            </div>
                             <div className="text-left mb-1">
                                 <h1 className="font-bold text-lg">
                                     Booking Schedule
@@ -588,7 +575,7 @@ function Booking() {
                                 }
                                 <div className="flex items-center justify-start gap-2 my-2">
                                     <h1 className="font-semibold">Date:</h1>
-                                    <p className="font-medium text-red-950">{roomDate}</p>
+                                    <p className="font-medium text-red-950">{selectedDate}</p>
                                 </div>
                                 {slot.filter((timeslot: TimeslotInterface) => (timeslot.ID) === books.TimeslotID)
                                     .map((timeslot) => (
@@ -711,51 +698,78 @@ function Booking() {
   function AfterSelect() {
     books.RoomID = convertType(roomState);
     books.TimeslotID = convertType(TimeSlotState);
-    books.Datetime = new Date(roomDate);
-    if (roomState) {
+    books.DateID = convertType(roomDate);
+    books.Datetime = new Date(selectedDate);
+    if (roomState && roomDate) {
         return (
             <section>
-                <ul>
-                    {datesArray.map((date, index) => (
-                        <li key={index}>
-                            <Paper className="rounded-md p-3 my-3">
-                            <p className="font-bold text-xl text-red-500">Book For The Date: "{date}"</p>
-                            {slot.filter((item: TimeslotInterface) => (item.RoomID) === books.RoomID)
-                                .map((item) => (
-                                <>
-                                {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
-                                    .map((rooms) => (
-                                        <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={rooms.ID}>
-                                            <Grid item xs={3}>
-                                                <div className="flex items-center justify-center py-5 mt-1">
-                                                    <p className="text-center text-5xl text-slate-600">{item.Quantity}/{rooms.Capacity}</p>
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <ul>
-                                                    <li>
-                                                        <span className="font-semibold">Time: </span>
-                                                        {item.Slot}
-                                                    </li>
-                                                    <li><span className="font-semibold">Room: </span>{rooms.Activity}</li>
-                                                    <li><span className="font-semibold">Capacity: </span>{rooms.Capacity} persons</li>
-                                                    <li><span className="font-semibold">Attendant: </span>{rooms.Attendant}</li>
-                                                </ul>  
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                <>
-                                                {buttonTime.map((element, index) => 
-                                                    <div key={index}>
-                                                        {(showButton && (date === PresentDate) && (element === item.Slot)) && 
-                                                            (
+                <Paper className="rounded-md p-3 my-3">
+                    <p className="font-bold text-xl text-red-500">
+                        Book For The Date: "{showRoomDate ? showRoomDate.DateCode : "No Room Booking date"}"</p>
+                            {slot.filter((timeslot: TimeslotInterface) => ((timeslot.RoomID) === books.RoomID) && ((timeslot.DateID) === books.DateID))
+                                .map((timeslot) => (
+                                    <>
+                                        {rooms.filter((room:RoomInterface) => (room.ID) === books.RoomID)
+                                            .map((room) => (
+                                                <Grid container className="my-2 rounded-lg bg-pink-50 px-2 py-3" key={room.ID}>
+                                                    <Grid item xs={3}>
+                                                        <div className="flex items-center justify-center py-5 mt-1">
+                                                            <p className="text-center text-5xl text-slate-600">{timeslot.Quantity}/{room.Capacity}</p>
+                                                        </div>
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        <ul>
+                                                            <li>
+                                                                <span className="font-semibold">Time: </span>
+                                                                {timeslot.Slot}
+                                                            </li>
+                                                            <li><span className="font-semibold">Room: </span>{room.Activity}</li>
+                                                            <li><span className="font-semibold">Capacity: </span>{room.Capacity} persons</li>
+                                                            <li><span className="font-semibold">Attendant: </span>{room.Attendant}</li>
+                                                        </ul>  
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <>
+                                                        {buttonTime.map((element, index) => 
+                                                            <div key={index}>
+                                                                {(showButton && (showRoomDate?.DateCode === PresentDate) && (element === timeslot.Slot)) && 
+                                                                    (
+                                                                    <div className="text-center pt-4">
+                                                                        <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
+                                                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                            onClick={() => BookerListOpen(timeslot.ID)}
+                                                                        >
+                                                                            View People
+                                                                        </button>
+                                                                        {(room.Capacity === timeslot.Quantity) ? (
+                                                                            <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
+                                                                                disabled
+                                                                                >
+                                                                                    <AssignmentTurnedInIcon/> Book
+                                                                            </button>
+                                                                        ):(
+                                                                            <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
+                                                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
+                                                                                onClick={() => handleDialogBookingOpen(timeslot.ID, showRoomDate?.DateCode)}
+                                                                            >
+                                                                                <AssignmentTurnedInIcon/> Book
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        )}
+                                                        {!showButton && (showRoomDate?.DateCode === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
+                                                        {!showButton && (showRoomDate?.DateCode != PresentDate) && (
                                                             <div className="text-center pt-4">
                                                                 <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
                                                                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                    onClick={() => BookerListOpen(item.ID)}
+                                                                    onClick={() => BookerListOpen(timeslot.ID)}
                                                                 >
                                                                     View People
                                                                 </button>
-                                                                {(rooms.Capacity === item.Quantity) ? (
+                                                                {(room.Capacity === timeslot.Quantity) ? (
                                                                     <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
                                                                         disabled
                                                                         >
@@ -764,51 +778,22 @@ function Booking() {
                                                                 ):(
                                                                     <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
                                                                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                        onClick={() => handleDialogBookingOpen(item.ID, date)}
+                                                                        onClick={() => handleDialogBookingOpen(timeslot.ID, showRoomDate?.DateCode)}
                                                                     >
                                                                         <AssignmentTurnedInIcon/> Book
                                                                     </button>
                                                                 )}
                                                             </div>
-                                                            )
-                                                        }
-                                                    </div>
-                                                )}
-                                                {!showButton && (date === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
-                                                {showButton && (date != PresentDate) && (
-                                                    <div className="text-center pt-4">
-                                                        <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
-                                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                            onClick={() => BookerListOpen(item.ID)}
-                                                        >
-                                                            View People
-                                                        </button>
-                                                        {(rooms.Capacity === item.Quantity) ? (
-                                                            <button className="rounded px-2 py-1 bg-slate-400 text-white font-semibold"
-                                                                disabled
-                                                                >
-                                                                    <AssignmentTurnedInIcon/> Book
-                                                            </button>
-                                                        ):(
-                                                            <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
-                                                            hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                onClick={() => handleDialogBookingOpen(item.ID, date)}
-                                                            >
-                                                                <AssignmentTurnedInIcon/> Book
-                                                            </button>
                                                         )}
-                                                    </div>
-                                                )}
-                                                </>
-                                            </Grid>
-                                        </Grid>
-                                    ))}
-                                </>
-                            ))}
-                            </Paper>
-                        </li>
-                    ))}
-                </ul>
+                                                        </>
+                                                    </Grid>
+                                                </Grid>
+                                            ))
+                                        }
+                                    </>
+                                ))
+                            }
+                </Paper>
             </section>
         )
     } else {
