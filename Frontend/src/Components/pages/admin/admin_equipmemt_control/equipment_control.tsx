@@ -110,14 +110,6 @@ function AllEquipment() {
                                             <TableCell align="center">{row.Member?.Firstname} {row.Member?.Lastname}</TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>
-                                                    {/* <Button
-                                                        className="hover:bg-blue-500 cursor-pointer"
-                                                        color="secondary"
-                                                        onClick={() =>
-                                                            navigate({ pathname: `/equipment/update/${row.ID}` })
-                                                        }
-                                                        >Available
-                                                    </Button> */}
                                                     <Button
                                                         startIcon={<EditIcon />}
                                                         className="hover:bg-blue-500 cursor-pointer"

@@ -1,4 +1,5 @@
 import React from "react";
+import dayjs from "dayjs";
 import "@/Components/pages/equipment_booking/equipment-booking.css"
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
@@ -6,7 +7,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useState } from "react";
 import { EquipmentBookingInterface } from "@/interfaces/IEquipmentBooking";
 import { EquipmentTimeslotInterface } from "@/interfaces/IEquipmentTimeslot";
-import { AlertProps, SelectChangeEvent } from "@mui/material";
+import { AlertProps } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { PictureInterface } from "@/interfaces/IPicture";
@@ -32,39 +33,32 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
     const [Pictures, setPictures] = useState<PictureInterface[]>([]);
     const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date());
-    const [clickedButton, setClickedButton] = useState("");
     const [clickedButtonEQTime, setClickedButtonEQTime] = useState("");
-    const [holdStateButtonEQTime, setholdStateButtonEQTime] = useState(false);
-    const [buttonAfterClicked, setButtonAfterClicked] = useState("");
+    const [holdStateButtonEQTime, setholdStateButtonEQTime] = useState<number>();
+    const [clickedButtonEQGroup, setClickedButtonEQGroup] = useState("");
+    const [holdStateButtonEQGroup, setholdStateButtonEQGroup] = useState<number>();
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const apiUrl = "http://localhost:9999";
 
     bookingTime = equipmentBook.ID;
+    const Noholdstate = `bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
+    hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all`
+    const Holdstate = `bg-yellow-500 p-1 shadow flex items-center justify-center rounded gap-1 w-max
+    active:scale-[.98] active:duration-75 transition-all`
 
-    const handleChange = (event: SelectChangeEvent) => {
-        const name = event.target.name as keyof typeof equipmentBook;
-        setEquipmentBook({
-          ...equipmentBook,
-          [name]: event.target.value,
-        });
+    const buttonEQTimeHandler = (id:any, value: any) => {
+      const EquipmentTimeSlotID = convertType(id);
+      equipmentBook.EquipmentTimeslotID = EquipmentTimeSlotID;
+      setClickedButtonEQTime(value);
+      setholdStateButtonEQTime(EquipmentTimeSlotID);
     };
 
-    const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-      {EQTimeSlot.map((item: EquipmentTimeslotInterface) => (
-        setButtonAfterClicked(`${item.TimeslotID}`)
-      ))}
-      setholdStateButtonEQTime(!buttonAfterClicked)
-      event.preventDefault();
-      const button: HTMLButtonElement = event.currentTarget;
-      setClickedButton(button.name);
-    };
-
-    const buttonEQtimeHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      const button: HTMLButtonElement = event.currentTarget;
-      setClickedButtonEQTime(button.name);
+    const buttonEQGroupHandler = (id:any, value: any) => {
+      const EquipmentGroupID = convertType(id);
+      setClickedButtonEQGroup(value);
+      setholdStateButtonEQGroup(EquipmentGroupID);
     };
 
     const handleClose = (
@@ -219,24 +213,24 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
         return () => clearInterval(intervalId);
     }, []);
 
-    const EquipmentItems = () => {
-      for (let index = 1; index <= Pictures.length; index++){
-        return (
-          <>
-          {Equipments.filter((eqBook: EquipmentInterface) => (eqBook.PictureID) === index)
-            .map((eqBook) => (
-              <div className="flex items-center justify-start gap-2">
-                <button className="bg-slate-100 rounded-md p-2 m-1 hover:bg-yellow-500 
-                  active:scale-[.98] active:duration-75 transition-all">
-                  <img src={`${eqBook.Picture?.Picture}`} width="100" height="250"/>
-                </button>
-              </div>
-            ))
-          }
-          </>
-        )
-      }
-    }
+    // const EquipmentItems = () => {
+    //   for (let index = 1; index <= Pictures.length; index++){
+    //     return (
+    //       <>
+    //       {Equipments.filter((eqBook: EquipmentInterface) => (eqBook.PictureID) === index)
+    //         .map((eqBook) => (
+    //           <div className="flex items-center justify-start gap-2">
+    //             <button className="bg-slate-100 rounded-md p-2 m-1 hover:bg-yellow-500 
+    //               active:scale-[.98] active:duration-75 transition-all">
+    //               <img src={`${eqBook.Picture?.Picture}`} width="100" height="250"/>
+    //             </button>
+    //           </div>
+    //         ))
+    //       }
+    //       </>
+    //     )
+    //   }
+    // }
 
     async function submit() {
       let data = {
@@ -329,10 +323,14 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                 <div className="text-center">
                   <p className="font-bold text-base">Fitness Room Booking Period</p>
                 </div>
-                <div className="flex EB-book-header">
+                <div className="flex EB-book-header gap-2">
                   {books.filter((BookTime: BookingInterface) => (BookTime.ID) === convertType(bookingTime))
                     .map((BookTime) => (
                       <>
+                        <button disabled className="text-center font-bold text-lg px-2 py-1 rounded-sm bg-slate-400 text-white">
+                          {dayjs(BookTime.Datetime).format('YYYY-MM-DD')}
+                        </button>
+                        <p className="font-bold text-xl">:</p>
                         <button disabled className="text-center font-bold text-lg text-white bg-orange-600 px-2 py-1 rounded-sm">
                           {BookTime.Timeslot?.Slot}
                         </button>
@@ -347,14 +345,13 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
               <div className="EB-equipment-time">
                 <p className="font-bold text-base py-1">Equipment Booking Period:</p>
                 <div className="flex EB-equipment-header">
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 mb-2">
                     {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
                       .map((eqTime) => (
                         <div>
-                          <button className={(holdStateButtonEQTime) ? "button-beforeClick shadow hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all" :
-                            "button-afterClicked shadow active:scale-[.98] active:duration-75 transition-all"}
-                              onClick={buttonHandler}
-                              name={eqTime.Equipmentslot}
+                          <button key={eqTime.ID}
+                            onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
+                            className= {holdStateButtonEQTime === eqTime.ID ? `${Holdstate}` : `${Noholdstate}`}
                             >
                               <AccessTimeIcon/>
                               <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
@@ -373,10 +370,9 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
               <div className="EB-topic">
                 <div className="flex gap-2 EB-topic-inside">
                   {Pictures.map((EQTopic: PictureInterface) => (
-                    <button className="bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
-                        hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all btn"
-                        onClick={buttonEQtimeHandler}
-                        name={EQTopic.Title}
+                    <button key={EQTopic.ID}
+                        onClick={() => buttonEQGroupHandler(EQTopic.ID, EQTopic.Title)}
+                        className= {holdStateButtonEQGroup === EQTopic.ID ? `${Holdstate}` : `${Noholdstate}`}
                         >
                         <p className="text-center font-medium">{EQTopic.Title}</p>
                     </button>
@@ -387,10 +383,10 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                 <ul className="p-2 flex gap-2">
                   <li>Fitness Room Booking: <span className="text-yellow-500 italic">"{roomTimeShow}"</span>,</li>
                   <li>Equipment Booking: <span className="text-yellow-500 italic">
-                    {clickedButton !== "" ? `"${clickedButton}"` : "No button clicked yet"}</span>,
+                    {clickedButtonEQTime !== "" ? `"${clickedButtonEQTime}"` : "No button clicked yet"}</span>,
                   </li>
                   <li>Equipment Catergory: <span className="text-yellow-500 italic">
-                    {clickedButtonEQTime !== "" ? `"${clickedButtonEQTime}"` : "No button clicked yet"}</span>
+                    {clickedButtonEQGroup !== "" ? `"${clickedButtonEQGroup}"` : "No button clicked yet"}</span>
                   </li>
                 </ul>
               </div>
