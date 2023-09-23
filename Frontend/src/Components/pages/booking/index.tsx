@@ -146,8 +146,8 @@ function Booking() {
         const currentMinutes = now.getMinutes();
     
         // Check if the current time is between 6:00 AM and 7:30 PM
-        if (currentHour >= 6 && currentHour < 12) {
-            const isBetween8AMand12PM = (currentHour >= 6 && currentHour < 12);
+        if (currentHour < 12) {
+            const isBetween8AMand12PM = (currentHour < 12);
             setButtonTime(["8:00 - 12:00","13:00 - 16:00","16:30 - 19:30"]);
             setShowButton(isBetween8AMand12PM);
         }
@@ -761,7 +761,7 @@ function Booking() {
                                                             </div>
                                                         )}
                                                         {!showButton && (showRoomDate?.DateCode === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
-                                                        {!showButton && (showRoomDate?.DateCode != PresentDate) && (
+                                                        {(showRoomDate?.DateCode != PresentDate) && (
                                                             <div className="text-center pt-4">
                                                                 <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
                                                                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"

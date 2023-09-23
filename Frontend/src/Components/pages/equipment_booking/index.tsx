@@ -42,7 +42,7 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
     const [errorMessage, setErrorMessage] = useState("");
     const apiUrl = "http://localhost:9999";
 
-    bookingTime = equipmentBook.ID;
+    // bookingTime = equipmentBook.ID;
     const Noholdstate = `bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
     hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all`
     const Holdstate = `bg-yellow-500 p-1 shadow flex items-center justify-center rounded gap-1 w-max
@@ -323,8 +323,8 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                 <div className="text-center">
                   <p className="font-bold text-base">Fitness Room Booking Period</p>
                 </div>
-                <div className="flex EB-book-header gap-2">
-                  {books.filter((BookTime: BookingInterface) => (BookTime.ID) === convertType(bookingTime))
+                <div className="flex EB-book-header gap-2 mb-2">
+                  {books.filter((BookTime: BookingInterface) => (BookTime.ID) === equipmentBook.ID)
                     .map((BookTime) => (
                       <>
                         <button disabled className="text-center font-bold text-lg px-2 py-1 rounded-sm bg-slate-400 text-white">
@@ -383,10 +383,10 @@ function EquipmentBooking({bookingTime, equipmentTime, roomTimeShow}: Props) {
                 <ul className="p-2 flex gap-2">
                   <li>Fitness Room Booking: <span className="text-yellow-500 italic">"{roomTimeShow}"</span>,</li>
                   <li>Equipment Booking: <span className="text-yellow-500 italic">
-                    {clickedButtonEQTime !== "" ? `"${clickedButtonEQTime}"` : "No button clicked yet"}</span>,
+                    {clickedButtonEQTime !== "" ? `"${clickedButtonEQTime}"` : ""}</span>,
                   </li>
                   <li>Equipment Catergory: <span className="text-yellow-500 italic">
-                    {clickedButtonEQGroup !== "" ? `"${clickedButtonEQGroup}"` : "No button clicked yet"}</span>
+                    {clickedButtonEQGroup !== "" ? `"${clickedButtonEQGroup}"` : ""}</span>
                   </li>
                 </ul>
               </div>
