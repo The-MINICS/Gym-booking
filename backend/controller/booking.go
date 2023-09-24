@@ -49,9 +49,8 @@ func CreateBooking(c *gin.Context) {
 	timeslot.Quantity++
 
 	//Member จองแต่ละ time slot ได้แค่ 1 ครั้ง
-	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 time slot"})
-		return
+	if err := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 times per time slot"})
 	}
 
 	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
