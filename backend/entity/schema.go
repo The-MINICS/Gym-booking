@@ -53,8 +53,7 @@ type Member struct {
 // date
 type Date struct {
 	gorm.Model
-	DateCode string
-	Date     time.Time
+	DateCode time.Time
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`

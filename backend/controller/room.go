@@ -48,11 +48,10 @@ func CreateRoom(c *gin.Context) {
 	// Create rooms for the current day and the next three days
 	for i := 0; i < 4; i++ {
 		// Generate date ID based on the current date and i
-		dateID := currentDate.AddDate(0, 0, i).Format("2006-01-02")
+		dateID := currentDate.AddDate(0, 0, i)
 
 		date = entity.Date{
 			DateCode: dateID,
-			Date:     currentDate.AddDate(0, 0, i),
 			Timeslots: []entity.Timeslot{
 				{
 					Slot:     "8:00 - 12:00",
