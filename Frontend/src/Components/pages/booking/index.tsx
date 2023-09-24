@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -18,7 +19,6 @@ import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import Snackbar from "@mui/material/Snackbar";
 import CancelIcon from '@mui/icons-material/Cancel';
-import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { format, startOfToday } from 'date-fns';
 import { DateInterface } from "@/interfaces/IDate";
@@ -171,8 +171,6 @@ function Booking() {
             setShowButton(false);
         }
     };
-    const presentDate = startOfToday();
-    const PresentDate = format(presentDate, 'yyyy-MM-dd');
 
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
@@ -237,8 +235,6 @@ function Booking() {
         return () => clearInterval(intervalId);
     }, []);
 
-    const showRoomDate = dates.find((date: DateInterface) => date.ID === convertType(roomDate))
-
     async function Submit() {
         let data = {
             Note: books.Note?? "",
@@ -300,6 +296,11 @@ function Booking() {
             }
         }
     }
+
+    const showRoomDate = dates.find((date: DateInterface) => date.ID === convertType(roomDate))
+    const ShowRoomDate = dayjs(showRoomDate?.DateCode).format('YYYY-MM-DD')
+    const presentDate = startOfToday();
+    const PresentDate = format(presentDate, 'yyyy-MM-dd');
 
     return (
     <section>
@@ -403,8 +404,8 @@ function Booking() {
                                     <option value="">Book for the date</option>
                                         {dates.filter((item: DateInterface) => (item.RoomID) === convertType(roomState))
                                             .map((item) => (
-                                                <option value={item.ID} key={item.ID} itemID={item.DateCode}>
-                                                    {item.DateCode}
+                                                <option value={item.ID} key={item.ID}>
+                                                    {dayjs(item.DateCode).format('YYYY-MM-DD')}
                                                 </option>
                                             ))
                                         }
@@ -502,7 +503,6 @@ function Booking() {
                                                         ) : ("")
                                                     }
                                                 </div>
-                                                
                                                 </>
                                             ))
                                         }
@@ -705,7 +705,7 @@ function Booking() {
             <section>
                 <Paper className="rounded-md p-3 my-3">
                     <p className="font-bold text-xl text-red-500">
-                        Book For The Date: "{showRoomDate ? showRoomDate.DateCode : "No Room Booking date"}"</p>
+                        Book For The Date: "{showRoomDate ? ShowRoomDate : "No Room Booking date"}"</p>
                             {slot.filter((timeslot: TimeslotInterface) => ((timeslot.RoomID) === books.RoomID) && ((timeslot.DateID) === books.DateID))
                                 .map((timeslot) => (
                                     <>
@@ -732,7 +732,7 @@ function Booking() {
                                                         <>
                                                         {buttonTime.map((element, index) => 
                                                             <div key={index}>
-                                                                {(showButton && (showRoomDate?.DateCode === PresentDate) && (element === timeslot.Slot)) && 
+                                                                {(showButton && ShowRoomDate === PresentDate) && (element === timeslot.Slot) && 
                                                                     (
                                                                     <div className="text-center pt-4">
                                                                         <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
@@ -750,7 +750,7 @@ function Booking() {
                                                                         ):(
                                                                             <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
                                                                             hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                                onClick={() => handleDialogBookingOpen(timeslot.ID, showRoomDate?.DateCode)}
+                                                                                onClick={() => handleDialogBookingOpen(timeslot.ID, ShowRoomDate)}
                                                                             >
                                                                                 <AssignmentTurnedInIcon/> Book
                                                                             </button>
@@ -760,8 +760,8 @@ function Booking() {
                                                                 }
                                                             </div>
                                                         )}
-                                                        {!showButton && (showRoomDate?.DateCode === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
-                                                        {(showRoomDate?.DateCode != PresentDate) && (
+                                                        {!showButton && (ShowRoomDate === PresentDate) && (<p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>)}
+                                                        {(ShowRoomDate != PresentDate) && (
                                                             <div className="text-center pt-4">
                                                                 <button className="rounded px-2 py-1 mb-1 bg-pink-400 text-white font-semibold
                                                                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
@@ -778,7 +778,7 @@ function Booking() {
                                                                 ):(
                                                                     <button className="rounded px-2 py-1 bg-pink-400 text-white font-semibold
                                                                     hover:text-white hover:bg-green-500 active:scale-[.98] active:duration-75 transition-all"
-                                                                        onClick={() => handleDialogBookingOpen(timeslot.ID, showRoomDate?.DateCode)}
+                                                                        onClick={() => handleDialogBookingOpen(timeslot.ID, ShowRoomDate)}
                                                                     >
                                                                         <AssignmentTurnedInIcon/> Book
                                                                     </button>
