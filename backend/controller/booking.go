@@ -40,13 +40,13 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	timeslot.Quantity++
-
 	// ค้นหา date ด้วย id
 	if tx := entity.DB().Where("id = ?", booking.DateID).First(&date); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a date"})
 		return
 	}
+
+	timeslot.Quantity++
 
 	//Member จองแต่ละ time slot ได้แค่ 1 ครั้ง
 	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {

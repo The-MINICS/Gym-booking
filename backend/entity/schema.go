@@ -59,8 +59,9 @@ type Date struct {
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
 
-	Timeslots []Timeslot `gorm:"foreignKey:DateID"`
-	Booking   []Booking  `gorm:"foreignKey:DateID"`
+	Timeslots         []Timeslot          `gorm:"foreignKey:DateID"`
+	Booking           []Booking           `gorm:"foreignKey:DateID"`
+	EquipmentTimeslot []EquipmentTimeslot `gorm:"foreignKey:DateID"`
 }
 
 // Timeslot
@@ -86,6 +87,9 @@ type EquipmentTimeslot struct {
 
 	TimeslotID *uint
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
+
+	DateID *uint
+	Date   Date `gorm:"references:id" valid:"-"`
 
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:EquipmentTimeslotID"`
 }

@@ -1,15 +1,20 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"github.com/chonticha1844/Gym-booking/controller"
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/chonticha1844/Gym-booking/middlewares"
 	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron"
 )
 
 const PORT = "9999"
 
 func main() {
+
 	entity.SetupDatabase()
 
 	r := gin.Default()
@@ -118,30 +123,39 @@ func main() {
 	// Run the server go run main.go
 	r.Run("localhost: " + PORT)
 
-	// // Create a new cron scheduler
-	// c := cron.New()
-	// //var booking entity.Booking
-	// var timeslot entity.Timeslot
+	// Create a new cron scheduler
+	c := cron.New()
 
-	// // Schedule the task to run at 12:00 AM daily mm/hh/dm/month/dw
-	// _, err := c.AddFunc("26 0 * * *", func() {
-	// 	// entity.DB().Where("Datetime <= ?", time.Now().Truncate(24*time.Hour)).Delete(&booking)
-	// 	// fmt.Println("Deleting Booking data at 12:00 AM")
+	// // Define the cron schedule (every minute)
+	// c.AddFunc("* * * * *", func() {
+	// 	currentTime := time.Now()
+	// 	targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 01, 35, 0, 0, currentTime.Location())
 
-	// 	entity.DB().Model(&timeslot).Update("Quantity", 0)
-	// 	fmt.Println("Updating Timeslot at 12:00 AM")
+	// 	if currentTime.Equal(targetTime) {
+	// 		// Add your code to update the "Quantity" column in the "timeslot" table here
+	// 		entity.DB().Model(&entity.Timeslot{}).Update("Quantity", 0)
+	// 	}
 	// })
 
-	// if err != nil {
-	// 	fmt.Println("Error scheduling task:", err)
-	// 	return
-	// }
+	c.AddFunc("* * * * *", func() {
+		currentTime := time.Now()
+		targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 1, 40, 0, 0, currentTime.Location())
 
-	// // Start the cron scheduler
-	// c.Start()
+		if currentTime.Equal(targetTime) {
+			// Add your code to delete all records in the "booking" table here
+			if err := entity.DB().Where("1 = 1").Delete(&entity.Booking{}).Error; err != nil {
+				// Handle the error if the delete operation fails
+				log.Println("Error deleting records:", err)
+			} else {
+				log.Println("All records in the 'booking' table deleted.")
+			}
+		}
+	})
 
-	// // Keep the program running
-	// select {}
+	c.Start()
+
+	// Keep the program running
+	select {}
 }
 
 func CORSMiddleware() gin.HandlerFunc {
