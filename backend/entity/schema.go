@@ -165,6 +165,7 @@ type Booking struct {
 // Member เป็นคนสร้าง ใช้จองอุปกรณ์
 type EquipmentBooking struct {
 	gorm.Model
+	EquipmentNote string
 	EquipmentDatetime time.Time
 
 	EquipmentTimeslotID *uint
