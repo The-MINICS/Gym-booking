@@ -165,9 +165,8 @@ type Booking struct {
 // Member เป็นคนสร้าง ใช้จองอุปกรณ์
 type EquipmentBooking struct {
 	gorm.Model
-	EquipmentNote string
-	EquipmentDatetime time.Time
-
+	EquipmentDatetime   time.Time
+	EquipmentNote       string
 	EquipmentTimeslotID *uint
 	EquipmentTimeslot   EquipmentTimeslot `gorm:"references:id" valid:"-"`
 

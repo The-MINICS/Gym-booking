@@ -43,6 +43,7 @@ func CreateEquipmentBooking(c *gin.Context) {
 	// 14: สร้าง  booking
 	eqbk := entity.EquipmentBooking{
 		EquipmentDatetime: time.Now(),
+		EquipmentNote:     equipmentbooking.EquipmentNote,
 		EquipmentTimeslot: equipmenttimeslot,
 		Equipment:         equipment,
 		Booking:           booking,
@@ -115,9 +116,12 @@ func UpdateEquipmentBooking(c *gin.Context) {
 		return
 	}
 
+	var Newequipmentnote = equipmentbooking.EquipmentNote
+
 	update_equipmentbooking := entity.EquipmentBooking{
 		Model:             gorm.Model{ID: equipmentbooking.ID},
 		EquipmentDatetime: time.Now(),
+		EquipmentNote:     Newequipmentnote,
 		EquipmentTimeslot: equipmenttimeslot,
 		Equipment:         equipment,
 		Booking:           booking,
