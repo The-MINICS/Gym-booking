@@ -22,8 +22,14 @@ const MenuItemServices = [
     role: 'all'
   },
   {
-    title: 'Booking',
+    title: 'Room Booking',
     path: '/bookings',
+    cName: 'dropdown-link',
+    role: 'all'
+  },
+  {
+    title: 'Equipment Booking',
+    path: '/equipmentbooking-create',
     cName: 'dropdown-link',
     role: 'all'
   }

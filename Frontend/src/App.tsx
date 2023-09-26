@@ -25,7 +25,7 @@ import MemberUpdate from "./Components/pages/admin/admin_member_control/member_u
 import PictureEquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/picture_update";
 import EquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/equipment_update";
 import RoomUpdate from './Components/pages/admin/admin_room_control/room_update';
-import EquipmentBooking from './Components/pages/equipment_booking';
+import EquipmentBookingCreate from './Components/pages/equipment_booking/EQbooking-create';
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -66,8 +66,7 @@ function App() {
         <Route path="/picture/update/:id" element={<PictureEquipmentUpdate/>}/> {}
         <Route path="/equipment/update/:id" element={<EquipmentUpdate/>}/> {}
         <Route path="/room/update/:id" element={<RoomUpdate/>}/> {}
-        <Route path="/equipmentbooking/update/:id" element={
-          <EquipmentBooking equipmentTime={undefined} roomTimeShow={undefined} roomBooking={undefined} roomBookingTime={undefined}/>}/> {}
+        <Route path="/equipmentbooking-create" element={<EquipmentBookingCreate/>}/> {}
       </Routes>
       <Footer />
   </Router>

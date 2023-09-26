@@ -480,32 +480,28 @@ function Booking() {
                                                         </button>
                                                     </Grid>
                                                 </Grid>
-                                                <div className="text-right">
-                                                    {booking.Room?.Activity && (booking.Room?.Activity.includes("fitness") || booking.Room?.Activity.includes("Fitness")) ? (
-                                                        <>
-                                                            <p className="text-red-500 italic my-2 text-sm">
-                                                                According to your room booking, You have booked a fitness room,
-                                                                For the convenience of using the room and equipment,
-                                                                Please click on the "Equipment Booking" button to continue booking equipment in the fitness room.
-                                                            </p>
-                                                            <button className="cursor-pointer text-white bg-green-500 rounded-lg py-2 px-2 mb-4
-                                                                active:scale-[.98] active:duration-75 transition-all font-bold hover:bg-yellow-500"
-                                                                onClick={() =>
-                                                                    navigate({ pathname: `/equipmentbooking/update/${booking.ID}` })
-                                                                }
-                                                                >
-                                                                <div className="flex items-center justify-center gap-1">
-                                                                    <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
-                                                                    <p>Equipment Booking ...</p>
-                                                                </div>
-                                                            </button>
-                                                        </>
-                                                        ) : ("")
-                                                    }
-                                                </div>
+                                                    {/* {booking.Room?.Activity && (booking.Room?.Activity.includes("fitness") || booking.Room?.Activity.includes("Fitness")) ? 
+                                                        (EquipmentButtonShow) : ("")
+                                                    } */}
                                                 </>
                                             ))
                                         }
+                                            <div className="text-right">
+                                                <p className="text-orange-500 italic my-2 text-sm">
+                                                    If you have booked a fitness room,
+                                                    Please click on the "Equipment Booking" button to continue booking equipment in the fitness room.
+                                                </p>
+                                                <button 
+                                                    className="cursor-pointer text-white bg-green-500 rounded-lg py-2 px-2 mb-4
+                                                    active:scale-[.98] active:duration-75 transition-all font-bold hover:bg-yellow-500"
+                                                    onClick={() => navigate({ pathname: `/equipmentbooking-create` })}
+                                                    >
+                                                        <div className="flex items-center justify-center gap-1">
+                                                            <img src={equipmentPhoto} alt="equipment-booking-icon" className="w-auto h-8"/>
+                                                            <p>Equipment Booking ...</p>
+                                                        </div>
+                                                </button>
+                                            </div>
                                     </section>
                                 </div>
                             </motion.div>

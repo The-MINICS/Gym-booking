@@ -11,55 +11,60 @@ import { AlertProps, Grid, Divider } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { BookingInterface } from "@/interfaces/IBooking";
 import { PictureInterface } from "@/interfaces/IPicture";
-import { GetBooks, GetEquipments, GetMemberByMID, GetPictures, GetSlot } from "@/services/HttpClientService";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { EquipmentInterface } from "@/interfaces/IEquipment";
-import { useParams } from "react-router-dom";
-import { TimeslotInterface } from "@/interfaces/ITimeslot";
+//import { useParams } from "react-router-dom";
+//import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import UserPhoto from '@/assets/UserProfile.png';
 import AdminPhoto from '@/assets/AdministratorProfile.png';
 import { MemberInterface } from "@/interfaces/IMember";
 import { Link } from "react-router-dom";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+//import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
+import { 
+  Dialog, DialogActions, DialogContent, DialogContentText,  
+  DialogTitle, Button,
+} from "@mui/material";
+import { 
+  EquipmentBookDelete,
+  GetBooks, 
+  GetEquipmentBookings, 
+  GetEquipmentTimeSlot, 
+  GetEquipments, 
+  GetMemberByMID, 
+  GetPictures,
+} from "@/services/HttpClientService";
 
-type Props = {
-  equipmentTime: any;
-  roomTimeShow: any;
-  roomBooking: any;
-  roomBookingTime: any;
-}
-
-function EquipmentBooking({equipmentTime, roomTimeShow, roomBooking, roomBookingTime}: Props) {
-    let { id } = useParams();
+function EquipmentBookingCreate() {
     const [equipmentBook, setEquipmentBook] = useState<EquipmentBookingInterface>({});
     const [members, setMembers] = useState<MemberInterface>({});
     const [EquipmentBooks, setEquipmentBooks] = useState<EquipmentBookingInterface[]>([]);
-    const [TimeSlot, setTimeSlot] = useState<TimeslotInterface[]>([]);
     const [EQTimeSlot, setEQTimeSlot] = useState<EquipmentTimeslotInterface[]>([]);
     const [books, setBooks] = useState<BookingInterface[]>([]);
     const [Equipments, setEquipments] = useState<EquipmentInterface[]>([]);
     const [Pictures, setPictures] = useState<PictureInterface[]>([]);
     const [openEQBooking, setOpenEQBooking] = useState(false);
+    const [holdStateButtonBookTime, setholdStateButtonBookTime] = useState<number>();
     const [clickedButtonEQTime, setClickedButtonEQTime] = useState("");
     const [holdStateButtonEQTime, setholdStateButtonEQTime] = useState<number>();
     const [clickedButtonEQGroup, setClickedButtonEQGroup] = useState("");
     const [holdStateButtonEQGroup, setholdStateButtonEQGroup] = useState<number>();
     const [dialogWidth, setDialogWidth] = useState<number | string>('auto');
     const dialogContentRef = React.createRef<HTMLDivElement>();
-    const [equipmentName, setEquipmentName] = useState("");
-    const [clickedPictureID, setClickedPictureID] = useState<number>();
     const [clickedEQid, setClickedEQid] = useState<number>();
-
+    const [equipmentTime, setEquipmentTime] = useState<number>();
+    const [roomTimeShow, setRoomTimeShow] = useState<string>("");
+    const [roomBookingTime, setRoomBookingTime] = useState<string>("");
+    const [deleteID, setDeleteID] = useState<number>(0);
+    const [openDelete, setOpenDelete] = useState(false);
     const roles = localStorage.getItem("role");
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const apiUrl = "http://localhost:9999";
 
     const Noholdstate = `bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
     hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all`
@@ -73,6 +78,29 @@ function EquipmentBooking({equipmentTime, roomTimeShow, roomBooking, roomBooking
           const { value } = event.target;
           setEquipmentBook({ ...equipmentBook, [id]: value });
     };
+
+    const handleDialogDeleteOpen = (ID: number) => {
+      setDeleteID(ID)
+      setOpenDelete(true)
+  }
+  const handleDialogDeleteclose = () => {
+      setOpenDelete(false)
+      setTimeout(() => {
+          setDeleteID(0)
+      }, 500)
+  }
+  const handleDelete = async () => {
+      let res = await EquipmentBookDelete(deleteID)
+      if (res) {
+          console.log(res.data)
+      } else {
+          console.log(res.data)
+      }
+      setOpenDelete(false)
+      setTimeout(() => {
+        window.location.href = "/equipmentbooking-create";
+      }, 1000);
+  }
 
     const buttonEQTimeHandler = (id:any, value: any) => {
       const EquipmentTimeSlotID = convertType(id);
@@ -98,103 +126,38 @@ function EquipmentBooking({equipmentTime, roomTimeShow, roomBooking, roomBooking
       setError(false);
   };
 
-  const handleDialogEQBookingOpen = (value: any, pictureID: any, eqID: any) => {
+  const handleDialogEQBookingOpen = (eqID: any) => {
     setOpenEQBooking(false);
-    const PictureOnClick = convertType(pictureID);
     const EquipmentOnClick = convertType(eqID);
     equipmentBook.EquipmentID = EquipmentOnClick;
     const contentWidth = dialogContentRef.current?.scrollWidth;
     if (contentWidth) {
-        setDialogWidth(contentWidth);
+      setDialogWidth(contentWidth);
     }
     setOpenEQBooking(true);
-    setEquipmentName(value);
-    setClickedPictureID(PictureOnClick);
     setClickedEQid(EquipmentOnClick);
-}
+  };
 
-const handleDialogEQBookingClose = () => {
+  const buttonRoomBookingHandler = (bookID: any, bookTimeID: any, roomTime: any, roomBooking: any) => {
+    const BookID = convertType(bookID);
+    const BookTimeID = convertType(bookTimeID);
+    equipmentBook.BookingID = BookID;
+    setEquipmentTime(BookTimeID);
+    setRoomTimeShow(roomTime);
+    setRoomBookingTime(roomBooking);
+    setholdStateButtonBookTime(BookID);
+  };
+
+  const handleDialogEQBookingClose = () => {
     setOpenEQBooking(false)
-}
-
-    async function EquipmentBookingByEBID() {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        },
-      };
-    
-      let res = await fetch(`${apiUrl}/equipmenttimeslot/`+id, requestOptions)
-        .then((response) => response.json())
-        .then((res) => {
-        if (res.data) {
-            return res.data;
-        } else {
-            return false;
-        }
-        });
-      return res;
   }
 
-    async function GetEquipmentTimeSlot() {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      };
-      
-      let res = await fetch(`${apiUrl}/equipmenttimeslots`, requestOptions)
-        .then((response) => response.json())
-        .then((res) => {
-          if (res.data) {
-            return res.data;
-          } else {
-            return false;
-          }
-        });
-      
-      return res;
-  }
-
-    async function GetEquipmentBookings() {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      };
-    
-      let res = await fetch(`${apiUrl}/equipmentbookings`, requestOptions)
-        .then((response) => response.json())
-        .then((res) => {
-          if (res.data) {
-            return res.data;
-          } else {
-            return false;
-          }
-        });
-    
-      return res;
-  }
-
-    const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-        props,
-        ref
-      ) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
-
-    const getEquipmentBooking = async () => {
-      let res = await EquipmentBookingByEBID();
-      if (res) {
-        setEquipmentBook(res);
-      }
-    };
+  const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+      props,
+      ref
+    ) {
+      return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
     
     const GetMembers = async () => {
       let res = await GetMemberByMID();
@@ -238,24 +201,15 @@ const handleDialogEQBookingClose = () => {
       }
     };
 
-    const getTimeSlot = async () => {
-      let res = await GetSlot();
-      if (res) {
-        setTimeSlot(res);
-      }
-    };
-
     const convertType = (data: string | number | undefined) => {
         let val = typeof data === "string" ? parseInt(data) : data;
         return val;
     };
 
     useEffect(() => {
-        getEquipmentBooking();
         GetMembers();
         getEquipmentBookings();
         getEquipments();
-        getTimeSlot();
         getEquipmentTimeSlot();
         getBooks();
         getPictures();
@@ -263,36 +217,38 @@ const handleDialogEQBookingClose = () => {
 
     async function submit() {
       let data = {
-          ID: equipmentBook.ID,
-          Note: equipmentBook.Note?? "",
+          EquipmentNote: equipmentBook.EquipmentNote,
           EquipmentID: convertType(equipmentBook.EquipmentID),
           EquipmentTimeslotID: convertType(equipmentBook.EquipmentTimeslotID),
-          BookingID: convertType(equipmentBook.ID),
+          BookingID: convertType(equipmentBook.BookingID),
       };
       console.log(data)
+      const apiUrl = "http://localhost:9999";
 
       const requestOptions = {
-          method: "PATCH",
-          headers: { 
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
       };
+    
       fetch(`${apiUrl}/equipmentbookings`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-              console.log(res);
-              if (res.data) {
-              console.log("seved")
-              setSuccess(true);
-              setErrorMessage("")
-              // setTimeout(() => {
-              //     window.location.href = "/bookings";
-              // }, 500);
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res)
+          if (res.data) {
+            console.log("seved")
+            setSuccess(true);
+            setErrorMessage("")
+            setTimeout(() => {
+              window.location.href = "/equipmentbooking-create";
+          }, 1000);
           } else {
-              console.log("save failured!")
-              setError(true);
-              setErrorMessage(res.error)
+            console.log("save failured!")
+            setError(true);
+            setErrorMessage(res.error)
           }
       });
   }
@@ -350,23 +306,20 @@ const handleDialogEQBookingClose = () => {
             <div className="EquipmentBookingArea">
               {/* Booking time */}
               <div className="EB-book-time">
-                <div className="text-center">
-                  <p className="font-bold text-base">Fitness Room Booking "Date:Period"</p>
-                </div>
+                <p className="font-bold text-base py-1">Your Fitness Room:</p>
                 <div className="flex EB-book-header gap-2 mb-2">
-                  {books.filter((BookTime: BookingInterface) => (BookTime.ID) === equipmentBook.ID)
+                  {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
                     .map((BookTime) => (
-                      <>
-                        <p className="text-center font-bold text-lg px-2 py-1 rounded-sm bg-slate-400 text-white">
-                          {roomBookingTime = dayjs(BookTime.Datetime).format('YYYY-MM-DD')}
-                        </p>
-                        <p className="font-bold text-xl">:</p>
-                        <p className="text-center font-bold text-lg text-white bg-orange-600 px-2 py-1 rounded-sm">
-                          {roomTimeShow = BookTime.Timeslot?.Slot}
-                        </p>
-                        <p hidden>{equipmentTime = (BookTime.TimeslotID)}</p>
-                        <p hidden>{roomBooking = (BookTime.ID)}</p>
-                      </>
+                      <button key={BookTime.ID}
+                        onClick={() => buttonRoomBookingHandler(BookTime.ID, BookTime.TimeslotID, BookTime.Timeslot?.Slot, 
+                            dayjs(BookTime.Datetime).format('YYYY-MM-DD'))}
+                        className= {holdStateButtonBookTime === BookTime.ID ? `${Holdstate}` : `${Noholdstate}`}
+                        >
+                          <EventAvailableIcon/>
+                          <p className="font-bold">{dayjs(BookTime.Datetime).format('YYYY-MM-DD')}</p> : 
+                          <AccessTimeIcon/>
+                          <p className="font-bold">{BookTime.Timeslot?.Slot}</p>
+                      </button>
                     ))
                   }
                 </div>
@@ -376,7 +329,7 @@ const handleDialogEQBookingClose = () => {
                 <p className="font-bold text-base py-1">Equipment Booking Period:</p>
                 <div className="flex EB-equipment-header">
                   <div className="flex gap-2 mb-2">
-                    {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === convertType(equipmentTime))
+                    {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === equipmentTime)
                       .map((eqTime) => (
                         <button key={eqTime.ID}
                           onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
@@ -432,17 +385,29 @@ const handleDialogEQBookingClose = () => {
                         </li>
                       </ul>
                       <p>Equipment Booking List:</p>
-                        {EquipmentBooks.filter((EQBookShow: EquipmentBookingInterface) => (EQBookShow.BookingID) === convertType(roomBooking))
+                        {EquipmentBooks.filter((EQBookShow: EquipmentBookingInterface) => (EQBookShow.Booking?.MemberID) === members.ID)
                           .map((EQBookShow) => (
-                            <>
-                              {EQBookShow.EquipmentTimeslotID && EQBookShow.EquipmentID &&
-                                <div className="bg-slate-50 rounded">
-                                  <button className="mt-1 ml-1 px-2 rounded bg-yellow-100">
-                                    - {EQBookShow.Equipment?.Name} : "{EQBookShow.EquipmentTimeslot?.Equipmentslot}"
-                                  </button>
-                                </div>
-                              }
-                            </>
+                            <Grid container className="bg-pink-100 my-2 px-2 py-2 rounded-lg mx-auto">
+                              <Grid item xs={9}>
+                                <ul className="px-2">
+                                  <li><span className="font-semibold">EQ: </span>{EQBookShow.Equipment?.Name}</li>
+                                  <li><span className="font-semibold">Period: </span>{EQBookShow.EquipmentTimeslot?.Equipmentslot}</li>
+                                  <li><span className="font-semibold">Date: </span>
+                                    {dayjs(EQBookShow.EquipmentDatetime).format('YYYY-MM-DD')}
+                                  </li>
+                                  <li className="text-green-700"><span className="font-semibold">Note: </span>
+                                    "{EQBookShow.EquipmentNote}"
+                                  </li>
+                                </ul> 
+                              </Grid>
+                              <Grid item xs={3} style={{ textAlign: "right" }}>
+                                <button className="cursor-pointer active:scale-[.98] active:duration-75 transition-all mb-2"
+                                  onClick={() => {handleDialogDeleteOpen(Number(EQBookShow.ID))}}
+                                  >
+                                  <CancelIcon/>
+                                </button>
+                              </Grid>
+                          </Grid>
                           ))
                         }
                     </div>
@@ -506,15 +471,13 @@ const handleDialogEQBookingClose = () => {
                                 <p className="text-red-500 italic text-sm">(Limit: 50 characters)</p>
                               </div>
                               <textarea
-                                  className="w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
-                                  autoFocus
-                                  placeholder="Leave Note Message"
-                                  id="Note"
-                                  name="note"
-                                  rows={3}
-                                  cols={30}
-                                  value={equipmentBook.Note || ""}
-                                  onChange={handleInputChange}
+                                className="w-full rounded-lg px-5 py-3 bg-slate-50 font-medium text-red-950"
+                                placeholder="Leave Note Message"
+                                id="EquipmentNote"
+                                rows={3}
+                                cols={30}
+                                value={equipmentBook.EquipmentNote || ""}
+                                onChange={handleInputChange}
                               />
                             </div> 
                           </Grid>
@@ -528,30 +491,48 @@ const handleDialogEQBookingClose = () => {
                               <CancelIcon/> Cancel
                           </button>
                           <button className="rounded px-2 py-1 text-white font-semibold
-                              bg-orange-600 active:scale-[.98] active:duration-75 transition-all" 
+                              bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
                               onClick={submit}
                           >
-                              <CheckIcon/> Book! That's enough
-                          </button>
-                          <button className="rounded px-2 py-1 text-white font-semibold
-                              bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
-                              // onClick={submit}
-                          >
-                              <AssignmentTurnedInIcon/> Book! Continue
+                              <CheckIcon/> Book Now!
                           </button>
                       </div>
                   </div>
               </dialog>
-          </div>
-            )}
+            </div>
+          )}
 
-            {/* Room Booking button */}
+          {/* Delete Dialog */}
+          <Dialog
+            open={openDelete}
+            onClose={handleDialogDeleteclose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                Equipment Booking Delete
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  If you delete this Equipment then you won't be able to recover any more. 
+                  Do you want to delete this Equipment?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button color= "error" onClick={handleDialogDeleteclose}>Cancel</Button>
+                <Button color= "secondary" onClick={handleDelete} className="bg-red-500" autoFocus>
+                  Confirm
+                </Button>
+              </DialogActions>
+          </Dialog>
+
+          {/* Room Booking button */}
             <div className="flex items-center justify-between m-3">
-              <button className="rounded bg-red-500 text-white border-solid
+              <button className="rounded bg-red-100 border-solid
                 active:scale-[.98] active:duration-75 transition-all">
                   <Link to="/bookings" className="flex items-center justify-center gap-1 p-2">
-                      <ArrowBackIosNewIcon/>
-                      <p className="font-bold text-xl">Back</p>
+                    <AssignmentTurnedInIcon/>
+                      <p className="font-bold text-xl">Room Booking</p>
                   </Link>
               </button>
               <button className="rounded bg-green-600 text-white border-solid
@@ -587,7 +568,7 @@ const handleDialogEQBookingClose = () => {
             {Equipments.filter((EQitems: EquipmentInterface) => (EQitems.PictureID) === holdStateButtonEQGroup)
               .map((EQitems ,index) => (
                 <>
-                  <button key={index} onClick={() => handleDialogEQBookingOpen(EQitems.Name, EQitems.PictureID, EQitems.ID)}
+                  <button key={index} onClick={() => handleDialogEQBookingOpen(EQitems.ID)}
                     className="rounded active:scale-[.98] active:duration-75 transition-all bg-slate-100 p-4 hover:bg-yellow-500 m-3">
                     <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${index}`}/>
                   </button>
@@ -605,4 +586,4 @@ const handleDialogEQBookingClose = () => {
   }
 }
 
-export default EquipmentBooking;
+export default EquipmentBookingCreate;

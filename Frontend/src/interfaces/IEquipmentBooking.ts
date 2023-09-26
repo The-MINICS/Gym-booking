@@ -5,7 +5,7 @@ import { EquipmentTimeslotInterface } from "./IEquipmentTimeslot";
 export interface EquipmentBookingInterface {
     ID?: number,
     EquipmentDatetime?: Date | null;
-    Note?: string,
+    EquipmentNote?: string,
 
     EquipmentID?: number;
     Equipment?: EquipmentInterface;

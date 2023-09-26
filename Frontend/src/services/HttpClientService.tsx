@@ -160,6 +160,27 @@ const BookDelete = async (ID: number) => {
   return res
 };
 
+const EquipmentBookDelete = async (ID: number) => {
+  console.log(ID)
+  const requestOptions = {
+      method: "DELETE",
+      headers: { 
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json", 
+      },
+  };
+  let res = await fetch(`http://localhost:9999/equipmentbookings/`+ID, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+          if(res.data){
+              return res.data
+          } else{
+              return false
+          }
+  })
+  return res
+};
+
 const EquipmentDelete = async (ID: number) => {
   console.log(ID)
   const requestOptions = {
@@ -311,6 +332,28 @@ async function GetBooks() {
   return res;
 }
 
+async function GetEquipmentBookings() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/equipmentbookings`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 async function GetDates() {
   const requestOptions = {
     method: "GET",
@@ -377,6 +420,28 @@ async function GetSlot() {
   return res;
 }
 
+async function GetEquipmentTimeSlot() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+  
+  let res = await fetch(`${apiUrl}/equipmenttimeslots`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+  
+  return res;
+}
+
 export {
   Login,
   Members,
@@ -385,6 +450,7 @@ export {
   MemberDelete,
   RoomDelete,
   BookDelete,
+  EquipmentBookDelete,
   EquipmentDelete,
   PictureDelete,
   ContactUsDelete,
@@ -394,5 +460,7 @@ export {
   GetBooks,
   GetContactUs,
   GetSlot,
-  GetDates
+  GetDates,
+  GetEquipmentBookings,
+  GetEquipmentTimeSlot
 };

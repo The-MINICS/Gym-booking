@@ -144,18 +144,9 @@ func UpdateEquipmentBooking(c *gin.Context) {
 
 func DeleteEquipmentBooking(c *gin.Context) {
 	id := c.Param("id")
-
-	//ลบเมื่อ
-	if err := entity.DB().Exec("DELETE FROM equipment_bookings WHERE equipment_booking_id = ?", id).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	if tx := entity.DB().Exec("DELETE FROM equipment_bookings WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "equipment bookings not found"})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"data": id})
-
 }
