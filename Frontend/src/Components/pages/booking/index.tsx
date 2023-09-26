@@ -481,7 +481,7 @@ function Booking() {
                                                     </Grid>
                                                 </Grid>
                                                 <div className="text-right">
-                                                    {(booking.Room?.ID === 5 && booking.Room.Activity === "fitness") ? (
+                                                    {booking.Room?.Activity && (booking.Room?.Activity.includes("fitness") || booking.Room?.Activity.includes("Fitness")) ? (
                                                         <>
                                                             <p className="text-red-500 italic my-2 text-sm">
                                                                 According to your room booking, You have booked a fitness room,

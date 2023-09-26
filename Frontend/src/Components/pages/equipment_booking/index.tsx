@@ -267,7 +267,7 @@ const handleDialogEQBookingClose = () => {
           Note: equipmentBook.Note?? "",
           EquipmentID: convertType(equipmentBook.EquipmentID),
           EquipmentTimeslotID: convertType(equipmentBook.EquipmentTimeslotID),
-          BookingID: convertType(equipmentBook.BookingID),
+          BookingID: convertType(equipmentBook.ID),
       };
       console.log(data)
 
@@ -287,7 +287,7 @@ const handleDialogEQBookingClose = () => {
               setSuccess(true);
               setErrorMessage("")
               // setTimeout(() => {
-              //     window.location.href = "/equipment-manage";
+              //     window.location.href = "/bookings";
               // }, 500);
           } else {
               console.log("save failured!")
@@ -496,7 +496,7 @@ const handleDialogEQBookingClose = () => {
                             <ul className="ml-10">
                               <li className="font-bold">UserName: <span className="font-medium text-red-900">{members.Username}</span></li>
                               <li className="font-bold">Full-Name: <span className="font-medium text-red-900">{members.Firstname} {members.Lastname}</span></li>
-                              <li className="font-bold">Date & Period: <span className="font-medium text-red-900">"{roomBookingTime}":"{roomTimeShow}"</span></li>
+                              <li className="font-bold">Date & Period: <span className="font-medium text-red-900">"{roomBookingTime}" : "{roomTimeShow}"</span></li>
                               <li className="font-bold">Equipment Booking: <span className="font-medium text-red-900">{`"${clickedButtonEQTime}"`}</span></li>
                               <li className="font-bold">Catergory: <span className="font-medium text-red-900">{`"${clickedButtonEQGroup}"`}</span></li>
                             </ul>
@@ -535,7 +535,7 @@ const handleDialogEQBookingClose = () => {
                           </button>
                           <button className="rounded px-2 py-1 text-white font-semibold
                               bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
-                              onClick={submit}
+                              // onClick={submit}
                           >
                               <AssignmentTurnedInIcon/> Book! Continue
                           </button>
