@@ -45,10 +45,9 @@ type Member struct {
 	RoleID   *uint
 	Role     Role `gorm:"references:id" valid:"-"`
 
-	Booking          []Booking          `gorm:"foreignKey:MemberID"`
-	Contactus        []Contactus        `gorm:"foreignKey:MemberID"`
-	Equipment        []Equipment        `gorm:"foreignKey:MemberID"`
-	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:MemberID"`
+	Booking   []Booking   `gorm:"foreignKey:MemberID"`
+	Contactus []Contactus `gorm:"foreignKey:MemberID"`
+	Equipment []Equipment `gorm:"foreignKey:MemberID"`
 }
 
 // date

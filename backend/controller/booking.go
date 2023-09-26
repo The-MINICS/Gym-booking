@@ -2,8 +2,8 @@ package controller
 
 import (
 	"net/http"
-	"strings"
-	"time"
+	// "strings"
+	// "time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
@@ -89,25 +89,25 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	if strings.Contains(room.Activity, "fitness") || strings.Contains(room.Activity, "Fitness") {
-		var equipmenttimeslot entity.EquipmentTimeslot
-		var equipment entity.Equipment
+	// if strings.Contains(room.Activity, "fitness") || strings.Contains(room.Activity, "Fitness") {
+	// 	var equipmenttimeslot entity.EquipmentTimeslot
+	// 	var equipment entity.Equipment
 
-		// Create an EquipmentBooking record
-		equipmentBooking := entity.EquipmentBooking{
-			EquipmentDatetime: time.Now(),
-			EquipmentTimeslot: equipmenttimeslot,
-			Equipment:         equipment,
-			BookingID:         &bk.ID,
-			MemberID:          &bk.Member.ID,
-		}
+	// 	// Create an EquipmentBooking record
+	// 	equipmentBooking := entity.EquipmentBooking{
+	// 		EquipmentDatetime: time.Now(),
+	// 		EquipmentTimeslot: equipmenttimeslot,
+	// 		Equipment:         equipment,
+	// 		BookingID:         &bk.ID,
+	// 		MemberID:          &bk.Member.ID,
+	// 	}
 
-		// Save the EquipmentBooking record to the database
-		if err := entity.DB().Create(&equipmentBooking).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-	}
+	// 	// Save the EquipmentBooking record to the database
+	// 	if err := entity.DB().Create(&equipmentBooking).Error; err != nil {
+	// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 		return
+	// 	}
+	// }
 
 	c.JSON(http.StatusCreated, gin.H{"data": bk})
 
