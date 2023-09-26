@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -88,7 +89,7 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	if *booking.RoomID == uint(5) {
+	if strings.Contains(room.Activity, "fitness") || strings.Contains(room.Activity, "Fitness") {
 		var equipmenttimeslot entity.EquipmentTimeslot
 		var equipment entity.Equipment
 
