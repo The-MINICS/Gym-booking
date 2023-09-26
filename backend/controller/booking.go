@@ -99,6 +99,7 @@ func CreateBooking(c *gin.Context) {
 			EquipmentTimeslot: equipmenttimeslot,
 			Equipment:         equipment,
 			BookingID:         &bk.ID,
+			MemberID:          &bk.Member.ID,
 		}
 
 		// Save the EquipmentBooking record to the database

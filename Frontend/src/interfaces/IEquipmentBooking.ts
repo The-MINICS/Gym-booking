@@ -1,6 +1,7 @@
 import { BookingInterface } from "./IBooking";
 import { EquipmentInterface } from "./IEquipment";
 import { EquipmentTimeslotInterface } from "./IEquipmentTimeslot";
+import { MemberInterface } from "./IMember";
 
 export interface EquipmentBookingInterface {
     ID?: number,
@@ -15,4 +16,7 @@ export interface EquipmentBookingInterface {
 
     BookingID?: number;
     Booking?: BookingInterface;
+
+    MemberID?: number;
+    Member?: MemberInterface;
 }
