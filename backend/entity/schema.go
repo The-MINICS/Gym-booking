@@ -175,9 +175,6 @@ type EquipmentBooking struct {
 
 	BookingID *uint
 	Booking   Booking `gorm:"references:id" valid:"-"`
-
-	MemberID *uint
-	Member   Member `gorm:"references:id" valid:"-"`
 }
 
 // Contact us

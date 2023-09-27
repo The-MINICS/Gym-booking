@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// POST /booking
+// POST / equipmentbooking
 func CreateEquipmentBooking(c *gin.Context) {
 	var equipmentbooking entity.EquipmentBooking
 	var equipmenttimeslot entity.EquipmentTimeslot
@@ -40,6 +40,12 @@ func CreateEquipmentBooking(c *gin.Context) {
 		return
 	}
 
+	//Member จองอุปกรณ์ 1 เครื่องได้แค่ 1 ครั้ง
+	if tx := entity.DB().Where("equipment_id = ? ", equipmentbooking.EquipmentID).First(&equipmentbooking); tx.RowsAffected != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 times per 1 equipment"})
+		return
+	}
+
 	// 14: สร้าง  booking
 	eqbk := entity.EquipmentBooking{
 		EquipmentDatetime: time.Now(),
@@ -60,6 +66,13 @@ func CreateEquipmentBooking(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Update the equipment status to "unavailable"
+	if err := entity.DB().Model(&equipment).Update("StatusID", 2).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
+		return
+	}
+
 	c.JSON(http.StatusCreated, gin.H{"data": eqbk})
 
 }
