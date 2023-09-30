@@ -1,0 +1,38 @@
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+}
+
+/* EventCalendar */
+/* Styling for the container div */
+.event-calendar-container {
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the header */
+.event-calendar-header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Styling for the calendar itself */
+.react-big-calendar {
+  font-size: 16px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Styling for the calendar events */
+.rbc-event {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  box-shadow: none;
+}

@@ -47,9 +47,11 @@ So, We used:
    8.  npm install -g npm
    9.  npm install @mui/material @emotion/react @emotion/styled
    10. npm install @mui/material @mui/styled-engine-sc styled-components
-   11. npm install @mui/x-date-pickers
-   12. npm install dayjs --save
-   13. npm install date-fns
+   11. npm install @mui/material @mui/icons-material
+   12. npm install @mui/x-date-pickers
+   13. npm install dayjs --save
+   14. npm install date-fns
+   15. npm install react-big-calendar moment @types/react-big-calendar
 
 ***Run Dev***
 + **Backend:**  -> go build -o main.exe main.go ***and then*** ./main.exe ***,or*** go run main.go

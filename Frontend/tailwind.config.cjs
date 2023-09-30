@@ -3,6 +3,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "*.{html,js}"
   ],
   theme: {
     extend: {
@@ -32,6 +33,12 @@ export default {
         xs: "480px",
         sm: "768px",
         md: "1060px"
+      },
+      gridTemplateColumns: {
+        'cards': 'repeat(auto-fit, minmax(250px, 1fr))',
+      },
+      gridTemplateRows: {
+        'auto1': 'auto 1fr',
       }
     },
   },
