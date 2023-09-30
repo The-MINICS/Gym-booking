@@ -13,13 +13,10 @@ import { BookingInterface } from "@/interfaces/IBooking";
 import { PictureInterface } from "@/interfaces/IPicture";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { EquipmentInterface } from "@/interfaces/IEquipment";
-//import { useParams } from "react-router-dom";
-//import { TimeslotInterface } from "@/interfaces/ITimeslot";
 import UserPhoto from '@/assets/UserProfile.png';
 import AdminPhoto from '@/assets/AdministratorProfile.png';
 import { MemberInterface } from "@/interfaces/IMember";
 import { Link } from "react-router-dom";
-//import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -60,6 +57,7 @@ function EquipmentBookingCreate() {
     const [roomBookingTime, setRoomBookingTime] = useState<string>("");
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
+    const [bookingChecked, setBookingChecked] = useState(false);
     const roles = localStorage.getItem("role");
 
     const [success, setSuccess] = useState(false);
@@ -146,6 +144,7 @@ function EquipmentBookingCreate() {
     setRoomTimeShow(roomTime);
     setRoomBookingTime(roomBooking);
     setholdStateButtonBookTime(BookID);
+    setBookingChecked(true);
   };
 
   const handleDialogEQBookingClose = () => {
@@ -291,7 +290,7 @@ function EquipmentBookingCreate() {
                     hidden: { opacity: 0, x:-50 },
                     visible: { opacity: 1, x:-0 }
                 }}
-            >
+              >
                 <HText>
                     <span className="text-red-500">Equipment Booking</span>
                 </HText>
@@ -304,41 +303,58 @@ function EquipmentBookingCreate() {
 
             {/* Booking Equipment */}
             <div className="EquipmentBookingArea">
-              {/* Booking time */}
               <div className="EB-book-time">
                 <p className="font-bold text-base py-1">Your Fitness Room:</p>
                 <div className="flex EB-book-header gap-2 mb-2">
-                  {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
-                    .map((BookTime) => (
-                      <button key={BookTime.ID}
-                        onClick={() => buttonRoomBookingHandler(BookTime.ID, BookTime.TimeslotID, BookTime.Timeslot?.Slot, 
-                            dayjs(BookTime.Datetime).format('YYYY-MM-DD'))}
-                        className= {holdStateButtonBookTime === BookTime.ID ? `${Holdstate}` : `${Noholdstate}`}
-                        >
-                          <EventAvailableIcon/>
-                          <p className="font-bold">{dayjs(BookTime.Datetime).format('YYYY-MM-DD')}</p> : 
-                          <AccessTimeIcon/>
-                          <p className="font-bold">{BookTime.Timeslot?.Slot}</p>
-                      </button>
-                    ))
-                  }
+                  {(books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID).length > 0) ? (
+                    <>
+                    {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
+                      .map((BookTime) => (
+                          <button key={BookTime.ID}
+                            onClick={() => buttonRoomBookingHandler(BookTime.ID, BookTime.TimeslotID, BookTime.Timeslot?.Slot, 
+                              dayjs(BookTime.Datetime).format('YYYY-MM-DD'))}
+                            className= {holdStateButtonBookTime === BookTime.ID ? `${Holdstate}` : `${Noholdstate}`}
+                            >
+                              <EventAvailableIcon/>
+                              <p className="font-bold">{dayjs(BookTime.Datetime).format('YYYY-MM-DD')}</p> : 
+                              <AccessTimeIcon/>
+                              <p className="font-bold">{BookTime.Timeslot?.Slot}</p>
+                          </button>
+                      ))
+                    }
+                    </>
+                  ):(
+                    <p className="text-red-500 italic">
+                      We do apologize! you haven't booked fitness room, please click "Room Booking" in the lower left corner
+                    </p>
+                  )}
                 </div>
               </div>
+
               {/* Booking time */}
               <div className="EB-equipment-time">
                 <p className="font-bold text-base py-1">Equipment Booking Period:</p>
                 <div className="flex EB-equipment-header">
                   <div className="flex gap-2 mb-2">
-                    {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === equipmentTime)
-                      .map((eqTime) => (
-                        <button key={eqTime.ID}
-                          onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
-                          className= {holdStateButtonEQTime === eqTime.ID ? `${Holdstate}` : `${Noholdstate}`}
-                          >
-                            <AccessTimeIcon/>
-                            <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
-                        </button>
-                      ))
+                    {(bookingChecked) ? (
+                      <>
+                      {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === equipmentTime)
+                        .map((eqTime) => (
+                          <button key={eqTime.ID}
+                            onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
+                            className= {holdStateButtonEQTime === eqTime.ID ? `${Holdstate}` : `${Noholdstate}`}
+                            >
+                              <AccessTimeIcon/>
+                              <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
+                          </button>
+                        ))
+                      }
+                      </>
+                      ) : (
+                      <p className="text-red-500 italic">
+                        Please choose "Your Fitness Room" above!
+                      </p>
+                      )
                     }
                   </div>
                 </div>

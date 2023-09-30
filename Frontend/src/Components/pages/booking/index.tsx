@@ -465,6 +465,9 @@ function Booking() {
                                                     <Grid item xs={9}>
                                                         <ul className="px-2">
                                                             <li><span className="font-semibold">Room: </span>{booking.Room?.Activity}</li>
+                                                            <li><span className="font-semibold">Room Number: </span>
+                                                                <span className="uppercase">{booking.Room?.Number}</span>
+                                                            </li>
                                                             <li><span className="font-semibold">Period: </span>{booking.Timeslot?.Slot}</li>
                                                             <li><span className="font-semibold">Booking Date: </span>
                                                                 {dayjs(booking.Datetime).format('YYYY-MM-DD')}
@@ -791,15 +794,6 @@ function Booking() {
                             }
                 </Paper>
             </section>
-        )
-    } else {
-        return (
-            <Paper className="rounded p-3">
-                <p className="italic text-red-600">
-                    Sorry! We haven't got any booking on this section yet,
-                    Please choose the services!
-                </p>
-            </Paper>
         )
     }
   }

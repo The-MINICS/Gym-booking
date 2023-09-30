@@ -14,7 +14,7 @@ import WorkoutPrograms from "./Components/pages/workout_program";
 import Services from "./Components/pages/services";
 import Profile from "./Components/pages/profile_user";
 import ChangePSW from "./Components/pages/member/change_password";
-import BookingSCH from "./Components/pages/member/booking_schedule";
+import BookingSCH from "./Components/pages/booking_schedule/booking_schedule";
 import AdminTools from "./Components/pages/admin";
 import ComplaintHandling from "./Components/pages/admin/admin_complaint_handling/Complaint_control";
 import RoomManagement from "./Components/pages/admin/admin_room_control/room_control";

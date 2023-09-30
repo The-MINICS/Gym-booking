@@ -1,4 +1,3 @@
-
 type Props = {
     name?: string;
     description?: string;
@@ -25,4 +24,4 @@ const Class = ({ name, description, room, attendant, image }: Props) => {
   );
 }
 
-export default Class
+export default Class;
