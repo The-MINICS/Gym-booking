@@ -166,6 +166,49 @@ func UpdateMember(c *gin.Context) {
 
 }
 
+func ChangePassword(c *gin.Context) {
+	var member entity.Member
+
+	// Bind the JSON request to a struct
+	if err := c.ShouldBindJSON(&member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Verify the user's identity by checking the old password
+	// Retrieve the user's current hashed password from the database
+	if tx := entity.DB().Where("id = ?", member.ID).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
+		return
+	}
+	// Verify the old password
+	if err := bcrypt.CompareHashAndPassword([]byte(member.Password), []byte(member.OldPassword)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Current password is incorrect"})
+		return
+	}
+
+	// Validate the new password and confirmation
+	if member.NewPassword != member.ConfirmNewPassword {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "New password and confirmation do not match"})
+		return
+	}
+
+	// Hash the new password
+	newHashedPassword, err := bcrypt.GenerateFromPassword([]byte(member.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error hashing new password"})
+		return
+	}
+
+	// Update the user's password in the database with the new hashed password
+	if err := entity.DB().Model(&member).Update("Password", string(newHashedPassword)).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating password"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Password changed successfully"})
+}
+
 // DELETE /members/:id
 func DeleteMember(c *gin.Context) {
 	id := c.Param("id")

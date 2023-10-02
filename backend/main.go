@@ -1,14 +1,13 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"time"
 
 	"github.com/chonticha1844/Gym-booking/controller"
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/chonticha1844/Gym-booking/middlewares"
 	"github.com/gin-gonic/gin"
-	"github.com/robfig/cron"
 )
 
 const PORT = "9999"
@@ -47,6 +46,7 @@ func main() {
 			protected.GET("/member/:id", controller.GetMember)
 			protected.GET("/members", controller.ListMembers)
 			protected.PATCH("/members", controller.UpdateMember)
+			protected.PATCH("/members//change-password", controller.ChangePassword)
 			protected.DELETE("/members/:id", controller.DeleteMember)
 
 			// Room Routes
@@ -117,45 +117,67 @@ func main() {
 			protected.GET("/date/:id", controller.GetDate)
 			protected.PATCH("/dates", controller.UpdateDate)
 			protected.DELETE("/dates/:id", controller.DeleteDate)
+
 		}
 	}
 
 	// Run the server go run main.go
 	r.Run("localhost: " + PORT)
 
-	// Create a new cron scheduler
-	c := cron.New()
+	// // Create a new cron scheduler
+	// c := cron.New()
+
+	// var timeslot entity.Timeslot
 
 	// // Define the cron schedule (every minute)
 	// c.AddFunc("* * * * *", func() {
 	// 	currentTime := time.Now()
-	// 	targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 01, 35, 0, 0, currentTime.Location())
+	// 	targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 04, 23, 0, 0, currentTime.Location())
 
 	// 	if currentTime.Equal(targetTime) {
-	// 		// Add your code to update the "Quantity" column in the "timeslot" table here
-	// 		entity.DB().Model(&entity.Timeslot{}).Update("Quantity", 0)
+	// 		if err := entity.DB().Model(&timeslot).Where("1 = 1").Update("Quantity", 0).Error; err != nil {
+	// 			fmt.Println("Error deleting records:", err)
+	// 			return
+	// 		}
 	// 	}
 	// })
 
-	c.AddFunc("* * * * *", func() {
-		currentTime := time.Now()
-		targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 1, 40, 0, 0, currentTime.Location())
+	// c.Start()
 
-		if currentTime.Equal(targetTime) {
-			// Add your code to delete all records in the "booking" table here
-			if err := entity.DB().Where("1 = 1").Delete(&entity.Booking{}).Error; err != nil {
-				// Handle the error if the delete operation fails
-				log.Println("Error deleting records:", err)
-			} else {
-				log.Println("All records in the 'booking' table deleted.")
+	// // Keep the program running
+	// select {}
+
+	// Create a ticker that checks the time every minute
+	ticker := time.NewTicker(1 * time.Minute)
+
+	// Run a background goroutine to perform the update at 6 AM
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				// Get the current time
+				now := time.Now()
+
+				// Check if the current time is 6 AM
+				if now.Hour() == 5 && now.Minute() == 47 {
+					// Perform the update here
+					updateTimeslotQuantity()
+				}
 			}
 		}
-	})
+	}()
 
-	c.Start()
-
-	// Keep the program running
+	// Keep the application running
 	select {}
+
+}
+
+func updateTimeslotQuantity() {
+	var timeslot entity.Timeslot
+	if err := entity.DB().Model(&timeslot).Where("1 = 1").Update("Quantity", 0).Error; err != nil {
+		fmt.Println("Error to update quantity!")
+		return
+	}
 }
 
 func CORSMiddleware() gin.HandlerFunc {

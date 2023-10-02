@@ -29,16 +29,19 @@ type Gender struct {
 // Member
 type Member struct {
 	gorm.Model
-	Username        string `gorm:"uniqueIndex" valid:"required~Please enter your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
-	Email           string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please enter your email."`
-	Password        string `valid:"required~Please enter your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
-	Firstname       string `valid:"required~Please enter your firstname"`
-	Lastname        string `valid:"required~Please enter your lastname"`
-	Phonenumber     string `valid:"matches(^0([6|8|9])([0-9]{8}$))~Phone number is not correct."`
-	Age             int32
-	Weight          int32
-	Height          int32
-	Member_datetime time.Time
+	Username           string `gorm:"uniqueIndex" valid:"required~Please enter your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
+	Email              string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please enter your email."`
+	Password           string `valid:"required~Please enter your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
+	Firstname          string `valid:"required~Please enter your firstname"`
+	Lastname           string `valid:"required~Please enter your lastname"`
+	Phonenumber        string `valid:"matches(^0([6|8|9])([0-9]{8}$))~Phone number is not correct."`
+	Age                int32
+	Weight             int32
+	Height             int32
+	Member_datetime    time.Time
+	OldPassword        string
+	NewPassword        string
+	ConfirmNewPassword string
 
 	GenderID *uint
 	Gender   Gender `gorm:"references:id" valid:"-"`
