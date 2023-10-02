@@ -106,7 +106,6 @@ function BookingSCH(){
                 const start = new Date(booking.Datetime || 0);
                 const end = new Date(booking.Datetime || 0);
                 end.setHours(start.getHours() + 5);
-
                 return {
                     title: booking.Room?.Activity + ' ' + 'room booking',
                     start,
@@ -256,7 +255,6 @@ function BookingSCH(){
                                 borderRadius: '8px',
                                 zIndex: 1000,
                                 maxHeight: '80vh',
-                                overflowY: 'auto',
                             }}
                             >
                                 <div ref={dialogContentRef}
@@ -272,7 +270,7 @@ function BookingSCH(){
                                             <p className="text-slate-300 font-light text-sm text-center uppercase">({members.Username}) {members.Firstname} {members.Lastname}</p>
                                         </div>
                                         <Divider/>
-                                        <div className="mb-3 mt-1">
+                                        <div className="mb-3 mt-1 event-card">
                                         {EquipmentBooks.filter((EQbooks: EquipmentBookingInterface) => (EQbooks.BookingID) === bookingShow)
                                             .map((EQbooks) => (
                                                 <React.Fragment>

@@ -55,7 +55,7 @@ function WorkoutPrograms(){
             <button className="flex font-semibold text-2xl py-2 text-pink-700 
                 w-full text-left items-center justify-between px-5"
                 onClick={()=> setIsExpanded1(!isExpanded1)}
-            >
+                >
                 THE BEST 15-MINUTE WARM-UPS
                 <div className="ml-2">
                     {isChevronDown1 && <ChevronDown size={42}/>}
@@ -69,7 +69,7 @@ function WorkoutPrograms(){
             <button className="flex font-semibold text-2xl py-2 text-pink-700 
                 w-full text-left items-center justify-between px-5"
                 onClick={()=> setIsExpanded2(!isExpanded2)}
-            >
+                >
                 HOW TO GAIN MASS FAST: 20 WEEK QUICK START PROGRAM
                 <div className="ml-2">
                     {isChevronDown2 && <ChevronDown size={42}/>}

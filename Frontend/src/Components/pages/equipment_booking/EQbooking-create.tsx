@@ -21,6 +21,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
+import { ChevronDown, ChevronUp } from "react-feather";
 import { 
   Dialog, DialogActions, DialogContent, DialogContentText,  
   DialogTitle, Button,
@@ -58,6 +59,9 @@ function EquipmentBookingCreate() {
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
     const [bookingChecked, setBookingChecked] = useState(false);
+    const [showSCH, setShowSCH] = useState(false);
+    const [showSCHid, setShowSCHid] = useState<number>();
+    const [expandedItems, setExpandedItems] = useState<number[]>([]);
     const roles = localStorage.getItem("role");
 
     const [success, setSuccess] = useState(false);
@@ -66,6 +70,7 @@ function EquipmentBookingCreate() {
 
     const Noholdstate = `bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
     hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all`
+    //const DisabledState = `p-1 shadow flex items-center justify-center gap-1 w-max rounded bg-gray-300 opacity-70"`
     const Holdstate = `bg-yellow-500 p-1 shadow flex items-center justify-center rounded gap-1 w-max
     active:scale-[.98] active:duration-75 transition-all`
 
@@ -80,14 +85,14 @@ function EquipmentBookingCreate() {
     const handleDialogDeleteOpen = (ID: number) => {
       setDeleteID(ID)
       setOpenDelete(true)
-  }
-  const handleDialogDeleteclose = () => {
+    }
+    const handleDialogDeleteclose = () => {
       setOpenDelete(false)
       setTimeout(() => {
           setDeleteID(0)
       }, 500)
-  }
-  const handleDelete = async () => {
+    }
+    const handleDelete = async () => {
       let res = await EquipmentBookDelete(deleteID)
       if (res) {
           console.log(res.data)
@@ -98,7 +103,7 @@ function EquipmentBookingCreate() {
       setTimeout(() => {
         window.location.href = "/equipmentbooking-create";
       }, 1000);
-  }
+    }
 
     const buttonEQTimeHandler = (id:any, value: any) => {
       const EquipmentTimeSlotID = convertType(id);
@@ -122,7 +127,7 @@ function EquipmentBookingCreate() {
       }
       setSuccess(false);
       setError(false);
-  };
+    };
 
   const handleDialogEQBookingOpen = (eqID: any) => {
     setOpenEQBooking(false);
@@ -147,6 +152,20 @@ function EquipmentBookingCreate() {
     setBookingChecked(true);
   };
 
+  const showEQBookingList = (bookID: any) => {
+    setShowSCH(!showSCH);
+    const BookingID = convertType(bookID);
+    setShowSCHid(BookingID);
+  }
+
+  const toggleExpand = (id: number) => {
+    if (expandedItems.includes(id)) {
+      setExpandedItems((prevState) => prevState.filter((item) => item !== id));
+    } else {
+      setExpandedItems((prevState) => [...prevState, id]);
+    }
+  };
+
   const handleDialogEQBookingClose = () => {
     setOpenEQBooking(false)
   }
@@ -158,101 +177,101 @@ function EquipmentBookingCreate() {
       return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
     
-    const GetMembers = async () => {
-      let res = await GetMemberByMID();
-      if (res) {
-          setMembers(res);
+  const GetMembers = async () => {
+    let res = await GetMemberByMID();
+    if (res) {
+      setMembers(res);
+    }
+  };
+
+  const getEquipmentBookings = async () => {
+    let res = await GetEquipmentBookings();
+    if (res) {
+      setEquipmentBooks(res);
+    }
+  };
+
+  const getEquipments = async () => {
+    let res = await GetEquipments();
+    if (res) {
+      setEquipments(res);
+    }
+  };
+
+  const getPictures = async () => {
+    let res = await GetPictures();
+    if (res) {
+      setPictures(res);
+    }
+  };
+
+  const getEquipmentTimeSlot = async () => {
+    let res = await GetEquipmentTimeSlot();
+    if (res) {
+      setEQTimeSlot(res);
       }
+  };
+
+  const getBooks = async () => {
+    let res = await GetBooks();
+    if (res) {
+      setBooks(res);
+    }
+  };
+
+  const convertType = (data: string | number | undefined) => {
+    let val = typeof data === "string" ? parseInt(data) : data;
+      return val;
+  };
+
+  useEffect(() => {
+    GetMembers();
+    getEquipmentBookings();
+    getEquipments();
+    getEquipmentTimeSlot();
+    getBooks();
+    getPictures();
+  }, []);
+
+  async function submit() {
+    let data = {
+      EquipmentNote: equipmentBook.EquipmentNote,
+      EquipmentID: convertType(equipmentBook.EquipmentID),
+      EquipmentTimeslotID: convertType(equipmentBook.EquipmentTimeslotID),
+      BookingID: convertType(equipmentBook.BookingID),
     };
+    console.log(data)
+    const apiUrl = "http://localhost:9999";
 
-    const getEquipmentBookings = async () => {
-      let res = await GetEquipmentBookings();
-      if (res) {
-        setEquipmentBooks(res);
-      }
-    };
-
-    const getEquipments = async () => {
-      let res = await GetEquipments();
-      if (res) {
-        setEquipments(res);
-      }
-    };
-
-    const getPictures = async () => {
-      let res = await GetPictures();
-      if (res) {
-        setPictures(res);
-      }
-    };
-
-    const getEquipmentTimeSlot = async () => {
-        let res = await GetEquipmentTimeSlot();
-        if (res) {
-          setEQTimeSlot(res);
-        }
-    };
-
-    const getBooks = async () => {
-        let res = await GetBooks();
-        if (res) {
-          setBooks(res);
-      }
-    };
-
-    const convertType = (data: string | number | undefined) => {
-        let val = typeof data === "string" ? parseInt(data) : data;
-        return val;
-    };
-
-    useEffect(() => {
-        GetMembers();
-        getEquipmentBookings();
-        getEquipments();
-        getEquipmentTimeSlot();
-        getBooks();
-        getPictures();
-    }, []);
-
-    async function submit() {
-      let data = {
-          EquipmentNote: equipmentBook.EquipmentNote,
-          EquipmentID: convertType(equipmentBook.EquipmentID),
-          EquipmentTimeslotID: convertType(equipmentBook.EquipmentTimeslotID),
-          BookingID: convertType(equipmentBook.BookingID),
-      };
-      console.log(data)
-      const apiUrl = "http://localhost:9999";
-
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-      };
-    
-      fetch(`${apiUrl}/equipmentbookings`, requestOptions)
-        .then((response) => response.json())
-        .then((res) => {
-          console.log(res)
-          if (res.data) {
-            console.log("seved")
-            setSuccess(true);
-            setErrorMessage("")
-            setTimeout(() => {
-              window.location.href = "/equipmentbooking-create";
-          }, 1000);
-          } else {
-            console.log("save failured!")
-            setError(true);
-            setErrorMessage(res.error)
-          }
-      });
+      },
+      body: JSON.stringify(data)
+    };
+
+    fetch(`${apiUrl}/equipmentbookings`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+      console.log(res)
+        if (res.data) {
+          console.log("seved")
+          setSuccess(true);
+          setErrorMessage("")
+          setTimeout(() => {
+            window.location.href = "/equipmentbooking-create";
+        }, 1000);
+        } else {
+          console.log("save failured!")
+          setError(true);
+          setErrorMessage(res.error)
+        }
+    });
   }
 
-    return (
+  return (
     <div className="w-full">
         <motion.div className="mx-auto w-5/6 pt-10 pb-5 bg-center">
           {/* Snackbar */}
@@ -310,16 +329,22 @@ function EquipmentBookingCreate() {
                     <>
                     {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
                       .map((BookTime) => (
-                          <button key={BookTime.ID}
-                            onClick={() => buttonRoomBookingHandler(BookTime.ID, BookTime.TimeslotID, BookTime.Timeslot?.Slot, 
-                              dayjs(BookTime.Datetime).format('YYYY-MM-DD'))}
-                            className= {holdStateButtonBookTime === BookTime.ID ? `${Holdstate}` : `${Noholdstate}`}
-                            >
-                              <EventAvailableIcon/>
-                              <p className="font-bold">{dayjs(BookTime.Datetime).format('YYYY-MM-DD')}</p> : 
-                              <AccessTimeIcon/>
-                              <p className="font-bold">{BookTime.Timeslot?.Slot}</p>
-                          </button>
+                        <React.Fragment>
+                          {BookTime.Room?.Activity && (BookTime.Room?.Activity.includes("fitness") || BookTime.Room?.Activity.includes("Fitness")) ? 
+                            (
+                              <button key={BookTime.ID}
+                                onClick={() => buttonRoomBookingHandler(BookTime.ID, BookTime.TimeslotID, BookTime.Timeslot?.Slot, 
+                                  dayjs(BookTime.Datetime).format('YYYY-MM-DD'))}
+                                className= {holdStateButtonBookTime === BookTime.ID ? `${Holdstate}` : `${Noholdstate}`}
+                                >
+                                  <EventAvailableIcon/>
+                                  <p className="font-bold">{dayjs(BookTime.Datetime).format('YYYY-MM-DD')}</p> : 
+                                  <AccessTimeIcon/>
+                                  <p className="font-bold">{BookTime.Timeslot?.Slot}</p>
+                              </button>
+                            ) : ("")
+                          }
+                        </React.Fragment>
                       ))
                     }
                     </>
@@ -340,19 +365,33 @@ function EquipmentBookingCreate() {
                       <>
                       {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === equipmentTime)
                         .map((eqTime) => (
-                          <button key={eqTime.ID}
-                            onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
-                            className= {holdStateButtonEQTime === eqTime.ID ? `${Holdstate}` : `${Noholdstate}`}
-                            >
-                              <AccessTimeIcon/>
-                              <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
-                          </button>
+                          <React.Fragment>
+                            {/* {EquipmentBooks.filter((eqBook: EquipmentBookingInterface) => (eqBook.EquipmentTimeslotID) != eqTime.ID)
+                              .map((eqBook) => (
+                                <React.Fragment>
+                                  <button disabled
+                                    className={DisabledState}
+                                    >
+                                      <AccessTimeIcon/>
+                                      <p className="text-center font-medium">{eqBook.EquipmentTimeslot?.Equipmentslot}</p>
+                                  </button>
+                                </React.Fragment>
+                              ))
+                            } */}
+                            <button key={eqTime.ID}
+                              onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
+                              className= {holdStateButtonEQTime === eqTime.ID ? `${Holdstate}` : `${Noholdstate}`}
+                              >
+                                <AccessTimeIcon/>
+                                <p className="text-center font-medium">{eqTime.Equipmentslot}</p>
+                            </button>
+                          </React.Fragment> 
                         ))
                       }
                       </>
                       ) : (
                       <p className="text-red-500 italic">
-                        Please choose "Your Fitness Room" above!
+                        Please select "Your Fitness Room" above!
                       </p>
                       )
                     }
@@ -401,31 +440,67 @@ function EquipmentBookingCreate() {
                         </li>
                       </ul>
                       <p>Equipment Booking List:</p>
-                        {EquipmentBooks.filter((EQBookShow: EquipmentBookingInterface) => (EQBookShow.Booking?.MemberID) === members.ID)
-                          .map((EQBookShow) => (
-                            <Grid container className="bg-pink-100 my-2 px-2 py-2 rounded-lg mx-auto">
-                              <Grid item xs={9}>
-                                <ul className="px-2">
-                                  <li><span className="font-semibold">EQ: </span>{EQBookShow.Equipment?.Name}</li>
-                                  <li><span className="font-semibold">Period: </span>{EQBookShow.EquipmentTimeslot?.Equipmentslot}</li>
-                                  <li><span className="font-semibold">Date: </span>
-                                    {dayjs(EQBookShow.EquipmentDatetime).format('YYYY-MM-DD')}
-                                  </li>
-                                  <li className="text-green-700"><span className="font-semibold">Note: </span>
-                                    "{EQBookShow.EquipmentNote}"
-                                  </li>
-                                </ul> 
-                              </Grid>
-                              <Grid item xs={3} style={{ textAlign: "right" }}>
-                                <button className="cursor-pointer active:scale-[.98] active:duration-75 transition-all mb-2"
-                                  onClick={() => {handleDialogDeleteOpen(Number(EQBookShow.ID))}}
-                                  >
-                                  <CancelIcon/>
-                                </button>
-                              </Grid>
-                          </Grid>
-                          ))
-                        }
+                      <div>
+                        {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
+                            .map((BookTime, index) => (
+                              <React.Fragment>
+                                <div className="my-1">
+                                  {BookTime.Room?.Activity && (BookTime.Room?.Activity.includes("fitness") || BookTime.Room?.Activity.includes("Fitness")) ? 
+                                    (
+                                      <button key={index}
+                                        onClick={() => {
+                                          showEQBookingList(BookTime.ID);
+                                          toggleExpand(index);
+                                          }
+                                        }
+                                        className= "bg-slate-50 p-1 shadow flex items-center justify-between rounded gap-1 w-full"
+                                        >
+                                          <p className="font-medium">{dayjs(BookTime.Datetime).format('YYYY-MM-DD')} : {BookTime.Timeslot?.Slot}</p>
+                                          <button>
+                                            {expandedItems.includes(index) ? <ChevronUp /> : <ChevronDown />}
+                                          </button>
+                                      </button>
+                                    ) : ("You haven't got any Equipment List that you booked yet!")
+                                  }
+                                  <div className="EQ-SCH-show">
+                                    {showSCH && expandedItems.includes(index) && (
+                                      <React.Fragment>
+                                      {EquipmentBooks.filter((EQBookShow: EquipmentBookingInterface) => ((EQBookShow.Booking?.MemberID) === members.ID) &&
+                                        (EQBookShow.BookingID === showSCHid)) 
+                                        .map((EQBookShow) => (
+                                          <div className="sticky-header">
+                                            <Grid container className="bg-pink-100 my-2 px-2 py-2 rounded-lg mx-auto">
+                                              <Grid item xs={9}>
+                                                <ul className="px-2">
+                                                  <li><span className="font-semibold">EQ: </span>{EQBookShow.Equipment?.Name}</li>
+                                                  <li><span className="font-semibold">Period: </span>{EQBookShow.EquipmentTimeslot?.Equipmentslot}</li>
+                                                  <li><span className="font-semibold">Date: </span>
+                                                    {dayjs(EQBookShow.EquipmentDatetime).format('YYYY-MM-DD')}
+                                                  </li>
+                                                  <li className="text-green-700"><span className="font-semibold">Note: </span>
+                                                    "{EQBookShow.EquipmentNote}"
+                                                  </li>
+                                                </ul> 
+                                              </Grid>
+                                              <Grid item xs={3} style={{ textAlign: "right" }}>
+                                                <button className="cursor-pointer active:scale-[.98] active:duration-75 transition-all mb-2"
+                                                  onClick={() => {handleDialogDeleteOpen(Number(EQBookShow.ID))}}
+                                                  >
+                                                  <CancelIcon/>
+                                                </button>
+                                              </Grid>
+                                            </Grid>
+                                          </div>
+                                        ))
+                                      }
+                                      </React.Fragment>
+                                    )}
+                                  </div>
+                                </div>
+                              </React.Fragment>
+                            ))
+                          } 
+                        </div>
                     </div>
                   </Grid>
                 </Grid>
@@ -450,9 +525,9 @@ function EquipmentBookingCreate() {
                       borderRadius: '8px',
                       zIndex: 1000,
                   }}
-                  >
+                    >
                       <div ref={dialogContentRef}
-                  >
+                    >
                       <div>
                           <h1 className="text-center font-bold text-purple-800 font-monserrat text-2xl mb-3">
                               Equipment Booking
@@ -478,7 +553,7 @@ function EquipmentBookingCreate() {
                               <li className="font-bold">UserName: <span className="font-medium text-red-900">{members.Username}</span></li>
                               <li className="font-bold">Full-Name: <span className="font-medium text-red-900">{members.Firstname} {members.Lastname}</span></li>
                               <li className="font-bold">Date & Period: <span className="font-medium text-red-900">"{roomBookingTime}" : "{roomTimeShow}"</span></li>
-                              <li className="font-bold">Equipment Booking: <span className="font-medium text-red-900">{`"${clickedButtonEQTime}"`}</span></li>
+                              <li className="font-bold">Equipment Booking: <span className="font-bold text-red-900">{`"${clickedButtonEQTime}"`}</span></li>
                               <li className="font-bold">Catergory: <span className="font-medium text-red-900">{`"${clickedButtonEQGroup}"`}</span></li>
                             </ul>
                             <div className="ml-10">
@@ -503,13 +578,13 @@ function EquipmentBookingCreate() {
                       <div className="flex justify-center items-center gap-3 my-3">
                           <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
                               onClick={handleDialogEQBookingClose}
-                          >
+                            >
                               <CancelIcon/> Cancel
                           </button>
                           <button className="rounded px-2 py-1 text-white font-semibold
                               bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
                               onClick={submit}
-                          >
+                            >
                               <CheckIcon/> Book Now!
                           </button>
                       </div>
@@ -583,12 +658,21 @@ function EquipmentBookingCreate() {
           <div>
             {Equipments.filter((EQitems: EquipmentInterface) => (EQitems.PictureID) === holdStateButtonEQGroup)
               .map((EQitems ,index) => (
-                <>
-                  <button key={index} onClick={() => handleDialogEQBookingOpen(EQitems.ID)}
-                    className="rounded active:scale-[.98] active:duration-75 transition-all bg-slate-100 p-4 hover:bg-yellow-500 m-3">
-                    <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${index}`}/>
-                  </button>
-                </>
+                <React.Fragment>
+                  {(EQitems.StatusID === 1) ? (
+                    <button key={index} onClick={() => handleDialogEQBookingOpen(EQitems.ID)}
+                      className="rounded active:scale-[.98] active:duration-75 transition-all bg-slate-100 p-4 hover:bg-yellow-500 m-3">
+                      <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${index}`}/>
+                      <p className="mt-2">{EQitems.Name}({index+1})</p>
+                    </button>
+                  ):(
+                    <button disabled
+                        className="rounded bg-gray-300 p-4 m-3 opacity-70">
+                      <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${index}`}/>
+                      <p className="mt-2 text-gray-700">{EQitems.Name}({index+1})</p>
+                    </button>
+                  )}
+                </React.Fragment>
               ))
             }
           </div>

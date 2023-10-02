@@ -234,7 +234,7 @@ function MemberUpdate() {
                       <div>
                         <label className="text-lg font-semibold text-red-700">FirstName</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your FirstName"
                           id="Firstname"
                           name="firstname"
@@ -245,7 +245,7 @@ function MemberUpdate() {
                         />
                         <label className="text-lg font-semibold text-red-700">LastName</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Lastname"
                           id="Lastname"
                           name="lastname"
@@ -256,7 +256,7 @@ function MemberUpdate() {
                         />
                         <label className="text-lg font-semibold text-red-700">Username</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Username"
                           id="Username"
                           name="username"
@@ -267,7 +267,7 @@ function MemberUpdate() {
                         />
                         <label className="text-lg font-semibold text-red-700">Email</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Email"
                           id="Email"
                           name="email"
@@ -276,20 +276,9 @@ function MemberUpdate() {
                           value={member.Email || ""}
                           onChange={handleInputChange}
                         />
-                        {/* <label className="text-lg font-semibold text-red-700">Password</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-white bg-red-400"
-                          placeholder="Enter your Password"
-                          id="Password"
-                          name="password"
-                          type="password"
-                          autoFocus
-                          value={member.Password || ""}
-                          onChange={handleInputChange}
-                        /> */}
                         <label className="text-lg font-semibold text-red-700">Phone Number</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Email"
                           id="Phonenumber"
                           name="phonenumber"
@@ -300,7 +289,7 @@ function MemberUpdate() {
                         />
                         <label className="text-lg font-semibold text-red-700">Gender</label>
                         <Select
-                          className="border-2 mt-1 mb-4 w-full rounded-2xl text-white border-black bg-red-400"
+                          className="border-2 mt-1 mb-4 w-full rounded-2xl font-medium border-black bg-gray-50"
                           native
                           value={member.GenderID + ""}
                           onChange={handleChange}
@@ -316,7 +305,7 @@ function MemberUpdate() {
                         </Select>
                         <label className="text-lg font-semibold text-red-700">Age</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Age"
                           id="Age"
                           name="age"
@@ -327,7 +316,7 @@ function MemberUpdate() {
                         />
                         <label className="text-lg font-semibold text-red-700">Weight(Kg.)</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Weight"
                           id="Weight"
                           name="weight"
@@ -338,7 +327,7 @@ function MemberUpdate() {
                         />
                         <label className="text-lg font-semibold text-red-700">Height(cm.)</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 text-white border-black bg-red-400"
+                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
                           placeholder="Enter your Height"
                           id="Height"
                           name="Height"
@@ -349,7 +338,7 @@ function MemberUpdate() {
                         />
                       </div>
                       
-                      <div className="mt-4 flex flex-col gap-y-4">
+                      <div className="mt-5 flex flex-col gap-y-4">
                           <button 
                             className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
                             py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
@@ -358,12 +347,22 @@ function MemberUpdate() {
                               Edit Now
                           </button>
                       </div>
-                      <div className="mt-4 flex flex-col gap-y-4">
+                      <div className="mt-2 flex flex-col gap-y-4">
                           <button 
-                            className="bg-gray-50 text-lg font-bold rounded-xl 
+                            className="text-white bg-orange-700 text-lg font-bold rounded-xl 
                             py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
                             >
-                              <Link to="/member-manage">
+                              <Link to="/chpassword">
+                                Change My Password
+                              </Link>
+                          </button>
+                      </div>
+                      <div className="mt-2 flex flex-col gap-y-4">
+                          <button 
+                            className="bg-red-500 text-lg font-bold rounded-xl text-white
+                            py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                            >
+                              <Link to="/profile">
                                 Cancel
                               </Link>
                           </button>
@@ -396,11 +395,6 @@ function MemberUpdate() {
                           alt="login-page-graphic"
                           src={SignUpPageGraphic3}
                         />
-                        <div className="relative">
-                            <div className="before:absolute before:-bottom-30 before:-right-10 
-                              before:z-[-1] md:before:content-evolvetext">
-                            </div>
-                        </div>
                     </motion.div>
                 </div>
           </motion.div>
