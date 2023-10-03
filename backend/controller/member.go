@@ -175,6 +175,10 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 
+	var newOldPassword = member.OldPassword
+	var newNewPassword = member.NewPassword
+	var newConfirmNewPassword = member.ConfirmNewPassword
+
 	// Retrieve the user's current hashed password from the database
 	if tx := entity.DB().Where("id = ?", member.ID).First(&member); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
@@ -182,67 +186,61 @@ func ChangePassword(c *gin.Context) {
 	}
 
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
-	hashPassword1, err := bcrypt.GenerateFromPassword([]byte(member.OldPassword), 14)
+	hashedOldPassword, err := bcrypt.GenerateFromPassword([]byte(newOldPassword), 14)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
 		return
 	}
 
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
-	hashPassword2, err := bcrypt.GenerateFromPassword([]byte(member.NewPassword), 14)
+	hashedNewPassword, err := bcrypt.GenerateFromPassword([]byte(newNewPassword), 14)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
 		return
 	}
 
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
-	hashPassword3, err := bcrypt.GenerateFromPassword([]byte(member.ConfirmNewPassword), 14)
+	hashedConfirmNewPassword, err := bcrypt.GenerateFromPassword([]byte(newConfirmNewPassword), 14)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
 		return
 	}
 
+	// การ validate
+	if _, err := govalidator.ValidateStruct(member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	update_password := entity.Member{
 		Model:              gorm.Model{ID: member.ID},
-		OldPassword:        string(hashPassword1),
-		NewPassword:        string(hashPassword2),
-		ConfirmNewPassword: string(hashPassword3),
+		OldPassword:        string(hashedOldPassword),
+		NewPassword:        string(hashedNewPassword),
+		ConfirmNewPassword: string(hashedConfirmNewPassword),
 	}
 
 	if tx := entity.DB().Where("id = ?", member.ID).Updates(&update_password).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": tx.Error()})
 		return
 	}
+	c.JSON(http.StatusOK, gin.H{"data": update_password})
 
 	// Verify the old password
-	if err := bcrypt.CompareHashAndPassword([]byte(member.Password), []byte(member.OldPassword)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(member.Password), []byte(newOldPassword)); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Current password is incorrect"})
 		return
 	}
 
-	var newPassword = member.NewPassword
-	var confirmPassword = member.ConfirmNewPassword
-
 	// Validate the new password and confirmation
-	if newPassword != confirmPassword {
+	if newNewPassword != newConfirmNewPassword {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "New password and confirmation do not match"})
 		return
 	}
 
-	// Hash the new password
-	newHashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Error hashing new password"})
-		return
-	}
-
 	// Update the user's password in the database with the new hashed password
-	if err := entity.DB().Model(&member).Update("Password", string(newHashedPassword)).Error; err != nil {
+	if err := entity.DB().Model(&member).Update("Password", string(hashedNewPassword)).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating password"})
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "Password changed successfully"})
 }
 
 // DELETE /members/:id
