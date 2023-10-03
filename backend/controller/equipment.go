@@ -15,6 +15,7 @@ func CreateEquipment(c *gin.Context) {
 	var picture entity.Picture
 	var room entity.Room
 	var member entity.Member
+	var status entity.Status
 
 	if err := c.ShouldBindJSON(&equipment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -32,9 +33,16 @@ func CreateEquipment(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select the room"})
 		return
 	}
+
 	// ค้นหา member ด้วย id
 	if tx := entity.DB().Where("id = ?", equipment.MemberID).First(&member); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select responsibility"})
+		return
+	}
+
+	// ค้นหา status ด้วย id
+	if tx := entity.DB().Where("id = ?", equipment.StatusID).First(&status); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select status"})
 		return
 	}
 
@@ -44,6 +52,7 @@ func CreateEquipment(c *gin.Context) {
 		Picture: picture,
 		Room:    room,
 		Member:  member,
+		Status:  status,
 	}
 
 	// การ validate
@@ -89,6 +98,7 @@ func UpdateEquipment(c *gin.Context) {
 	var picture entity.Picture
 	var room entity.Room
 	var member entity.Member
+	var status entity.Status
 
 	if err := c.ShouldBindJSON(&equipment); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -117,12 +127,18 @@ func UpdateEquipment(c *gin.Context) {
 		return
 	}
 
+	if tx := entity.DB().Where("id = ?", equipment.StatusID).First(&status); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Status not found"})
+		return
+	}
+
 	update_equipment := entity.Equipment{
 		Model:   gorm.Model{ID: equipment.ID},
 		Name:    new_equipment,
 		Picture: picture,
 		Room:    room,
 		Member:  member,
+		Status:  status,
 	}
 
 	if _, err := govalidator.ValidateStruct(update_equipment); err != nil {

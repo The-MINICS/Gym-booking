@@ -6,9 +6,8 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import equipmentPhoto from "@/assets/equipments.png";
 import { 
         Dialog, DialogActions, DialogContent, DialogContentText,  
-        DialogTitle, Divider, Grid, Paper, Select, 
-        SelectChangeEvent, Button,
-        Table,  TableBody,  TableCell,  TableContainer, TableHead,  TableRow,
+        DialogTitle, Divider, Grid, Paper,  Button, Table,  TableBody,  
+        TableCell,  TableContainer, TableHead,  TableRow,
 } from "@mui/material";
 import { RoomInterface } from "@/interfaces/IRoom";
 import { useEffect, useState } from "react";
@@ -49,14 +48,6 @@ function Booking() {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const handleChange = (event: SelectChangeEvent) => {
-        const name = event.target.name as keyof typeof books;
-        setBooks({
-          ...books,
-          [name]: event.target.value,
-        });
-    };
-
     const handleRoomChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const roomState = event.target.value;
         setRoomState(roomState);
@@ -65,6 +56,11 @@ function Booking() {
     const handleDateChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const RoomDate = event.target.value;
         setRoomDate(RoomDate);
+    }
+
+    const handleMemberChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        const memberID = event.target.value;
+        books.MemberID = convertType(memberID)
     }
 
     const handleInputChange = (
@@ -587,18 +583,16 @@ function Booking() {
                                 }
                                 <div className="flex justify-start items-center gap-2 my-2">
                                     <p className="text-lg font-semibold">Booker: </p>
-                                    <Select
-                                        disabled
-                                        native
-                                        value={books.MemberID + ""}
-                                        onChange={handleChange}
-                                        inputProps={{
-                                            name: "MemberID",
-                                        }}>
+                                    <select disabled
+                                        className="rounded p-2 font-medium cursor-pointer bg-slate-100"
+                                        onChange={handleMemberChange}
+                                        >
                                         <option value={members?.ID} key={members?.ID}>
-                                            {members?.Firstname} {members?.Lastname}
-                                        </option> 
-                                    </Select>
+                                            <p className="font-bold text-red-950">
+                                                {members?.Firstname} {members?.Lastname}
+                                            </p>
+                                        </option>
+                                    </select>
                                 </div>
                                 <div className="my-2">
                                     <div className="flex justify-start items-center gap-2">
@@ -761,7 +755,7 @@ function Booking() {
                                                             </div>
                                                         )}
                                                         {!showButton && (ShowRoomDate === PresentDate) && (
-                                                            <p className="text-red-500 font-medium text-lg text-center italic">Continue Booking Later</p>
+                                                            <p className="text-red-500 font-medium text-lg text-center italic">Out Of Time</p>
                                                         )}
                                                         {(ShowRoomDate != PresentDate) && (
                                                             <div className="text-center pt-4">

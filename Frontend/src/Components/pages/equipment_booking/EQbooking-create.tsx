@@ -460,7 +460,7 @@ function EquipmentBookingCreate() {
                                             {expandedItems.includes(index) ? <ChevronUp /> : <ChevronDown />}
                                           </button>
                                       </button>
-                                    ) : ("You haven't got any Equipment List that you booked yet!")
+                                    ) : ("")
                                   }
                                   <div className="EQ-SCH-show">
                                     {showSCH && expandedItems.includes(index) && (

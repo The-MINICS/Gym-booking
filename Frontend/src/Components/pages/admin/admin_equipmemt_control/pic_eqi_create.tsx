@@ -34,11 +34,11 @@ function PictureEquipmentCreate({ Visible, onClose }:Props){
                 {/* navegation icon */}
                 <Grid item xs={12}>
                     <div className="flex items-center justify-between">
-                        <button onClick={PreviousPage} className="bg-pink-500 text-white px-3 py-1 
+                        <button onClick={PreviousPage} className=" bg-slate-100 px-3 py-1 
                             rounded-md text-base font-medium">
                             <ChevronLeftIcon/> Previous
                         </button>
-                        <button onClick={NextPage} className="bg-pink-500 text-white px-3 py-1 
+                        <button onClick={NextPage} className=" bg-slate-100 px-3 py-1 
                             rounded-md text-base font-medium">
                             Next <ChevronRightIcon/>
                         </button>

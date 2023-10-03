@@ -11,21 +11,22 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
 import { EquipmentInterface } from "@/interfaces/IEquipment";
 import { Select, SelectChangeEvent } from "@mui/material";
-import { GetMemberByMID } from "@/services/HttpClientService";
+import { GetMemberByMID, GetPictures, GetRooms, GetStatus } from "@/services/HttpClientService";
 import { MemberInterface } from "@/interfaces/IMember";
 import { PictureInterface } from "@/interfaces/IPicture";
 import { RoomInterface } from "@/interfaces/IRoom";
+import { StatusInterface } from "@/interfaces/IStatus";
 
 function EquipmentCreate({ onClose }: any ){
     const [equipment, setEquipment] =  useState<EquipmentInterface>({});
     const [members, setMembers] = useState<MemberInterface>();
     const [pictures, setPictures] = useState<PictureInterface[]>([]);
     const [rooms, setRooms] = useState<RoomInterface[]>([]);
+    const [statuses, setStatuses] = useState<StatusInterface[]>([]);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const apiUrl = "http://localhost:9999";
 
     const handleInputChange = (
         event: React.ChangeEvent<{ id?: string; value: any }>
@@ -53,50 +54,6 @@ function EquipmentCreate({ onClose }: any ){
           [name]: event.target.value,
         });
     };
-
-    async function GetPictures() {
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        };
-      
-        let res = await fetch(`${apiUrl}/pictures`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            if (res.data) {
-              return res.data;
-            } else {
-              return false;
-            }
-          });
-      
-        return res;
-    }
-
-    async function GetRooms() {
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        };
-      
-        let res = await fetch(`${apiUrl}/rooms`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            if (res.data) {
-              return res.data;
-            } else {
-              return false;
-            }
-          });
-      
-        return res;
-    }
 
     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
@@ -127,10 +84,18 @@ function EquipmentCreate({ onClose }: any ){
         }
     };
 
+    const getStatuses = async () => {
+        let res = await GetStatus();
+        if (res) {
+          setStatuses(res);
+        }
+    };
+
     useEffect(() => {
         getMembers();
         getPictures();
         getRooms();
+        getStatuses();
     }, []);
 
     const convertType = (data: string | number | undefined) => {
@@ -144,6 +109,7 @@ function EquipmentCreate({ onClose }: any ){
             PictureID: convertType(equipment.PictureID),
             RoomID: convertType(equipment.RoomID),
             MemberID: convertType(equipment.MemberID),
+            StatusID: convertType(equipment.StatusID),
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -208,13 +174,16 @@ function EquipmentCreate({ onClose }: any ){
                             anchorOrigin={{ vertical: "top", horizontal: "center" }}
                             >
                             <Alert onClose={handleClose} severity="error">
-                                Can not create the the equipment! : {errorMessage}
+                                {errorMessage}
                             </Alert>
                         </Snackbar>
 
                         <Grid item xs={7}>
                             <FormControl fullWidth variant="outlined">
-                                <p className="text-lg font-semibold">Title</p>
+                                <div className="flex items-baseline gap-1">
+                                    <p className="text-lg font-semibold">Title</p>
+                                    <p className="text-sm text-red-600 italic">(Ex. "Equipment Name" + "No.1")</p>
+                                </div>
                                 <TextField
                                     required
                                     id="Name"
@@ -248,7 +217,7 @@ function EquipmentCreate({ onClose }: any ){
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 <FormControl fullWidth variant="outlined">
                                     <p className="text-lg font-semibold">Room</p>
                                     <Select
@@ -258,7 +227,7 @@ function EquipmentCreate({ onClose }: any ){
                                         inputProps={{
                                             name: "RoomID",
                                         }}>
-                                        <option aria-label="None" value="">Rooms</option>
+                                        <option aria-label="None" value="">Select the Room</option>
                                         {rooms.map((item: RoomInterface) => (
                                             <option value={item.ID} key={item.ID}>
                                                 {item.Number} ({item.Activity})
@@ -268,7 +237,27 @@ function EquipmentCreate({ onClose }: any ){
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
+                                <FormControl fullWidth variant="outlined">
+                                    <p className="text-lg font-semibold">Status</p>
+                                    <Select
+                                        native
+                                        value={equipment.StatusID + ""}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                            name: "StatusID",
+                                        }}>
+                                        <option aria-label="None" value="">Select the Status</option>
+                                        {statuses.map((item: StatusInterface) => (
+                                            <option value={item.ID} key={item.ID}>
+                                                {item.Status}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item xs={4}>
                                 <FormControl fullWidth variant="outlined">
                                     <p className="text-lg font-semibold">Responsibility</p>
                                     <Select

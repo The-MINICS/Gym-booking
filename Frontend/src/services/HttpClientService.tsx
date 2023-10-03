@@ -442,6 +442,28 @@ async function GetEquipmentTimeSlot() {
   return res;
 }
 
+async function GetStatus() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+  
+  let res = await fetch(`${apiUrl}/statuses`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+  
+  return res;
+}
+
 export {
   Login,
   Members,
@@ -462,5 +484,6 @@ export {
   GetSlot,
   GetDates,
   GetEquipmentBookings,
-  GetEquipmentTimeSlot
+  GetEquipmentTimeSlot,
+  GetStatus
 };

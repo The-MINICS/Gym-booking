@@ -8,6 +8,7 @@ import AdminPhoto from '@/assets/AdministratorProfile.png';
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import KeyIcon from '@mui/icons-material/Key';
 
 function Profile(){
     const navigate = useNavigate();
@@ -91,12 +92,18 @@ function Profile(){
                     <p className="px-3 py-2 font-base text-purple-800">{members.Height} cm.</p>
                 </div>
             </div>
-            <div className="mx-3 py-3 mt-3 flex items-center justify-center">
-                <button className="bg-yellow-500 text-white hover:bg-red-300 rounded px-3 py-3 
+            <div className="py-2 m-2 flex items-center justify-center gap-2">
+                <button className="bg-yellow-500 text-white hover:bg-red-300 rounded p-2
                 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
                     onClick={() => navigate({ pathname: `/member/update/${members.ID}` })}
                 >
                     <EditIcon/> Edit Profile
+                </button>
+                <button className="text-white bg-orange-700 hover:bg-red-300 rounded p-2
+                active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                    onClick={() => navigate({ pathname: `/chpassword` })}
+                >
+                    <KeyIcon/> Change My Password
                 </button>
             </div>
         </motion.div>

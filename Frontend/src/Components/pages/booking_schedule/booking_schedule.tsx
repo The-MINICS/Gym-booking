@@ -16,7 +16,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 
-function BookingSCH(){
+function BookingSCH() {
     const [holdStateCalendarEvent, setHoldStateCalendarEvent] = useState(false);
     const [holdStateCardsEvent, setHoldStateCardsEvent] = useState(true);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -110,10 +110,29 @@ function BookingSCH(){
                     title: booking.Room?.Activity + ' ' + 'room booking',
                     start,
                     end,
-                    description: `Details: ${booking.Note}`
+                    description: (
+                    `(${members.Username})~${members.Firstname} ${members.Lastname}~ 
+                    Room: ${booking.Room?.Activity}
+                    Room Number: ${booking.Room?.Number}
+                    Attendant: ${booking.Room?.Attendant}
+                    Period: ${booking.Timeslot?.Slot}
+                    Note: "${booking.Note}"`
+                    )
                 };
             }
     );
+
+    const eventStyleGetter = () => {
+        const style = {
+          backgroundColor: '#800000',
+          color: 'white',
+          border: '1px solid #ccc',
+        };
+      
+        return {
+          style,
+        };
+    };
 
     return (
     <div className="w-full">
@@ -129,7 +148,7 @@ function BookingSCH(){
                     hidden: { opacity: 0, x:-50 },
                     visible: { opacity: 1, x:-0 }
                 }}
-              >
+                >
                 <h1 className="text-3xl sm:text-6xl font-bold bg-clip-text text-transparent
                  bg-gradient-to-br pb-4 md:pb-4 from-red-500 to-violet-700 dark:from-blue-400">
                     My Calendar Events
@@ -140,7 +159,7 @@ function BookingSCH(){
                     <button id="eventAmt"
                         onClick={() => CalenderEventHandler()}
                         className= {holdStateCalendarEvent ? `${Holdstate}` : `${Noholdstate}`}
-                    >
+                        >
                         <CalendarMonthIcon/>
                     </button>
                     <button id="eventAmt"
@@ -173,10 +192,12 @@ function BookingSCH(){
                             <Calendar
                                 localizer={localizer}
                                 events={events}
-                                views={['month','agenda']}
+                                views={['month']}
                                 startAccessor="start"
                                 endAccessor="end"
                                 style={{ height: 1000, color: "black" }}
+                                eventPropGetter={eventStyleGetter}
+                                tooltipAccessor={(event) => event.description}
                             />
                         </div>
                     )}

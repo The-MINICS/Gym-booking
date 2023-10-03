@@ -12,9 +12,6 @@ import {
 } from '@mui/material';
 import { EquipmentDelete, GetEquipments } from '@/services/HttpClientService';
 import { useNavigate } from "react-router-dom";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 
 function AllEquipment() {
     const navigate = useNavigate();
@@ -32,14 +29,16 @@ function AllEquipment() {
     const handleDialogDeleteOpen = (ID: number) => {
         setDeleteID(ID)
         setOpenDelete(true)
-      }
-      const handleDialogDeleteclose = () => {
+    }
+
+    const handleDialogDeleteclose = () => {
         setOpenDelete(false)
         setTimeout(() => {
             setDeleteID(0)
         }, 500)
-      }
-      const handleDelete = async () => {
+    }
+
+    const handleDelete = async () => {
         let res = await EquipmentDelete(deleteID)
         if (res) {
             console.log(res.data)
@@ -52,19 +51,11 @@ function AllEquipment() {
           window.location.href = "/equipment-manage";
         }, 500);
     }
-
-    const StatusSwitch = () => {
-        return (
-            <FormGroup style={{ alignContent: "center" }}>
-                <FormControlLabel control={<Switch defaultChecked />} label="Available"/>
-            </FormGroup>
-        )
-    }
   
-      useEffect(() => {
+    useEffect(() => {
         getEquipments();
       }, []);
-  
+
     const Transition = React.forwardRef(function Transition(
         props: TransitionProps & {
           children: React.ReactElement<any, any>;
@@ -127,13 +118,14 @@ function AllEquipment() {
                                                     </Button>
                                                 </ButtonGroup>
                                             </TableCell>
-                                            <TableCell align="center">{StatusSwitch()}</TableCell>
+                                            <TableCell align="center">{(row.StatusID === 1) ? ("Available"):("Unavailabe")}</TableCell>
                                     </TableRow>
                                 ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </motion.div>
+
             <Dialog
                 open={openDelete}
                 onClose={handleDialogDeleteclose}
