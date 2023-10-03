@@ -46,7 +46,7 @@ func main() {
 			protected.GET("/member/:id", controller.GetMember)
 			protected.GET("/members", controller.ListMembers)
 			protected.PATCH("/members", controller.UpdateMember)
-			protected.PATCH("/members//change-password", controller.ChangePassword)
+			protected.PATCH("/changepassword", controller.ChangePassword)
 			protected.DELETE("/members/:id", controller.DeleteMember)
 
 			// Room Routes

@@ -54,7 +54,7 @@ function App() {
         <Route path='/programs' element={<WorkoutPrograms/>}/> {}
         <Route path='/bookings' element={<Booking/>}/> {}
         <Route path='/profile' element={<Profile/>}/> {}
-        <Route path='/chpassword' element={<ChangePSW/>}/> {}
+        <Route path='/chpassword/update/:id' element={<ChangePSW/>}/> {}
         <Route path='/bookingsch' element={<BookingSCH/>}/> {}
         <Route path='/admin-tools' element={<AdminTools/>}/> {}
         <Route path='/member-manage' element={<MemberManagement/>}/> {}

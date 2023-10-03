@@ -101,7 +101,7 @@ function Profile(){
                 </button>
                 <button className="text-white bg-orange-700 hover:bg-red-300 rounded p-2
                 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                    onClick={() => navigate({ pathname: `/chpassword` })}
+                    onClick={() => navigate({ pathname: `/chpassword/update/${members.ID}` })}
                 >
                     <KeyIcon/> Change My Password
                 </button>

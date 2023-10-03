@@ -13,6 +13,9 @@ export interface MemberInterface {
     Weight?: number;
     Height?: number;
     Member_datetime?: Date | null;
+    OldPassword?: string;
+    NewPassword?: string;
+    ConfirmNewPassword?: string;
 
     GenderID?: number;
     Gender?: GenderInterface;
