@@ -42,7 +42,7 @@ function Profile(){
                 }}
             >
                 <HText>
-                    <span className="text-red-500">MY PROFILE</span>
+                    <span className="text-red-500">Account Information</span>
                 </HText>
             </motion.div>
         </motion.div>
@@ -64,7 +64,7 @@ function Profile(){
             </div>
             <h1 className="text-center text-base text-slate-500 font-semibold" >{members.Username} ({members.Role?.Role})</h1>
             <h1 className="font-medium text-slate-500 text-center text-base mb-2 italic">
-                    Registration Date: {dayjs(members.Member_datetime).format('YYYY-MM-DD HH:mm:ss')}
+                    Registration Date: {dayjs(members.Member_datetime).format('YYYY-MM-DD')}
             </h1>
             <div className="px-10 py-6 bg-slate-50 mx-40 rounded-3xl text-2xl">
                 <div className="flex items-center justify-start">
@@ -95,16 +95,16 @@ function Profile(){
             <div className="py-2 m-2 flex items-center justify-center gap-2">
                 <button className="bg-yellow-500 text-white hover:bg-red-300 rounded p-2
                 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                    onClick={() => navigate({ pathname: `/member/update/${members.ID}` })}
+                    onClick={() => navigate({ pathname: `/account-setting` })}
                 >
-                    <EditIcon/> Edit Profile
+                    <EditIcon/> Account Settings
                 </button>
-                <button className="text-white bg-orange-700 hover:bg-red-300 rounded p-2
+                {/* <button className="text-white bg-orange-700 hover:bg-red-300 rounded p-2
                 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
                     onClick={() => navigate({ pathname: `/chpassword/update/${members.ID}` })}
                 >
                     <KeyIcon/> Change My Password
-                </button>
+                </button> */}
             </div>
         </motion.div>
     </div>
