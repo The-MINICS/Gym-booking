@@ -70,7 +70,6 @@ function EquipmentBookingCreate() {
 
     const Noholdstate = `bg-slate-100 p-1 shadow flex items-center justify-center rounded gap-1 w-max
     hover:bg-yellow-500 active:scale-[.98] active:duration-75 transition-all`
-    //const DisabledState = `p-1 shadow flex items-center justify-center gap-1 w-max rounded bg-gray-300 opacity-70"`
     const Holdstate = `bg-yellow-500 p-1 shadow flex items-center justify-center rounded gap-1 w-max
     active:scale-[.98] active:duration-75 transition-all`
 
@@ -366,18 +365,6 @@ function EquipmentBookingCreate() {
                       {EQTimeSlot.filter((eqTime: EquipmentTimeslotInterface) => (eqTime.TimeslotID) === equipmentTime)
                         .map((eqTime) => (
                           <React.Fragment>
-                            {/* {EquipmentBooks.filter((eqBook: EquipmentBookingInterface) => (eqBook.EquipmentTimeslotID) != eqTime.ID)
-                              .map((eqBook) => (
-                                <React.Fragment>
-                                  <button disabled
-                                    className={DisabledState}
-                                    >
-                                      <AccessTimeIcon/>
-                                      <p className="text-center font-medium">{eqBook.EquipmentTimeslot?.Equipmentslot}</p>
-                                  </button>
-                                </React.Fragment>
-                              ))
-                            } */}
                             <button key={eqTime.ID}
                               onClick={() => buttonEQTimeHandler(eqTime.ID, eqTime.Equipmentslot)}
                               className= {holdStateButtonEQTime === eqTime.ID ? `${Holdstate}` : `${Noholdstate}`}

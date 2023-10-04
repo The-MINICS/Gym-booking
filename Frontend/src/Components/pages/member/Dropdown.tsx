@@ -14,8 +14,8 @@ const MenuItemMember = [
     cName: 'dropdown-link'
   },
   {
-    title: 'Change My Password',
-    path: '/chpassword',
+    title: 'Account Settings',
+    path: '/account-setting',
     cName: 'dropdown-link'
   }
 ];

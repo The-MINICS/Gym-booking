@@ -11,6 +11,7 @@ import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
 import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
 import { Link, useParams } from "react-router-dom";
+import { GetGenders } from "@/services/HttpClientService";
 
 function MemberUpdate() {
     let { id } = useParams();
@@ -25,11 +26,11 @@ function MemberUpdate() {
 
     const handleInputChange = (
       event: React.ChangeEvent<{ id?: string; value: any }>
-  ) => {
+    ) => {
       const id = event.target.id as keyof typeof member;
       const { value } = event.target;
       setMember({ ...member, [id]: value });
-  };
+    };
 
     const handleClose = (
         event?: React.SyntheticEvent | Event,
@@ -50,48 +51,25 @@ function MemberUpdate() {
       });
     };
 
-    async function GetMemberByMID() {
-        const requestOptions = {
-            method: "GET",
-            headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-            },
-        };
-    
-        let res = await fetch(`${apiUrl}/member/`+id, requestOptions)
-            .then((response) => response.json())
-            .then((res) => {
-            if (res.data) {
-                return res.data;
-            } else {
-                return false;
-            }
-            });
-            return res;
-    }
-
-    async function GetGenders() {
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
+  async function GetMemberByMID() {
+      const requestOptions = {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
           },
         };
-      
-        let res = await fetch(`${apiUrl}/genders`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            if (res.data) {
-              return res.data;
-            } else {
-              return false;
-            }
-          });
-      
-        return res;
-    }
+      let res = await fetch(`${apiUrl}/member/`+id, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+        if (res.data) {
+          return res.data;
+        } else {
+          return false;
+        }
+      });
+    return res;
+  }
 
   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -100,72 +78,72 @@ function MemberUpdate() {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
-    const getMembers = async () => {
-        let res = await GetMemberByMID();
-        if (res) {
-        setMember(res);
-        }
-    };
+  const getMembers = async () => {
+    let res = await GetMemberByMID();
+    if (res) {
+      setMember(res);
+    }
+  };
 
-    const getGenders = async () => {
-      let res = await GetGenders();
-      if (res) {
-       setGenders(res);
-      }
-    };
-    
-    useEffect(() => {
-        getMembers();
-        getGenders();
-    }, []);
+  const getGenders = async () => {
+    let res = await GetGenders();
+    if (res) {
+      setGenders(res);
+    }
+  };
+  
+  useEffect(() => {
+    getMembers();
+    getGenders();
+  }, []);
 
-    const convertType = (data: string | number | undefined) => {
-        let val = typeof data === "string" ? parseInt(data) : data;
-        return val;
-    };
+  const convertType = (data: string | number | undefined) => {
+    let val = typeof data === "string" ? parseInt(data) : data;
+    return val;
+  };
 
-    async function submit() {
-        let data = {
-            ID: member.ID,
-            Firstname: member.Firstname?? "",
-            Lastname: member.Lastname?? "",
-            Username: member.Username?? "",
-            Email: member.Email?? "",
-            Password: member.Password?? "",
-            Phonenumber: member.Phonenumber?? "",
-            Member_datetime: member.Member_datetime,
-            Age: typeof member.Age === "string" ? parseInt(member.Age) : 0,
-            Weight: typeof member.Weight === "string" ? parseInt(member.Weight) : 0,
-            Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
-            GenderID: convertType(member.GenderID),
-            RoleID: convertType(member.RoleID),
-        };
-        console.log(data)
+  async function submit() {
+      let data = {
+        ID: member.ID,
+        Firstname: member.Firstname?? "",
+        Lastname: member.Lastname?? "",
+        Username: member.Username?? "",
+        Email: member.Email?? "",
+        Password: member.Password?? "",
+        Phonenumber: member.Phonenumber?? "",
+        Member_datetime: member.Member_datetime,
+        Age: typeof member.Age === "string" ? parseInt(member.Age) : 0,
+        Weight: typeof member.Weight === "string" ? parseInt(member.Weight) : 0,
+        Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
+        GenderID: convertType(member.GenderID),
+        RoleID: convertType(member.RoleID),
+      };
+      console.log(data)
 
-        const requestOptions = {
-            method: "PATCH",
-            headers: { 
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        };
+      const requestOptions = {
+        method: "PATCH",
+        headers: { 
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+      };
       
-        fetch(`${apiUrl}/members`, requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            console.log(res)
-            if (res.data) {
-              console.log("Saved")
-              setSuccess(true);
-              setErrorMessage("")
-              setTimeout(() => {
-                window.location.href = "/member-manage";
-              }, 1000);
-            } else {
-              console.log("Error!")
-              setError(true);
-              setErrorMessage(res.error)
-            }
+      fetch(`${apiUrl}/members`, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+        console.log(res)
+        if (res.data) {
+          console.log("Saved")
+          setSuccess(true);
+          setErrorMessage("")
+          setTimeout(() => {
+            window.location.href = "/member-manage";
+          }, 1000);
+        } else {
+          console.log("Error!")
+          setError(true);
+            setErrorMessage(res.error)
+          }
         });
     }
 
@@ -238,7 +216,7 @@ function MemberUpdate() {
                           placeholder="Enter your FirstName"
                           id="Firstname"
                           name="firstname"
-                          type="firstname"
+                          type="string"
                           autoFocus
                           value={member.Firstname || ""}
                           onChange={handleInputChange}
