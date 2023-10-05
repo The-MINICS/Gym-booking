@@ -6,7 +6,6 @@ import img4 from "@/assets/HomePageGraphic4.png";
 import { SelectedPage } from "@/shared/types";
 import ActionButton from "@/shared/ActionButton";
 import HomePageText from "@/assets/HomePageText.png";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
 
 type Props = {
@@ -64,13 +63,6 @@ const Home1 = ( { setSelectedPage } : Props) => {
           <ActionButton setSelectedPage={setSelectedPage}>
             Join Now
           </ActionButton>
-          <AnchorLink 
-            className="text-sm font-bold  text-red-400 underline hover:text-yellow-300"
-            onClick={() => setSelectedPage(SelectedPage.JoinNow)}
-            href={`#${SelectedPage.JoinNow}`}
-          >
-            <p>Learn More</p>
-          </AnchorLink>
         </motion.div>
       </div>
 

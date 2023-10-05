@@ -413,7 +413,6 @@ function AccountSettings() {
                                                     name="old_password"
                                                     type="password"
                                                     autoFocus
-                                                    value={member.OldPassword || ""}
                                                     onChange={handleInputChange}
                                                 />
                                             </Grid>
@@ -425,7 +424,6 @@ function AccountSettings() {
                                                     name="new_password"
                                                     type="password"
                                                     autoFocus
-                                                    value={member.NewPassword || ""}
                                                     onChange={handleInputChange}
                                                 />
                                             </Grid>
@@ -437,7 +435,6 @@ function AccountSettings() {
                                                     name="confirm_new_password"
                                                     type="password"
                                                     autoFocus
-                                                    value={member.ConfirmNewPassword || ""}
                                                     onChange={handleInputChange}
                                                 />
                                             </Grid>
