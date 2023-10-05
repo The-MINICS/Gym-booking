@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/chonticha1844/Gym-booking/controller"
 	"github.com/chonticha1844/Gym-booking/entity"
 	"github.com/chonticha1844/Gym-booking/middlewares"
@@ -124,60 +121,6 @@ func main() {
 	// Run the server go run main.go
 	r.Run("localhost: " + PORT)
 
-	// // Create a new cron scheduler
-	// c := cron.New()
-
-	// var timeslot entity.Timeslot
-
-	// // Define the cron schedule (every minute)
-	// c.AddFunc("* * * * *", func() {
-	// 	currentTime := time.Now()
-	// 	targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 04, 23, 0, 0, currentTime.Location())
-
-	// 	if currentTime.Equal(targetTime) {
-	// 		if err := entity.DB().Model(&timeslot).Where("1 = 1").Update("Quantity", 0).Error; err != nil {
-	// 			fmt.Println("Error deleting records:", err)
-	// 			return
-	// 		}
-	// 	}
-	// })
-
-	// c.Start()
-
-	// // Keep the program running
-	// select {}
-
-	// Create a ticker that checks the time every minute
-	ticker := time.NewTicker(1 * time.Minute)
-
-	// Run a background goroutine to perform the update at 6 AM
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				// Get the current time
-				now := time.Now()
-
-				// Check if the current time is 6 AM
-				if now.Hour() == 5 && now.Minute() == 47 {
-					// Perform the update here
-					updateTimeslotQuantity()
-				}
-			}
-		}
-	}()
-
-	// Keep the application running
-	select {}
-
-}
-
-func updateTimeslotQuantity() {
-	var timeslot entity.Timeslot
-	if err := entity.DB().Model(&timeslot).Where("1 = 1").Update("Quantity", 0).Error; err != nil {
-		fmt.Println("Error to update quantity!")
-		return
-	}
 }
 
 func CORSMiddleware() gin.HandlerFunc {

@@ -47,11 +47,14 @@ func CreateEquipmentBooking(c *gin.Context) {
 	}
 
 	//Member จองอุปกรณ์ 1 เครื่องได้แค่ 1 ครั้ง ต่อ 1 เวลา
-	if tx := entity.DB().Where("equipment_timeslot_id = ? ", equipmentbooking.EquipmentTimeslotID).First(&equipmentbooking); tx.RowsAffected != 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 equipment per time slot"})
-		return
+	if *equipmentbooking.StatusID == uint(3) {
+		if tx := entity.DB().Where("equipment_timeslot_id = ? ", equipmentbooking.EquipmentTimeslotID).First(&equipmentbooking); tx.RowsAffected != 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 equipment per time slot"})
+			return
+		}
 	}
 
+	status2 := uint(3)
 	// 14: สร้าง  booking
 	eqbk := entity.EquipmentBooking{
 		EquipmentDatetime: time.Now(),
@@ -59,6 +62,7 @@ func CreateEquipmentBooking(c *gin.Context) {
 		EquipmentTimeslot: equipmenttimeslot,
 		Equipment:         equipment,
 		Booking:           booking,
+		StatusID:          &status2,
 	}
 
 	// การ validate
@@ -177,8 +181,14 @@ func DeleteEquipmentBooking(c *gin.Context) {
 		return
 	}
 
-	if tx := entity.DB().Exec("DELETE FROM equipment_bookings WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "equipment bookings not found"})
+	// if tx := entity.DB().Exec("DELETE FROM equipment_bookings WHERE id = ?", id); tx.RowsAffected == 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "equipment bookings not found"})
+	// 	return
+	// }
+
+	// Update the equipment status to "available"
+	if err := entity.DB().Model(&equipment).Update("StatusID", 4).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
 		return
 	}
 

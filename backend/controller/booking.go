@@ -2,8 +2,6 @@ package controller
 
 import (
 	"net/http"
-	// "strings"
-	// "time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
@@ -17,6 +15,7 @@ func CreateBooking(c *gin.Context) {
 	var room entity.Room
 	var timeslot entity.Timeslot
 	var date entity.Date
+	var status entity.Status
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -47,12 +46,20 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
+	// ค้นหา status ด้วย id
+	if tx := entity.DB().Where("id = ?", booking.StatusID).First(&status); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a date"})
+		return
+	}
+
 	timeslot.Quantity++
 
 	//Member จองแต่ละ time slot ได้แค่ 1 ครั้ง
-	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 times per time slot"})
-		return
+	if *booking.StatusID == uint(3) {
+		if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 times per time slot"})
+			return
+		}
 	}
 
 	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
@@ -60,6 +67,8 @@ func CreateBooking(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "This time slot is fully booked"})
 		return
 	}
+
+	status1 := uint(3)
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
@@ -69,6 +78,7 @@ func CreateBooking(c *gin.Context) {
 		Room:     room,
 		Timeslot: timeslot,
 		Date:     date,
+		StatusID: &status1,
 	}
 
 	// การ validate
@@ -88,26 +98,6 @@ func CreateBooking(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// if strings.Contains(room.Activity, "fitness") || strings.Contains(room.Activity, "Fitness") {
-	// 	var equipmenttimeslot entity.EquipmentTimeslot
-	// 	var equipment entity.Equipment
-
-	// 	// Create an EquipmentBooking record
-	// 	equipmentBooking := entity.EquipmentBooking{
-	// 		EquipmentDatetime: time.Now(),
-	// 		EquipmentTimeslot: equipmenttimeslot,
-	// 		Equipment:         equipment,
-	// 		BookingID:         &bk.ID,
-	// 		MemberID:          &bk.Member.ID,
-	// 	}
-
-	// 	// Save the EquipmentBooking record to the database
-	// 	if err := entity.DB().Create(&equipmentBooking).Error; err != nil {
-	// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 		return
-	// 	}
-	// }
 
 	c.JSON(http.StatusCreated, gin.H{"data": bk})
 
@@ -162,10 +152,16 @@ func DeleteBooking(c *gin.Context) {
 		return
 	}
 
-	if tx := entity.DB().Exec("DELETE FROM bookings WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bookings not found"})
+	// Update the equipment status to "available"
+	if err := entity.DB().Model(&booking).Update("StatusID", 4).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
 		return
 	}
+
+	// if tx := entity.DB().Exec("DELETE FROM bookings WHERE id = ?", id); tx.RowsAffected == 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "bookings not found"})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{"data": id})
 }
