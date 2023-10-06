@@ -9,11 +9,6 @@ const MenuItemMember = [
     cName: 'dropdown-link'
   },
   {
-    title: 'Workout Programs',
-    path: '/programs',
-    cName: 'dropdown-link'
-  },
-  {
     title: 'Account Settings',
     path: '/account-setting',
     cName: 'dropdown-link'

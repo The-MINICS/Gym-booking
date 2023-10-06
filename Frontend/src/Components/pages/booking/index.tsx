@@ -238,7 +238,8 @@ function Booking() {
             RoomID: convertType(books.RoomID),
             MemberID: convertType(books.MemberID),
             TimeslotID: convertType(books.TimeslotID),
-            DateID: convertType(books.DateID)
+            DateID: convertType(books.DateID),
+            StatusID: convertType(books.StatusID = 3)
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -454,7 +455,9 @@ function Booking() {
                                 >
                                 <div>
                                     <section>
-                                        {book.filter((booking:BookingInterface) => (booking.MemberID) === members?.ID)
+                                        {book.filter((booking:BookingInterface) => ((booking.MemberID) === members?.ID) && (
+                                            booking.StatusID === 3
+                                        ))
                                             .map((booking) => (
                                                 <>
                                                 <Grid container className="bg-pink-100 my-2 px-2 py-2 rounded-lg mx-auto">

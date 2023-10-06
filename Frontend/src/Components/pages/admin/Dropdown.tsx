@@ -19,6 +19,11 @@ const MenuItemAdmin = [
     cName: 'dropdown-link',
   },
   {
+    title: 'Booking Management',
+    path: '/booking-management',
+    cName: 'dropdown-link',
+  },
+  {
     title: 'Complaint Handling',
     path: '/complaint-handle',
     cName: 'dropdown-link',

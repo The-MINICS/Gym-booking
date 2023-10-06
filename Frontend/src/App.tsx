@@ -10,10 +10,8 @@ import Booking from "./Components/pages/booking";
 import Recreations from "./Components/pages/recreation_room";
 import Equipments from "./Components/pages/equipment";
 import Member from "./Components/pages/member";
-import WorkoutPrograms from "./Components/pages/workout_program";
 import Services from "./Components/pages/services";
 import Profile from "./Components/pages/account_information/profile";
-import ChangePSW from "./Components/pages/member/change_password";
 import BookingSCH from "./Components/pages/booking_schedule/booking_schedule";
 import AdminTools from "./Components/pages/admin";
 import ComplaintHandling from "./Components/pages/admin/admin_complaint_handling/Complaint_control";
@@ -27,6 +25,7 @@ import EquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/eq
 import RoomUpdate from './Components/pages/admin/admin_room_control/room_update';
 import EquipmentBookingCreate from './Components/pages/equipment_booking/EQbooking-create';
 import AccountSettings from './Components/pages/account_information';
+import BookingManagement from './Components/pages/admin/admin_complaint_handling/booking_control';
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -52,16 +51,16 @@ function App() {
         <Route path='/contact-us' element={<ContactUs/>}/> {}
         <Route path='/equipments' element={<Equipments/>}/> {}
         <Route path='/recreations' element={<Recreations/>}/> {}
-        <Route path='/programs' element={<WorkoutPrograms/>}/> {}
         <Route path='/bookings' element={<Booking/>}/> {}
         <Route path='/account-setting' element={<AccountSettings/>}/> {}
         <Route path='/profile' element={<Profile/>}/> {}
-        <Route path='/chpassword/update/:id' element={<ChangePSW/>}/> {}
         <Route path='/bookingsch' element={<BookingSCH/>}/> {}
         <Route path='/admin-tools' element={<AdminTools/>}/> {}
         <Route path='/member-manage' element={<MemberManagement/>}/> {}
         <Route path='/equipment-manage' element={<EquipmentManagement/>}/> {}
         <Route path='/room-mannage' element={<RoomManagement/>}/> {}
+        <Route path='/room-mannage' element={<RoomManagement/>}/> {}
+        <Route path='/booking-management' element={<BookingManagement/>}/> {}
         <Route path='/complaint-handle' element={<ComplaintHandling/>}/> {}
         <Route path='/member-create' element={<MemberCreate/>}/> {}
         <Route path="/member/update/:id" element={<MemberUpdate/>}/> {}

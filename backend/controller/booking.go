@@ -48,7 +48,7 @@ func CreateBooking(c *gin.Context) {
 
 	// ค้นหา status ด้วย id
 	if tx := entity.DB().Where("id = ?", booking.StatusID).First(&status); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select a date"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select status a date"})
 		return
 	}
 

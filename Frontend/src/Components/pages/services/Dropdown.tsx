@@ -16,12 +16,6 @@ const MenuItemServices = [
     role: 'all'
   },
   {
-    title: 'Workout Programs',
-    path: '/programs',
-    cName: 'dropdown-link',
-    role: 'all'
-  },
-  {
     title: 'Room Booking',
     path: '/bookings',
     cName: 'dropdown-link',
