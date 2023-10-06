@@ -187,7 +187,7 @@ func DeleteEquipmentBooking(c *gin.Context) {
 	// }
 
 	// Update the equipment status to "available"
-	if err := entity.DB().Model(&equipment).Update("StatusID", 4).Error; err != nil {
+	if err := entity.DB().Model(&equipmentbooking).Update("StatusID", 4).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
 		return
 	}
