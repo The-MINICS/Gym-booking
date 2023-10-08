@@ -305,7 +305,7 @@ function Booking() {
         <motion.div className="mx-auto w-5/6 pt-10 pb-5 bg-center">
             {/* Header */}
             <motion.div
-                className="justify-center items-center text-center"
+                className="justify-center items-center text-center mb-3"
                 initial="hidden" 
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
@@ -316,13 +316,8 @@ function Booking() {
                 }}
                 >
                 <HText>
-                    <span className="text-red-500">Room Booking</span>
+                    <span className="text-red-500 text-4xl">Room Booking</span>
                 </HText>
-                <p className="mt-5">
-                Are you tired of the hassle that comes with managing reservations and appointments? 
-                Look no further! Our Booking System is designed to streamline your reservation processes, 
-                enhance customer satisfaction, and boost your business's efficiency.
-                </p>
             </motion.div>
 
             {/* Services */}

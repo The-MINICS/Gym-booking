@@ -167,7 +167,7 @@ function EquipmentUpdate(){
                 setErrorMessage("")
                 setTimeout(() => {
                     window.location.href = "/equipment-manage";
-                }, 500);
+                }, 1000);
             } else {
                 console.log("save failured!")
                 setError(true);
@@ -283,12 +283,13 @@ function EquipmentUpdate(){
                                         inputProps={{
                                             name: "StatusID",
                                         }}>
-                                        <option aria-label="None" value="">Select the Status</option>
-                                        {statuses.map((item: StatusInterface) => (
-                                            <option value={item.ID} key={item.ID}>
-                                                {item.Status}
-                                            </option>
-                                        ))}
+                                        {statuses.filter((item) => ((item.Status) === "available") || ((item.Status) === "unavailable"))
+                                            .map((item) => (
+                                                <option value={item.ID} key={item.ID}>
+                                                    {item.Status}
+                                                </option>
+                                            ))
+                                        }
                                     </Select>
                                 </FormControl>
                             </Grid>

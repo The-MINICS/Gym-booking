@@ -287,6 +287,20 @@ function EquipmentBookingCreate() {
     itemEquipmentBook.EquipmentTimeslotID === itemEquipmentTime.ID)
   );
 
+  const equipments: EquipmentInterface[] = Equipments.filter(
+    (equipItems) => (equipItems.PictureID === holdStateButtonEQGroup) && 
+    (equipItems.RoomID === 5)
+  );
+
+  const equipmentBooking: EquipmentBookingInterface[] = EquipmentBooks.filter(
+    (eqBook) => (eqBook.EquipmentTimeslotID === holdStateButtonEQTime) && (eqBook.StatusID === 3)
+  );
+
+  const complementEquipments: EquipmentInterface[] = equipments.filter(
+    (itemEquipment) => !equipmentBooking.some((itemEquipmentBook) => 
+    itemEquipmentBook.EquipmentID === itemEquipment.ID)
+  );
+
   return (
     <div className="w-full">
         <motion.div className="mx-auto w-5/6 pt-10 pb-5 bg-center">
@@ -316,7 +330,7 @@ function EquipmentBookingCreate() {
 
             {/* Header */}
             <motion.div
-                className="justify-center items-center text-center"
+                className="justify-center items-center text-center mb-3"
                 initial="hidden" 
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.5 }}
@@ -327,13 +341,8 @@ function EquipmentBookingCreate() {
                 }}
               >
                 <HText>
-                    <span className="text-red-500">Equipment Booking</span>
+                    <span className="text-red-500 text-4xl">Equipment Booking</span>
                 </HText>
-                <p className="my-5">
-                Are you tired of the hassle that comes with managing reservations and appointments? 
-                Look no further! Our Booking System is designed to streamline your reservation processes, 
-                enhance customer satisfaction, and boost your business's efficiency.
-                </p>
             </motion.div>
 
             {/* Booking Equipment */}
@@ -452,7 +461,7 @@ function EquipmentBookingCreate() {
                         {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
                             .map((BookTime, index) => (
                               <React.Fragment>
-                                <div className="my-1">
+                                <div>
                                   {BookTime.Room?.Activity && (BookTime.Room?.Activity.includes("fitness") || BookTime.Room?.Activity.includes("Fitness")) ? 
                                     (
                                       <button key={index}
@@ -664,20 +673,19 @@ function EquipmentBookingCreate() {
       return (
         <section>
           <div>
-            {Equipments.filter((EQitems: EquipmentInterface) => ((EQitems.PictureID) === holdStateButtonEQGroup))
-              .map((EQitems ,index) => (
+            {complementEquipments.map((EQitems) => (
                 <React.Fragment>
                   {(EQitems.StatusID === 1) ? (
-                    <button key={index} onClick={() => handleDialogEQBookingOpen(EQitems.ID)}
+                    <button key={EQitems.ID} onClick={() => handleDialogEQBookingOpen(EQitems.ID)}
                       className="rounded active:scale-[.98] active:duration-75 transition-all bg-slate-100 p-4 hover:bg-yellow-500 m-3">
-                      <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${index}`}/>
-                      <p className="mt-2">{EQitems.Name}({index+1})</p>
+                      <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${EQitems.ID}`}/>
+                      <p className="mt-2">{EQitems.Name}</p>
                     </button>
                   ):(
                     <button disabled
-                        className="rounded bg-gray-300 p-4 m-3 opacity-70">
-                      <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${index}`}/>
-                      <p className="mt-2 text-gray-700">{EQitems.Name}({index+1})</p>
+                      className="rounded bg-gray-300 p-4 m-3 opacity-70">
+                        <img src={`${EQitems.Picture?.Picture}`} width="150" height="auto" alt={`Image ${EQitems.ID}`}/>
+                        <p className="mt-2 text-gray-700">{EQitems.Name}</p>
                     </button>
                   )}
                 </React.Fragment>
