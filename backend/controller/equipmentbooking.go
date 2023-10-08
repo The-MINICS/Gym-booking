@@ -41,10 +41,10 @@ func CreateEquipmentBooking(c *gin.Context) {
 	}
 
 	//Member จองอุปกรณ์ 1 เครื่องได้แค่ 1 ครั้ง
-	if tx := entity.DB().Where("equipment_id = ? ", equipmentbooking.EquipmentID).First(&equipmentbooking); tx.RowsAffected != 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 times per 1 equipment"})
-		return
-	}
+	// if tx := entity.DB().Where("equipment_id = ? ", equipmentbooking.EquipmentID).First(&equipmentbooking); tx.RowsAffected != 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 times per 1 equipment"})
+	// 	return
+	// }
 
 	//Member จองอุปกรณ์ 1 เครื่องได้แค่ 1 ครั้ง ต่อ 1 เวลา
 	if *equipmentbooking.StatusID == uint(3) {
@@ -78,7 +78,7 @@ func CreateEquipmentBooking(c *gin.Context) {
 	}
 
 	// Update the equipment status to "unavailable"
-	if err := entity.DB().Model(&equipment).Update("StatusID", 2).Error; err != nil {
+	if err := entity.DB().Model(&equipment).Update("StatusID", 1).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
 		return
 	}

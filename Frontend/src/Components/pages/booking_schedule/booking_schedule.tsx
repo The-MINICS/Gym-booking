@@ -205,7 +205,9 @@ function BookingSCH() {
                     {/* Event Cards */}
                     {holdStateCardsEvent && (
                         <React.Fragment>
-                        {books.filter((bookings: BookingInterface) => (bookings.MemberID) === members.ID)
+                        {books.filter((bookings: BookingInterface) => ((bookings.MemberID) === members.ID) && 
+                            (bookings.StatusID === 3)
+                        )
                             .map((bookings) => (
                                 <article className="bg-white shadow-xl shadow-slate-200 rounded-lg">
                                     <div className="p-3 shadow bg-rose-500 text-indigo-50 uppercase grid
@@ -239,7 +241,8 @@ function BookingSCH() {
                                                 </div>
                                             </div>
                                         </div>
-                                        {bookings.Room?.Activity && (bookings.Room?.Activity.includes("fitness") || bookings.Room?.Activity.includes("Fitness")) ? 
+                                        {bookings.Room?.Activity && (bookings.StatusID === 3) && (bookings.Room?.Activity.includes("fitness") || 
+                                            bookings.Room?.Activity.includes("Fitness")) ? 
                                             (
                                                 <button className="bg-rose-600 rounded-md px-4 py-2 text-indigo-50 shadow-2xl shadow-indigo-200
                                                     text-center font-bold hover:shadow-none ring ring-offset-0 ring-rose-600 focus:outline-none focus:ring-offset-2
@@ -292,7 +295,7 @@ function BookingSCH() {
                                         </div>
                                         <Divider/>
                                         <div className="mb-3 mt-1 event-card">
-                                        {EquipmentBooks.filter((EQbooks: EquipmentBookingInterface) => (EQbooks.BookingID) === bookingShow)
+                                        {EquipmentBooks.filter((EQbooks: EquipmentBookingInterface) => ((EQbooks.BookingID) === bookingShow) && (EQbooks.StatusID === 3))
                                             .map((EQbooks) => (
                                                 <React.Fragment>
                                                     <div className="bg-pink-200 p-1 flex justify-start items-center gap-1 my-2">
