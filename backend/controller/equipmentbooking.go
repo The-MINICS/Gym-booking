@@ -40,15 +40,31 @@ func CreateEquipmentBooking(c *gin.Context) {
 		return
 	}
 
-	//Member จองอุปกรณ์ 1 เครื่องได้แค่ 1 ครั้ง
-	// if tx := entity.DB().Where("equipment_id = ? ", equipmentbooking.EquipmentID).First(&equipmentbooking); tx.RowsAffected != 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 times per 1 equipment"})
-	// 	return
-	// }
+	// Check if the equipmentbooking already has a equipment for the same timeslot with "canceled" status
+	if tx := entity.DB().Where("equipment_id = ? AND equipment_timeslot_id = ? AND status_id = ?", equipmentbooking.EquipmentID, equipmentbooking.EquipmentTimeslotID, 4).First(&equipmentbooking); tx.RowsAffected != 0 {
+		// Member already booked this equipment and timeslot, update the existing booking
+		status2 := uint(3)
+		eqbk := entity.EquipmentBooking{
+			EquipmentDatetime: time.Now(),
+			EquipmentNote:     equipmentbooking.EquipmentNote,
+			EquipmentTimeslot: equipmenttimeslot,
+			Equipment:         equipment,
+			Booking:           booking,
+			StatusID:          &status2,
+		}
+
+		if err := entity.DB().Save(&eqbk).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": eqbk})
+		return
+	}
 
 	//Member จองอุปกรณ์ 1 เครื่องได้แค่ 1 ครั้ง ต่อ 1 เวลา
-	if *equipmentbooking.StatusID == uint(3) {
-		if tx := entity.DB().Where("equipment_timeslot_id = ? ", equipmentbooking.EquipmentTimeslotID).First(&equipmentbooking); tx.RowsAffected != 0 {
+	if *equipmentbooking.StatusID == 3 {
+		if tx := entity.DB().Where("equipment_id = ? AND equipment_timeslot_id = ? ", equipmentbooking.EquipmentID, equipmentbooking.EquipmentTimeslotID).First(&equipmentbooking); tx.RowsAffected != 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "You can book equipment only 1 equipment per time slot"})
 			return
 		}
@@ -181,12 +197,7 @@ func DeleteEquipmentBooking(c *gin.Context) {
 		return
 	}
 
-	// if tx := entity.DB().Exec("DELETE FROM equipment_bookings WHERE id = ?", id); tx.RowsAffected == 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "equipment bookings not found"})
-	// 	return
-	// }
-
-	// Update the equipment status to "available"
+	// Update the equipment booking status to "canceled"
 	if err := entity.DB().Model(&equipmentbooking).Update("StatusID", 4).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
 		return

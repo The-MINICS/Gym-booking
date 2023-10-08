@@ -52,15 +52,38 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	timeslot.Quantity++
+	// Check if the member already has a booking for the same timeslot with "canceled" status
+	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ? AND status_id = ?", booking.MemberID, booking.TimeslotID, 4).First(&booking); tx.RowsAffected != 0 {
+		// Member already booked this timeslot, update the existing booking
+		status1 := uint(3)
+		bk := entity.Booking{
+			Datetime: booking.Datetime,
+			Note:     booking.Note,
+			Member:   member,
+			Room:     room,
+			Timeslot: timeslot,
+			Date:     date,
+			StatusID: &status1,
+		}
 
-	//Member จองแต่ละ time slot ได้แค่ 1 ครั้ง
+		if err := entity.DB().Save(&bk).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": bk})
+		return
+	}
+
+	//Member can book only 1 times per time slot
 	if *booking.StatusID == uint(3) {
 		if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 times per time slot"})
 			return
 		}
 	}
+
+	timeslot.Quantity++
 
 	//จำนวน member ที่จองห้องต้องไม่เกิน capacity
 	if timeslot.Quantity > room.Capacity {
@@ -100,7 +123,6 @@ func CreateBooking(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"data": bk})
-
 }
 
 // GET /booking/:id
@@ -154,14 +176,9 @@ func DeleteBooking(c *gin.Context) {
 
 	// Update the equipment status to "available"
 	if err := entity.DB().Model(&booking).Update("StatusID", 4).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment status"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update booking status"})
 		return
 	}
-
-	// if tx := entity.DB().Exec("DELETE FROM bookings WHERE id = ?", id); tx.RowsAffected == 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "bookings not found"})
-	// 	return
-	// }
 
 	c.JSON(http.StatusOK, gin.H{"data": id})
 }
