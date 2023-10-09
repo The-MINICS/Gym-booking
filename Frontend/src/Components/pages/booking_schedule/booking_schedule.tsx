@@ -100,7 +100,7 @@ function BookingSCH() {
     }, []);
 
     const events = books
-        .filter((booking) => booking.MemberID === members.ID)
+        .filter((booking) => (booking.MemberID === members.ID) && (booking.StatusID === 3))
         .map((booking) => 
             {
                 const start = new Date(booking.Datetime || 0);

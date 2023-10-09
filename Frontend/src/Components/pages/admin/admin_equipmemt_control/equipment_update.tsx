@@ -263,12 +263,13 @@ function EquipmentUpdate(){
                                         inputProps={{
                                             name: "RoomID",
                                         }}>
-                                        <option aria-label="None" value="">Select the Room</option>
-                                        {rooms.map((item: RoomInterface) => (
-                                            <option value={item.ID} key={item.ID}>
-                                                {item.Number} ({item.Activity})
-                                            </option>
-                                        ))}
+                                        {rooms.filter((item) => (item.Activity?.includes("Fitness")) || (item.Activity?.includes("fitness")))
+                                            .map((item) => (
+                                                <option value={item.ID} key={item.ID}>
+                                                    {item.Number} ({item.Activity})
+                                                </option>
+                                            ))
+                                        }
                                     </Select>
                                 </FormControl>
                             </Grid>

@@ -25,7 +25,7 @@ import EquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/eq
 import RoomUpdate from './Components/pages/admin/admin_room_control/room_update';
 import EquipmentBookingCreate from './Components/pages/equipment_booking/EQbooking-create';
 import AccountSettings from './Components/pages/account_information';
-import BookingManagement from './Components/pages/admin/admin_complaint_handling/booking_control';
+import BookingManagement from './Components/pages/admin/admin_book_handle';
 
 function App() {
   const [token, setToken] = useState<String>("");

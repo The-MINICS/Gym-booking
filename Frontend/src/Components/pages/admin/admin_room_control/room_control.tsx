@@ -143,7 +143,7 @@ function RoomManagement() {
                 </button>
             </motion.div>
 
-            {/* Member List */}
+            {/* Room List */}
             <motion.div
                 className="bg-center mx-20"
                 initial="hidden" 
