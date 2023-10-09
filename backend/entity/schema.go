@@ -200,7 +200,7 @@ type Contactus struct {
 // status
 type Status struct {
 	gorm.Model
-	Status string
+	State string
 
 	Equipment        []Equipment        `gorm:"foreignKey:StatusID"`
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:StatusID"`
