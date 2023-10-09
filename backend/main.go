@@ -23,6 +23,7 @@ func main() {
 	// Authentication Routes
 	r.POST("/login/member", controller.LoginMember)
 
+	r.POST("/forgot-password", controller.ForgotPassword)
 	api := r.Group("")
 	{
 		protected := api.Use(middlewares.Authorizes())
