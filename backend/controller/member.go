@@ -82,7 +82,7 @@ func GetMember(c *gin.Context) {
 func ListMembers(c *gin.Context) {
 	var members []entity.Member
 
-	if err := entity.DB().Preload("Gender").Preload("Role").Raw("SELECT * FROM members WHERE role_id = 2").Find(&members).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("Role").Raw("SELECT * FROM members").Find(&members).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

@@ -393,7 +393,7 @@ function Booking() {
                                     className="w-full h-full rounded p-2 font-medium cursor-pointer bg-slate-100"
                                     onChange={handleDateChange}
                                     >
-                                    <option value="">Book for the date</option>
+                                    <option>Book for the date</option>
                                         {dates.filter((item: DateInterface) => (item.RoomID) === convertType(roomState))
                                             .map((item) => (
                                                 <option value={item.ID} key={item.ID}>

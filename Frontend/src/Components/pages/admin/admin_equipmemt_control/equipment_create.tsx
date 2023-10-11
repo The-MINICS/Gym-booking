@@ -248,11 +248,13 @@ function EquipmentCreate({ onClose }: any ){
                                             name: "StatusID",
                                         }}>
                                         <option aria-label="None" value="">Select the Status</option>
-                                        {statuses.map((item: StatusInterface) => (
-                                            <option value={item.ID} key={item.ID}>
-                                                {item.Status}
-                                            </option>
-                                        ))}
+                                        {statuses.filter((item) => ((item.State) === "available") || ((item.State) === "unavailable"))
+                                            .map((item) => (
+                                                <option value={item.ID} key={item.ID}>
+                                                    {item.State}
+                                                </option>
+                                            ))
+                                        }
                                     </Select>
                                 </FormControl>
                             </Grid>

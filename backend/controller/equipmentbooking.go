@@ -107,7 +107,7 @@ func CreateEquipmentBooking(c *gin.Context) {
 func GetEquipmentBooking(c *gin.Context) {
 	var equipmentbooking entity.EquipmentBooking
 	id := c.Param("id")
-	if tx := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Preload("Booking").Raw("SELECT * FROM equipment_bookings WHERE id = ?", id).Find(&equipmentbooking).Error; tx != nil {
+	if tx := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Preload("Booking").Preload("Status").Raw("SELECT * FROM equipment_bookings WHERE id = ?", id).Find(&equipmentbooking).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "equipment booking not found"})
 		return
 	}
@@ -118,7 +118,7 @@ func GetEquipmentBooking(c *gin.Context) {
 func ListEquipmentBookings(c *gin.Context) {
 	var equipmentbookings []entity.EquipmentBooking
 
-	if err := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Preload("Booking").Raw("SELECT * FROM equipment_bookings").Find(&equipmentbookings).Error; err != nil {
+	if err := entity.DB().Preload("EquipmentTimeslot").Preload("Equipment").Preload("Booking").Preload("Status").Raw("SELECT * FROM equipment_bookings").Find(&equipmentbookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

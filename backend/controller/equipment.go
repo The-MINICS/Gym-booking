@@ -70,12 +70,11 @@ func CreateEquipment(c *gin.Context) {
 
 }
 
-//GET--equipment id--
-
+// GET--equipment id--
 func GetEquipment(c *gin.Context) {
 	var equipment entity.Equipment
 	id := c.Param("id")
-	if err := entity.DB().Preload("Picture").Preload("Member").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
+	if err := entity.DB().Preload("Picture").Preload("Member").Preload("Status").Preload("Room").Raw("SELECT * FROM equipment WHERE id = ?", id).Scan(&equipment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -85,7 +84,7 @@ func GetEquipment(c *gin.Context) {
 // GET--equipments--
 func ListEquipments(c *gin.Context) {
 	var equipments []entity.Equipment
-	if err := entity.DB().Preload("Picture").Preload("Member").Raw("SELECT * FROM equipment").Find(&equipments).Error; err != nil {
+	if err := entity.DB().Preload("Picture").Preload("Member").Preload("Status").Preload("Room").Raw("SELECT * FROM equipment").Find(&equipments).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

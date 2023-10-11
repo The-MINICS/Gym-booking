@@ -7,7 +7,6 @@ import RecreationRoom from "@/assets/Recreation-room.png";
 import MemberShip from "@/assets/membership.png";
 import BookIcon from "@/assets/booking.png";
 import Complaint from "@/assets/complaint.png";
-import BookingSchedule from "@/assets/BookingSchedule.png";
 import HText from "@/shared/HText";
 import BuildIcon from '@mui/icons-material/Build';
 
@@ -68,21 +67,21 @@ function AdminTools(){
                             <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
                                 <Link to="/equipment-manage">
-                                    <img className="h-32 w-32" src={equipment} alt="equipment-icon"/>
+                                    <img className="h-auto w-36" src={equipment} alt="equipment-icon"/>
                                     <h3 className="text-lg font-bold text-black">Equipment Management</h3>
                                 </Link>
                             </button>
                             <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
                                 <Link to="/room-mannage">
-                                    <img className="h-32 w-32" src={RecreationRoom} alt="recreation_room-icon"/>
-                                    <h3 className="text-lg font-bold text-black">Class Management</h3>
+                                    <img className="h-auto w-36" src={RecreationRoom} alt="recreation_room-icon"/>
+                                    <h3 className="text-lg font-bold text-black">Room Management</h3>
                                 </Link>
                             </button>
                             <button className="curser-point hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
                                 <Link to="/member-manage">
-                                    <img className="h-auto w-32" src={MemberShip} alt="workout_room-icon"/>
+                                    <img className="h-auto w-36" src={MemberShip} alt="workout_room-icon"/>
                                     <h3 className="text-lg font-bold text-black">Member Management</h3>
                                 </Link>
                             </button>
@@ -90,22 +89,15 @@ function AdminTools(){
                         <div className="flex items-center justify-center gap-20 py-3">
                             <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
-                                <Link to="/bookings">
-                                    <img className="h-32 w-32" src={BookIcon} alt="booking-icon"/>
-                                    <h3 className="text-lg font-bold text-black">Booking</h3>
-                                </Link>
-                            </button>
-                            <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
-                                active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
-                                <Link to="/bookingsch">
-                                    <img className="h-32 w-32 ml-4" src={BookingSchedule} alt="booking-icon"/>
-                                    <h3 className="text-lg font-bold text-black">Booking Schedule</h3>
+                                <Link to="/booking-management">
+                                    <img className="h-auto w-36" src={BookIcon} alt="booking-icon"/>
+                                    <h3 className="text-lg font-bold text-black">Booking Management</h3>
                                 </Link>
                             </button>
                             <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
                                 active:scale-[.98] active:duration-85 transition-all text-center h-auto w-40">
                                 <Link to="/complaint-handle">
-                                    <img className="h-32 w-32 mx-2" src={Complaint} alt="booking-icon"/>
+                                    <img className="h-auto w-36" src={Complaint} alt="booking-icon"/>
                                     <h3 className="text-lg font-bold text-black">Complaint Handling</h3>
                                 </Link>
                             </button>

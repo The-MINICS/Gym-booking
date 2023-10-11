@@ -39,6 +39,10 @@ function Navbar2() {
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
+  const toggleDropdown = () => {
+    setOpen((prevIsOpen) => !prevIsOpen);
+  };
+
   const onMouseEnterServices = () => {
     if (window.innerWidth < 960) {
       setDropdown1(false);
@@ -53,10 +57,6 @@ function Navbar2() {
     } else {
       setDropdown1(false);
     }
-  };
-
-  const toggleDropdown = () => {
-    setOpen((prevIsOpen) => !prevIsOpen);
   };
 
   const onMouseEnterMember = () => {
@@ -125,7 +125,9 @@ function Navbar2() {
       <nav className='navbar'>
         <Link to='/' className="flex items-center justify-between cursor-pointer ml-4 justify-self-start" 
           onClick={closeMobileMenu}>
-          <img alt="logo" src= {Logo} />
+          <h1 className='text-3xl font-extrabold font-dmsans'>The MINICS</h1>
+          <h1 className='text-3xl font-extrabold text-red-600 font-dmsans'>-Gym</h1>
+          {/* <img alt="logo" src= {Logo} /> */}
         </Link>
         <div className='menu-icon' onClick={handleClick}>
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -136,16 +138,16 @@ function Navbar2() {
               if (item.index === 1) {
                 return (
                   <li 
-                      className='nav-item z-20'
-                      onMouseEnter={onMouseEnterServices}
-                      onMouseLeave={onMouseLeaveServices}>
+                    className='nav-item z-20'
+                    onMouseEnter={onMouseEnterServices}
+                    onMouseLeave={onMouseLeaveServices}>
                       <Link 
                         to={item.path} 
                         key={item.name}
                         className='nav-links' 
                         onClick={closeMobileMenu}
-                      >
-                        <h1>{item.name} {item.icon}</h1>
+                        >
+                          <h1>{item.name} {item.icon}</h1>
                       </Link>
                       {dropdown1 && <DropdownServices/>}
                   </li>
@@ -205,7 +207,7 @@ function Navbar2() {
           })}
         </ul>
         {/* Profile Dropdown */}
-        <div className="gap-5 md:flex my-3 relative rounded-full right-5">
+        <div className="md:flex my-3 relative rounded-full right-5">
                 <img src={user} alt='user-logo' 
                     onClick={toggleDropdown}
                     className='h-10 w-10 hover:bg-yellow-200
@@ -251,6 +253,7 @@ function Navbar2() {
                   )
                 }
           </div>
+          
       </nav>
     </>
   );

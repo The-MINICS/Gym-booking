@@ -1,22 +1,21 @@
 import { motion } from "framer-motion";
-import ResetPasswordIcon from "@/assets/reset-password.png";
 import BookingSchedule from "@/assets/BookingSchedule.png";
-import WorkoutPrograms from "@/assets/workout-program.png";
 import AcountIcon from "@/assets/Usericon.png";
+import AcountSettingsIcon from "@/assets/account-settings.png"
 import { Link } from "react-router-dom";
 import HText from "@/shared/HText";
 import MemberPageGraphic from "@/assets/MemberPageGraphic.jpg";
 import MemberPageGraphic2 from "@/assets/MemberPageGraphic2.jpg";
+import ContactUs from "@/assets/ContactUs.png";
 
 function Member(){
-    
     return (
         <div className="w-full bg-gray-50">
         {/* Page Graphic */}
             <motion.div className="mx-auto w-5/6 py-10">
-                <div className="justify-between gap-8 md:flex">
+                <div className="justify-between md:flex">
                     <motion.div
-                        className="mt-2 basis-2/5"
+                        className="basis-2/5"
                         initial="hidden" 
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
@@ -26,19 +25,18 @@ function Member(){
                             hidden: { opacity: 0, x:-50 },
                         }}>
                         <img
-                            className="rounded-lg bg-auto w-full"
+                            className="rounded-lg w-4/5 h-auto mb-5 mx-7 mt-1"
                             alt="our-services-page-graphic"
                             src={MemberPageGraphic}
                         />
                         <img
-                            className="rounded-lg bg-auto w-full mt-4"
+                            className="rounded-lg w-4/5 h-auto mx-7"
                             alt="our-services-page-graphic"
                             src={MemberPageGraphic2}
                         />
                     </motion.div>
                 {/* Header */}
-            <div className="relative">
-                <div className="">
+                <div className="relative">
                     <motion.div
                             initial="hidden" 
                             whileInView="visible"
@@ -67,18 +65,10 @@ function Member(){
                                 Whether you want short-term access or long-term commitment, we have the perfect plan for you.
                                 <li className="font-bold text-base">Fun Challenges and Events:</li> Stay motivated with our exciting challenges and events that add an element of fun 
                                 and competition to your fitness routine. Win rewards and prizes while pushing your limits!
-                                <p>
-                                    Don't wait any longer to become the best version of yourself. Join our fitness gym today and start your journey towards a healthier, stronger, 
-                                and happier you! Sign up now or call us at [Your Gym's Contact Number] for more information.
-                                </p>
-                                <p>
-                                    Remember, it's never too late to start, and we're here to support you every step of the way. Together, let's make your fitness goals a reality! 🎉
-                                </p>
                             </p>
                     </motion.div>
                 </div>
             </div>
-        </div>
                 {/* QuickMenu */}
                     <motion.div
                             className="mt-16 basis-2/5 md:mt-0"
@@ -91,33 +81,33 @@ function Member(){
                                 visible: { opacity: 1, x:-0 }
                             }}>
                         <ul>
-                            <div className="my-10 bg-gray-100 pt-5 pb-5 px-0 rounded-xl flex items-center justify-center">
-                                <button className="curser-pointer hover:bg-gray-200 rounded-xl py-3 px-3
+                            <div className="my-5 bg-gray-100 py-5 px-20 rounded-xl flex items-center justify-between">
+                                <button className="curser-pointer hover:bg-gray-200 rounded-xl p-3
                                     active:scale-[.98] active:duration-85 transition-all">
                                     <Link to="/profile">
-                                        <img className="h-40 w-40" src={AcountIcon} alt="equipment-icon"/>
+                                        <img className="h-36 w-36" src={AcountIcon} alt="equipment-icon"/>
                                         <h3 className="text-xl font-bold text-black">My Account</h3>
                                     </Link>
                                 </button>
-                                <button className="curser-pointer ml-20 hover:bg-gray-200 rounded-xl py-3 px-3
+                                <button className="curser-pointer hover:bg-gray-200 rounded-xl p-3
                                     active:scale-[.98] active:duration-85 transition-all">
                                     <Link to="/bookingsch">
-                                        <img className="h-40 w-40 ml-2" src={BookingSchedule} alt="recreation_room-icon"/>
+                                        <img className="h-36 w-36" src={BookingSchedule} alt="recreation_room-icon"/>
                                         <h3 className="text-xl font-bold text-black">Booking Schedule</h3>
                                     </Link>
                                 </button>
-                                <button className="curser-point ml-24 hover:bg-gray-200 rounded-xl py-3 px-3
+                                <button className="curser-pointer hover:bg-gray-200 rounded-xl p-3
                                     active:scale-[.98] active:duration-85 transition-all">
-                                    <Link to="/programs">
-                                        <img className="h-40 w-40 ml-2" src={WorkoutPrograms} alt="workout_room-icon"/>
-                                        <h3 className="text-xl font-bold text-black">Workout Programs</h3>
+                                    <Link to="/account-setting">
+                                        <img className="h-36 w-36" src={AcountSettingsIcon} alt="equipment-icon"/>
+                                        <h3 className="text-xl font-bold text-black">Account Settings</h3>
                                     </Link>
                                 </button>
-                                <button className="curser-pointer ml-16 hover:bg-gray-200 rounded-xl py-3 px-3
+                                <button className="curser-pointer hover:bg-gray-200 rounded-xl p-3
                                     active:scale-[.98] active:duration-85 transition-all">
-                                    <Link to="/chpassword">
-                                        <img className="h-40 w-40 ml-6" src={ResetPasswordIcon} alt="booking-icon"/>
-                                        <h3 className="text-xl font-bold text-black">Change My Password</h3>
+                                    <Link to="/contact-us">
+                                        <img className="h-36 w-36" src={ContactUs} alt="equipment-icon"/>
+                                        <h3 className="text-xl font-bold text-black">Contact Us</h3>
                                     </Link>
                                 </button>
                             </div>

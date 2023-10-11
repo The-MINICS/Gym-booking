@@ -159,6 +159,7 @@ function MemberManagement() {
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Age</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Weight(kg)</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Height(cm)</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Role</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Registration Date</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Action</h4></TableCell>
                             </TableRow>
@@ -177,6 +178,7 @@ function MemberManagement() {
                                             <TableCell align="center">{row.Age}</TableCell>
                                             <TableCell align="center">{row.Weight}</TableCell>
                                             <TableCell align="center">{row.Height}</TableCell>
+                                            <TableCell align="center">{row.Role?.Role}</TableCell>
                                             <TableCell align="center">{dayjs(row.Member_datetime).format('YYYY-MM-DD HH:mm')}</TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>

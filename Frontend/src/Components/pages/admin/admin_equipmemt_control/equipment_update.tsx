@@ -284,10 +284,10 @@ function EquipmentUpdate(){
                                         inputProps={{
                                             name: "StatusID",
                                         }}>
-                                        {statuses.filter((item) => ((item.Status) === "available") || ((item.Status) === "unavailable"))
+                                        {statuses.filter((item) => ((item.State) === "available") || ((item.State) === "unavailable"))
                                             .map((item) => (
                                                 <option value={item.ID} key={item.ID}>
-                                                    {item.Status}
+                                                    {item.State}
                                                 </option>
                                             ))
                                         }

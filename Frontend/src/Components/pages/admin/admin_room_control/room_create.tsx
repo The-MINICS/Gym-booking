@@ -96,7 +96,6 @@ function RoomCreate({ onClose }:any){
         let data = {
             Activity: rooms.Activity?? "",
             Number: rooms.Number?? "",
-            Quantity: typeof rooms.Quantity === "string" ? parseInt(rooms.Quantity) : 0,
             Capacity: typeof rooms.Capacity === "string" ? parseInt(rooms.Capacity) : 0,
             Attendant: rooms.Attendant?? "",
             Illustration: image,
