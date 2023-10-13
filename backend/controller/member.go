@@ -15,6 +15,7 @@ import (
 func CreateMember(c *gin.Context) {
 	var member entity.Member
 	var gender entity.Gender
+	var role entity.Role
 
 	if err := c.ShouldBindJSON(&member); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -24,6 +25,12 @@ func CreateMember(c *gin.Context) {
 	// ค้นหา gender ด้วย id
 	if tx := entity.DB().Where("id = ?", member.GenderID).First(&gender); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
+		return
+	}
+
+	// ค้นหา role ด้วย id
+	if tx := entity.DB().Where("id = ?", member.RoleID).First(&role); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your role"})
 		return
 	}
 
@@ -41,7 +48,7 @@ func CreateMember(c *gin.Context) {
 	}
 
 	//กำหนด Role ตอนสร้าง
-	role := uint(2)
+	// role := uint(2)
 
 	// 14: สร้าง  member
 	mr := entity.Member{
@@ -56,7 +63,7 @@ func CreateMember(c *gin.Context) {
 		Age:             member.Age,
 		Weight:          member.Weight,
 		Height:          member.Height,
-		RoleID:          &role,
+		Role:            role,
 	}
 
 	// 13: บันทึก

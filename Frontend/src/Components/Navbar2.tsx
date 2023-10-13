@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '@/Components/Navbar2.css';
-import Logo from "@/assets/Logo4.png"
 import DropdownServices from '@/Components/pages/services/Dropdown';
 import { MemberInterface } from "@/interfaces/IMember";
 import { GetMemberByMID } from "@/services/HttpClientService";
@@ -127,7 +126,6 @@ function Navbar2() {
           onClick={closeMobileMenu}>
           <h1 className='text-3xl font-extrabold font-dmsans'>The MINICS</h1>
           <h1 className='text-3xl font-extrabold text-red-600 font-dmsans'>-Gym</h1>
-          {/* <img alt="logo" src= {Logo} /> */}
         </Link>
         <div className='menu-icon' onClick={handleClick}>
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -191,7 +189,7 @@ function Navbar2() {
               }
               else {
                 return (
-                  <li className='nav-item'>
+                  <li className='nav-item z-20'>
                     <Link 
                       to={item.path} 
                       key={item.name}
