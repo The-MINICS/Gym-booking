@@ -61,7 +61,7 @@ function MemberManagement() {
         if (res) {
             setRoles(res);
         }
-      };
+    };
 
     const handleInputChange = (
         event: React.ChangeEvent<{ id?: string; value: any }>
@@ -202,7 +202,7 @@ function MemberManagement() {
                   open={success}
                   autoHideDuration={5000}
                   onClose={handleClose}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   >
                     <Alert onClose={handleClose} severity="success">
                       Saved Successfully!
@@ -213,7 +213,7 @@ function MemberManagement() {
                   open={error}
                   autoHideDuration={6000}
                   onClose={handleClose}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
                   <Alert onClose={handleClose} severity="error">
                     Save failed!! : {errorMessage}
@@ -536,18 +536,18 @@ function MemberManagement() {
                             </div>
                             <Divider/>
                             <div className="flex justify-center items-center gap-3 my-3">
-                            <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
-                                onClick={() => handleDialogMemberCreateClose()}
-                            >
-                                <CancelIcon/> Cancel
-                            </button>
-                            <button className="rounded px-2 py-1 text-white font-semibold
-                                bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
-                                onClick={submit}
-                            >
-                                <CheckCircleIcon/> Submit
-                            </button>
-                        </div>
+                                <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
+                                    onClick={() => handleDialogMemberCreateClose()}
+                                >
+                                    <CancelIcon/> Cancel
+                                </button>
+                                <button className="rounded px-2 py-1 text-white font-semibold
+                                    bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
+                                    onClick={submit}
+                                >
+                                    <CheckCircleIcon/> Submit
+                                </button>
+                            </div>
                         </div>
                     </dialog>
                 </div>

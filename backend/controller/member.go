@@ -155,11 +155,10 @@ func UpdateMember(c *gin.Context) {
 	}
 
 	if !(member.Password[0:13] == "$2a$14$") {
-		hashPassword, err := bcrypt.GenerateFromPassword([]byte(member.Password), 14)
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), 14)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
 			return
-
 		}
 		update_member.Password = string(hashPassword)
 	}
