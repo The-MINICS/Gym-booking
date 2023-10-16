@@ -75,7 +75,7 @@ func ForgotPassword(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Password reset email sent successfully"})
+	c.JSON(http.StatusOK, gin.H{"data": member})
 }
 
 func ResetPassword(c *gin.Context) {

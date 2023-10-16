@@ -4,7 +4,6 @@ import HText from "@/shared/HText";
 import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
 import React, { useState } from "react";
 import { ForgotPasswordInterface } from "@/interfaces/IForgotPassword";
-import { ForgotPassword } from '@/services/HttpClientService';
 import { Alert, Snackbar } from '@mui/material';
 
 type Props = {
@@ -15,6 +14,7 @@ function InputEmail({setSelectedPage}: Props){
     const [error, setError] = useState(false);
     const [forgot, setForgot] = useState<ForgotPasswordInterface>({});
     const [success, setSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const Cancel = () => {
       setTimeout(() => {
@@ -40,19 +40,37 @@ function InputEmail({setSelectedPage}: Props){
       setSuccess(false);
       setError(false);
     };
-    
-    const submit = async () => {
-      let res = await ForgotPassword(forgot);
-      if (res) {
-        setSuccess(true);
-        setTimeout(() => {
-          window.location.href = "/";
-      }, 1000);
-      } else { 
-        setError(true);
+      
+      async function submit() {
+        let data = {
+          Email: forgot.Email?? "", 
       };
-    };
+      console.log(data)
+      const apiUrl = "http://localhost:9999";
   
+      const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+      };
+    
+      fetch(`${apiUrl}/forgot-password`, requestOptions)
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res)
+          if (res.data) {
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("mid", res.data.id);
+            console.log("Saved")
+            setSuccess(true);
+            setErrorMessage("")
+          } else {
+            console.log("Error!")
+            setError(true);
+            setErrorMessage(res.error)
+          }
+      });
+  }
 
   return (
     <section id="joinnow" className="w-full bg-gray-50">
@@ -77,7 +95,7 @@ function InputEmail({setSelectedPage}: Props){
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert onClose={handleClose} severity="error">
-                    Email incorrcted!
+                  {errorMessage}
                   </Alert>
                 </Snackbar>
                 {/* Header */}
