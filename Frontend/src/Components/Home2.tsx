@@ -36,10 +36,7 @@ function Home(){
             visible: { opacity: 1, x:-0 }
           }}>
           <div className="relative -ml-5">
-            <div className="before:absolute before:-top-24 before:-left-72
-              before:z-[-1] md:before:content-evolvetext">
               <img alt="home-page-text" src={HomePageText}/>
-            </div>
           </div>
           <p className="mt-4 text-sm font-medium">
             <p className="font-bold text-lg">Welcome to The MINICS Gym.</p>

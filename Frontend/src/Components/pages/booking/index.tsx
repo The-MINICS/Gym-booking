@@ -60,7 +60,7 @@ function Booking() {
 
     const handleMemberChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const memberID = event.target.value;
-        books.MemberID = convertType(memberID)
+        books.MemberID = convertType(memberID);
     }
 
     const handleInputChange = (
@@ -72,8 +72,8 @@ function Booking() {
     };
 
     const handleDialogDeleteOpen = (ID: number) => {
-        setDeleteID(ID)
-        setOpenDelete(true)
+        setDeleteID(ID);
+        setOpenDelete(true);
     }
     const handleDialogDeleteclose = () => {
         setOpenDelete(false)
@@ -561,7 +561,7 @@ function Booking() {
                             <Divider/>
                         </div>
                         <div className="my-3">
-                            <>
+                            <React.Fragment>
                                 {rooms.filter((rooms:RoomInterface) => (rooms.ID) === books.RoomID)
                                     .map((rooms) => (
                                         <h1 className="text-orange-600 font-medium text-lg text-center">{rooms.Number} {rooms.Activity} room booking</h1>
@@ -609,7 +609,7 @@ function Booking() {
                                         onChange={handleInputChange}
                                     />
                                 </div> 
-                            </>
+                            </React.Fragment>
                         </div>
                         <Divider/>
                         <div className="flex justify-center items-center gap-3 my-3">

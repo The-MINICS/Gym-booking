@@ -67,14 +67,14 @@ function RoomManagement() {
         getRooms();
       }, []);
   
-      const Transition = React.forwardRef(function Transition(
+    const Transition = React.forwardRef(function Transition(
         props: TransitionProps & {
           children: React.ReactElement<any, any>;
         },
         ref: React.Ref<unknown>,
       ) {
         return <Slide direction="up" ref={ref} {...props} />;
-      });
+    });
     
     return(
         <section className="w-full bg-gray-50 py-10">

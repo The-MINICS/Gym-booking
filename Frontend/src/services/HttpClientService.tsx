@@ -509,6 +509,28 @@ async function GetGenders() {
   return res;
 }
 
+async function GetRoles() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/roles`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 export {
   Login,
   ForgotPassword,
@@ -532,5 +554,6 @@ export {
   GetEquipmentBookings,
   GetEquipmentTimeSlot,
   GetStatus,
-  GetGenders
+  GetGenders,
+  GetRoles
 };

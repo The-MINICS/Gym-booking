@@ -1,7 +1,6 @@
 import { SelectedPage } from "@/shared/types";
 import { motion } from "framer-motion";
 import HText from "@/shared/HText";
-import ActionButton from "@/shared/ActionButton";
 import img1 from "@/assets/fitness_room1.jpg";
 import img2 from "@/assets/fitness_room2.jpg";
 import img3 from "@/assets/fitness_room3.jpg";
@@ -14,7 +13,7 @@ type Props = {
 }
 
 const Benefits = ({setSelectedPage}: Props) => {
-  return <section id="terms" className="w-full py-20 bg-gray-20">
+  return <section id="terms" className="w-full md:py-1 sm:py-1 bg-gray-20">
         <motion.div
             className="w-5/6 mx-auto min-h-full"
             onViewportEnter={() => setSelectedPage(SelectedPage.Terms)}>
@@ -33,6 +32,7 @@ const Benefits = ({setSelectedPage}: Props) => {
                     <div className="relative">
                         <div>
                             <motion.div
+                                className="sm:py-3"
                                 initial="hidden" 
                                 whileInView="visible"
                                 viewport={{ once: true, amount: 0.5 }}
@@ -91,10 +91,6 @@ const Benefits = ({setSelectedPage}: Props) => {
                             <p>5. Fitness room opens for reservations through the website from 6:00 a.m.</p>
                         </p>
                     </motion.div>
-                    {/* Button */}
-                    <ActionButton setSelectedPage={setSelectedPage}>
-                        Join Now
-                    </ActionButton>
                 </div>
             </div>
         </motion.div>

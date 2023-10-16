@@ -3,7 +3,7 @@ import Logo from "@/assets/HomePageText.png";
 const Footer = () => {
   return (
     <footer className="bg-red-100 py-4">
-      <div className="flex justify-center items-center gap-12 md:flex">
+      <div className="flex justify-center items-stretch gap-12 md:flex">
         <div className="basis-1/3 md:mt-0">
           <img className="bg-auto" alt="logo" src={Logo} />
           <p className="text-red-500 font-semibold">©Minics All Rights Reserved.</p>

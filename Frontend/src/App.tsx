@@ -18,7 +18,6 @@ import ComplaintHandling from "./Components/pages/admin/admin_complaint_handling
 import RoomManagement from "./Components/pages/admin/admin_room_control/room_control";
 import EquipmentManagement from "./Components/pages/admin/admin_equipmemt_control";
 import MemberManagement from "./Components/pages/admin/admin_member_control/member_control";
-import MemberCreate from "./Components/pages/admin/admin_member_control/member_create";
 import MemberUpdate from "./Components/pages/admin/admin_member_control/member_update";
 import PictureEquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/picture_update";
 import EquipmentUpdate from "./Components/pages/admin/admin_equipmemt_control/equipment_update";
@@ -59,10 +58,8 @@ function App() {
         <Route path='/member-manage' element={<MemberManagement/>}/> {}
         <Route path='/equipment-manage' element={<EquipmentManagement/>}/> {}
         <Route path='/room-mannage' element={<RoomManagement/>}/> {}
-        <Route path='/room-mannage' element={<RoomManagement/>}/> {}
         <Route path='/booking-management' element={<BookingManagement/>}/> {}
         <Route path='/complaint-handle' element={<ComplaintHandling/>}/> {}
-        <Route path='/member-create' element={<MemberCreate/>}/> {}
         <Route path="/member/update/:id" element={<MemberUpdate/>}/> {}
         <Route path="/picture/update/:id" element={<PictureEquipmentUpdate/>}/> {}
         <Route path="/equipment/update/:id" element={<EquipmentUpdate/>}/> {}

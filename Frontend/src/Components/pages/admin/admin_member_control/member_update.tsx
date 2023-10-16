@@ -1,22 +1,23 @@
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React from 'react';
 import Snackbar from "@mui/material/Snackbar";
-import { motion } from 'framer-motion';
-import HText from "@/shared/HText";
 import { useEffect, useState } from 'react';
 import { MemberInterface } from '@/interfaces/IMember';
 import { GenderInterface } from '@/interfaces/IGender';
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
-import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
-import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
-import { Link, useParams } from "react-router-dom";
-import { GetGenders } from "@/services/HttpClientService";
+import { useNavigate, useParams } from "react-router-dom";
+import { GetGenders, GetRoles } from "@/services/HttpClientService";
+import { RoleInterface } from "@/interfaces/IRole";
+import { Divider, Grid } from "@mui/material";
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 function MemberUpdate() {
     let { id } = useParams();
+    const navigate = useNavigate();
     const [member, setMember] = useState<MemberInterface>({});
     const [genders, setGenders] = useState<GenderInterface[]>([]);
+    const [roles, setRoles] = useState<RoleInterface[]>([]);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -91,10 +92,18 @@ function MemberUpdate() {
       setGenders(res);
     }
   };
+
+  const getRoles = async () => {
+    let res = await GetRoles();
+    if (res) {
+        setRoles(res);
+    }
+};
   
   useEffect(() => {
     getMembers();
     getGenders();
+    getRoles();
   }, []);
 
   const convertType = (data: string | number | undefined) => {
@@ -148,234 +157,206 @@ function MemberUpdate() {
     }
 
     return (
-        <section className="w-full bg-gray-20">
-          <motion.div className="mx-auto w-5/6 pt-12 pb-32">
-                {/* Snackbar */}
-                <Snackbar
-                  id="success"
-                  open={success}
-                  autoHideDuration={5000}
-                  onClose={handleClose}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  >
-                    <Alert onClose={handleClose} severity="success">
-                      Your information was updated
-                    </Alert>
-                </Snackbar>
-                <Snackbar
-                  id="error"
-                  open={error}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                >
-                  <Alert onClose={handleClose} severity="error">
-                    Sorry!! We can not update your information : {errorMessage}
-                  </Alert>
-                </Snackbar>
-
-                {/* Header */}
-                <motion.div
-                    className="md:w-3/5"
-                    initial="hidden" 
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.5 }}
-                    variants={{
-                        hidden: { opacity: 0, x:-50 },
-                        visible: { opacity: 1, x:-0 }
-                    }}
-                >
-                    <HText>
-                        <span className="text-red-500">WELCOME</span> TO OUR FAMILY
-                    </HText>
-                    <p className="my-5">
-                    It's important to note that the fitness industry is constantly evolving, 
-                    and new state-of-the-art gyms may emerge with even more advanced features in the future.
+        <section className="bg-slate-50 py-20">
+          {/* Snackbar */}
+            <Snackbar
+              id="success"
+              open={success}
+              autoHideDuration={5000}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert onClose={handleClose} severity="success">
+                  Updated Successful
+                </Alert>
+            </Snackbar>
+            <Snackbar
+              id="error"
+              open={error}
+              autoHideDuration={6000}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert onClose={handleClose} severity="error">
+                {errorMessage}
+              </Alert>
+            </Snackbar>
+          {/* Member Update */}
+          <div className="bg-white border-2 rounded-md p-1 w-4/5 bg-center mx-auto">
+              <div className="m-2">
+                <h1 className="text-center font-bold text-purple-800 font-monserrat text-3xl mb-3">
+                  Edit Member
+                </h1>
+                <Divider/>
+              </div>
+              <div className="my-3">
+                  <p className="font-bold text-red-600 text-center">
+                    *** Personal Information ***
+                  </p>
+                  <Grid container padding={1}>
+                    <Grid item xs={5.7} margin={1}>
+                      <label id="Firstname" className="font-medium text-black">FirstName</label>
+                      <input
+                        className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                        id="Firstname"
+                        type="string"
+                        autoFocus
+                        value={member.Firstname || ""}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={5.7} margin={1}>
+                      <label id="Lastname" className="font-medium text-black">LastName</label>
+                      <input
+                        className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                        id="Lastname"
+                        type="string"
+                        autoFocus
+                        value={member.Lastname || ""}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={5.7} margin={1}>
+                      <label id="Phonenumber" className="font-medium text-black">Phone Number</label>
+                      <input
+                        className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                        id="Phonenumber"
+                        type="string"
+                        autoFocus
+                        value={member.Phonenumber || ""}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={5.7} margin={1}>
+                      <label id="Gender" className="font-medium text-black">Gender</label>
+                      <Select
+                        native
+                        id="Gender"
+                        className="border-1 border-slate-100 mt-1 bg-transparent w-full h-9 rounded"
+                        value={member.GenderID + ""}
+                        onChange={handleChange}
+                        inputProps={{
+                            name: "GenderID",
+                        }}
+                        >
+                          <option>Choose Gender</option>
+                          {genders.map((item: GenderInterface) => (
+                            <option value={item.ID} key={item.ID}>
+                              {item.Gender}
+                            </option>
+                          ))}
+                      </Select>
+                    </Grid>
+                    <Grid item xs={3.7} margin={1}>
+                      <label id="Age" className="font-medium text-black">Age</label>
+                      <input
+                        className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                        id="Age"
+                        type="number"
+                        autoFocus
+                        value={member.Age || ""}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={3.7} margin={1}>
+                      <label id="Weight" className="font-medium text-black">Weight(Kg.)</label>
+                      <input
+                        className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                        id="Weight"
+                        type="number"
+                        autoFocus
+                        value={member.Weight || ""}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={3.7} margin={1}>
+                      <label id="Height" className="font-medium text-black">Height(cm.)</label>
+                      <input
+                        className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                        id="Height"
+                        type="number"
+                        autoFocus
+                        value={member.Height || ""}
+                        onChange={handleInputChange}
+                      />
+                    </Grid>
+                  </Grid>
+                  <div className="my-3">
+                    <p className="font-bold text-red-600 text-center">
+                      *** General Information ***
                     </p>
-                </motion.div>
-
-                {/* Fill the form and image */}
-                <div className="mt-5 justify-between gap-8 md:flex">
-                  <motion.div
-                    className="mt-5 basis-3/5 md:mt-0"
-                    initial="hidden" 
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.5 }}
-                    transition={{ duration: 0.5 }}
-                    variants={{
-                        hidden: { opacity: 0, y: 50 },
-                        visible: { opacity: 1, y: 0 }
-                    }}
-                  >
-                    {/* Fill the form */}
-                      <div>
-                        <label className="text-lg font-semibold text-red-700">FirstName</label>
+                    <Grid container padding={1}>
+                      <Grid item xs={5.7} margin={1}>
+                        <label id="Email" className="font-medium text-black">Email</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your FirstName"
-                          id="Firstname"
-                          name="firstname"
-                          type="string"
-                          autoFocus
-                          value={member.Firstname || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">LastName</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Lastname"
-                          id="Lastname"
-                          name="lastname"
-                          type="string"
-                          autoFocus
-                          value={member.Lastname || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Username</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Username"
-                          id="Username"
-                          name="username"
-                          type="string"
-                          autoFocus
-                          value={member.Username || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Email</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Email"
+                          className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
                           id="Email"
-                          name="email"
                           type="string"
                           autoFocus
                           value={member.Email || ""}
                           onChange={handleInputChange}
                         />
-                        <label className="text-lg font-semibold text-red-700">Phone Number</label>
+                      </Grid>
+                      <Grid item xs={5.7} margin={1}>
+                        <label id="Password" className="font-medium text-black">Password</label>
                         <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Email"
-                          id="Phonenumber"
-                          name="phonenumber"
+                          className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                          placeholder="Change a new password"
+                          id="Password"
                           type="string"
                           autoFocus
-                          value={member.Phonenumber || ""}
                           onChange={handleInputChange}
                         />
-                        <label className="text-lg font-semibold text-red-700">Gender</label>
+                      </Grid>
+                      <Grid item xs={5.7} margin={1}>
+                        <label id="Username" className="font-medium text-black">Username</label>
+                        <input
+                          className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                          id="Username"
+                          type="string"
+                          autoFocus
+                          value={member.Username || ""}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={5.7} margin={1}>
+                        <label id="Gender" className="font-medium text-black">Gender</label>
                         <Select
-                          className="border-2 mt-1 mb-4 w-full rounded-2xl font-medium border-black bg-gray-50"
                           native
-                          value={member.GenderID + ""}
+                          id="Gender"
+                          className="border-1 border-slate-100 mt-1 bg-transparent w-full h-9 rounded"
+                          value={member.RoleID + ""}
                           onChange={handleChange}
                           inputProps={{
-                              name: "GenderID",
-                          }}>
-                          <option className="text-gray-300">Choose your Gender</option>
-                          {genders.map((item: GenderInterface) => (
+                              name: "RoleID",
+                          }}
+                          >
+                            <option>Choose Role</option>
+                            {roles.map((item: RoleInterface) => (
                               <option value={item.ID} key={item.ID}>
-                                {item.Gender}
+                                {item.Role}
                               </option>
-                          ))}
+                            ))}
                         </Select>
-                        <label className="text-lg font-semibold text-red-700">Age</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Age"
-                          id="Age"
-                          name="age"
-                          type="number"
-                          autoFocus
-                          value={member.Age || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Weight(Kg.)</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Weight"
-                          id="Weight"
-                          name="weight"
-                          type="number"
-                          autoFocus
-                          value={member.Weight || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Height(cm.)</label>
-                        <input
-                          className="w-full border-2 rounded-xl p-3 mt-1 mb-3 font-medium border-black bg-gray-50"
-                          placeholder="Enter your Height"
-                          id="Height"
-                          name="Height"
-                          type="number"
-                          autoFocus
-                          value={member.Height || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      
-                      <div className="mt-5 flex flex-col gap-y-4">
-                          <button 
-                            className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
-                            py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                            onClick= {submit}
-                            >
-                              Edit Now
-                          </button>
-                      </div>
-                      <div className="mt-2 flex flex-col gap-y-4">
-                          <button 
-                            className="text-white bg-orange-700 text-lg font-bold rounded-xl 
-                            py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                            >
-                              <Link to="/chpassword">
-                                Change My Password
-                              </Link>
-                          </button>
-                      </div>
-                      <div className="mt-2 flex flex-col gap-y-4">
-                          <button 
-                            className="bg-red-500 text-lg font-bold rounded-xl text-white
-                            py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                            >
-                              <Link to="/profile">
-                                Cancel
-                              </Link>
-                          </button>
-                      </div>
-                </motion.div>
-
-                {/* Image */}
-                <motion.div
-                        className="mt-16 basis-3/5 md:mt-0"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.5 }}
-                        transition={{ delay: 0.2, duration: 0.5 }}
-                        variants={{
-                        hidden: { opacity: 0, x:-50 },
-                        visible: { opacity: 1, x:-0 },
-                        }}>
-                        <img
-                          className="w-full rounded-lg bg-auto my-2"
-                          alt="login-page-graphic"
-                          src={SignUpPageGraphic1}
-                        />
-                        <img
-                          className="w-full rounded-lg bg-auto my-2"
-                          alt="login-page-graphic"
-                          src={SignUpPageGraphic2}
-                        />
-                        <img
-                          className="w-full rounded-lg bg-auto my-2"
-                          alt="login-page-graphic"
-                          src={SignUpPageGraphic3}
-                        />
-                    </motion.div>
+                      </Grid>
+                    </Grid>
+                  </div>
                 </div>
-          </motion.div>
+                <Divider/>
+                <div className="flex justify-center items-center gap-3 my-3">
+                  <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
+                    onClick={() => navigate({ pathname: `/member-manage` })}
+                  >
+                    <CancelIcon/> Back
+                  </button>
+                  <button className="rounded px-2 py-1 text-white font-semibold
+                    bg-green-500 active:scale-[.98] active:duration-75 transition-all" 
+                    onClick={submit}
+                  >
+                    <CheckCircleIcon/> Submit
+                  </button>
+                </div>
+              </div>
         </section>
     )
 }
