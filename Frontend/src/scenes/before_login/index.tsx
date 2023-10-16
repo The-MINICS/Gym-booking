@@ -40,9 +40,9 @@ function BeforeLogin() {
                 <Benefits setSelectedPage = {setSelectedPage} />
                 <Terms setSelectedPage = {setSelectedPage} />
                 <SignIn setSelectedPage={setSelectedPage} />
-                <Routes>
+                {/* <Routes>
                   <Route path="/resetpassword" element={< ResetPassword/>}/> {}
-                </Routes>
+                </Routes> */}
                 <Footer/>
             </div>
         </>

@@ -18,6 +18,7 @@ import DropdownAdminTools from './pages/admin/Dropdown';
 import BuildIcon from '@mui/icons-material/Build';
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import logo from "@/assets/Logo4.png";
 
 const menunevbar = [
   { name: 'Home', path: '/', role: 'All', index: 0},
@@ -128,8 +129,7 @@ function Navbar2() {
       <nav className='navbar'>
         <Link to='/' className="flex items-center justify-between cursor-pointer ml-4 justify-self-start" 
           onClick={closeMobileMenu}>
-          <h1 className='text-3xl font-extrabold font-dmsans'>The MINICS</h1>
-          <h1 className='text-3xl font-extrabold text-red-600 font-dmsans'>-Gym</h1>
+            <img src={logo} alt='logo'/>
         </Link>
         <div className='menu-icon' onClick={handleClick}>
           <i className={click ? 'fas fa-times' : 'fas fa-bars'} />

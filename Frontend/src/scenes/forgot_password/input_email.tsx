@@ -3,24 +3,23 @@ import { SelectedPage } from '@/shared/types';
 import HText from "@/shared/HText";
 import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
 import React, { useState } from "react";
-import { SigninInterface } from "@/interfaces/ISignin";
 import { ForgotPasswordInterface } from "@/interfaces/IForgotPassword";
 import { ForgotPassword } from '@/services/HttpClientService';
+import { Alert, Snackbar } from '@mui/material';
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 }
 
 function InputEmail({setSelectedPage}: Props){
-    const [signin, setSignin] = useState<Partial<SigninInterface>>({});
     const [error, setError] = useState(false);
     const [forgot, setForgot] = useState<ForgotPasswordInterface>({});
     const [success, setSuccess] = useState(false);
 
     const Cancel = () => {
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }
 
     const handleInputChange = (
@@ -30,6 +29,17 @@ function InputEmail({setSelectedPage}: Props){
         const { value } = event.target;
         setForgot({ ...forgot, [id]: value });
     };
+
+    const handleClose = (
+      event?: React.SyntheticEvent | Event,
+      reason?: string
+    ) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      setSuccess(false);
+      setError(false);
+    };
     
     const submit = async () => {
       let res = await ForgotPassword(forgot);
@@ -38,14 +48,38 @@ function InputEmail({setSelectedPage}: Props){
         setTimeout(() => {
           window.location.href = "/";
       }, 1000);
-      } else { setError(true); };
+      } else { 
+        setError(true);
+      };
     };
   
 
   return (
-    <section id="joinnow" className="w-full bg-yellow-50">
+    <section id="joinnow" className="w-full bg-gray-50">
             <motion.div className="mx-auto w-5/6 pt-24 pb-32"
                 onViewportEnter={() => setSelectedPage(SelectedPage.JoinNow)}>
+                {/* login success */}
+                <Snackbar
+                  open={success}
+                  autoHideDuration={5000}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                >
+                  <Alert onClose={handleClose} severity="success">
+                    Please check your email
+                  </Alert>
+                </Snackbar>
+                {/* login failure */}
+                <Snackbar
+                  open={error}
+                  autoHideDuration={3000}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                >
+                  <Alert onClose={handleClose} severity="error">
+                    Email incorrcted!
+                  </Alert>
+                </Snackbar>
                 {/* Header */}
                 <motion.div
                     className="md:w-3/5"
@@ -80,7 +114,7 @@ function InputEmail({setSelectedPage}: Props){
                       }}
                   >
                   {/* fill the form */}
-                  <div className="bg-yellow-50">
+                  <div className="bg-gray-50">
                     <div>
                       <input
                         className="w-full border-2 border-red-300 rounded-xl p-4 mt-1 bg-transparent mb-4"
