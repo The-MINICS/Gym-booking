@@ -32,7 +32,7 @@ func SendPasswordResetEmail(email, token string) error {
 	m.SetHeader("From", "TheMINICSGym@gmail.com")
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Password Reset")
-	m.SetBody("text/plain", fmt.Sprintf("To reset your password, click on the following link: http://127.0.0.1:5173/resetpassword"))
+	m.SetBody("text/plain", fmt.Sprintf("To reset your password, click on the following link: http://127.0.0.1:5173/resetpassword?token=%s", token))
 
 	if err := d.DialAndSend(m); err != nil {
 		return err
