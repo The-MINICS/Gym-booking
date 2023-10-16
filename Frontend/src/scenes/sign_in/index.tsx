@@ -7,7 +7,6 @@ import HText from "@/shared/HText";
 import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import SignUp from "../sign_up";
 import InputEmail from "../forgot_password/input_email";
 
 type Props = {
@@ -22,20 +21,11 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const SignIn = ({setSelectedPage}: Props) => {
-  //const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
   const [signin, setSignin] = useState<Partial<SigninInterface>>({});
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const roles = localStorage.getItem("role");
-
-  // const ShowSignup = () => {
-  //   if(show == true){
-  //     setShow(false)
-  //   }else{
-  //     setShow(true)
-  //   }
-  // }
 
   const ShowForgotPassword = () => {
     if(open == true){
@@ -184,16 +174,6 @@ const SignIn = ({setSelectedPage}: Props) => {
                           Sign In
                       </button>
                     </div>
-                    {/* <div className="mt-4 flex flex-center mx-16">
-                      <p className="mr-2">You are not our member yet?</p>
-                      <button onClick={ShowSignup} 
-                        className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
-                      >
-                        <span className="text-purple-500 font-semibold">
-                          Become our member
-                        </span>
-                      </button>
-                    </div> */}
                   </div>
                   </motion.div>
 

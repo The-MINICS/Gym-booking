@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '@/Components/Navbar2.css';
@@ -15,6 +16,8 @@ import UserPhoto from '@/assets/UserProfile.png';
 import AdminPhoto from '@/assets/AdministratorProfile.png';
 import DropdownAdminTools from './pages/admin/Dropdown';
 import BuildIcon from '@mui/icons-material/Build';
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const menunevbar = [
   { name: 'Home', path: '/', role: 'All', index: 0},
@@ -26,14 +29,15 @@ const menunevbar = [
 
 function Navbar2() {
   const [click, setClick] = useState(false);
+  const [isMenuToggled, setIsMenuToggled] = React.useState<boolean>(false);
   const [dropdown1, setDropdown1] = useState(false);
   const [dropdown2, setDropdown2] = useState(false);
   const [dropdown3, setDropdown3] = useState(false);
   const [members, setMembers] = useState<MemberInterface>({});
+  const isAboveMediumScreens = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const roles = localStorage.getItem("role");
-  console.log(roles);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -204,8 +208,8 @@ function Navbar2() {
             }
           })}
         </ul>
-        {/* Profile Dropdown */}
-        <div className="md:flex my-3 relative rounded-full right-5">
+        {isAboveMediumScreens ? (
+          <div className="md:flex my-3 relative rounded-full right-5">
                 <img src={user} alt='user-logo' 
                     onClick={toggleDropdown}
                     className='h-10 w-10 hover:bg-yellow-200
@@ -251,7 +255,49 @@ function Navbar2() {
                   )
                 }
           </div>
-          
+        ) : (
+          <button 
+              className="rounded-full bg-yellow-500 p-2"
+              onClick={() => setIsMenuToggled(!isMenuToggled)}
+            >
+              <Bars3Icon className="h-6 w-6 text-white" />
+          </button>
+        )
+        }
+
+      {/* Mobile Menu */}
+      {!isAboveMediumScreens && isMenuToggled && (
+        <div className="fixed right-0 bottom-0 z-40 h-full w-[300px] bg-red-100
+        drop-shadow-xl">
+          {/* Close Icon */}
+          <div className="flex justify-end p-12">
+            <button onClick={() => setIsMenuToggled(!isMenuToggled)}>
+              <XMarkIcon className="h-6 w-6 text-gray-400"/>
+            </button>
+          </div>
+          {/* Menu Items */}
+          <div className= "ml-[33%] flex flex-col gap-10 text-2xl font-bold">
+            <Link to="/">
+              Home
+            </Link>
+            <Link to="/services">
+              Services
+            </Link>
+            <Link to="/members'">
+              Member
+            </Link>
+            {(roles === "User") ? (
+              <Link to="/contact-us">
+                Contact Us
+              </Link>
+            ):(
+              <Link to="/admin-tools">
+                Administrator Tools
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
       </nav>
     </>
   );

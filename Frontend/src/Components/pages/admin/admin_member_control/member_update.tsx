@@ -301,10 +301,10 @@ function MemberUpdate() {
                         <label id="Password" className="font-medium text-black">Password</label>
                         <input
                           className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                          placeholder="Change a new password"
                           id="Password"
                           type="string"
                           autoFocus
-                          value={member.Password || ""}
                           onChange={handleInputChange}
                         />
                       </Grid>
