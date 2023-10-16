@@ -25,11 +25,11 @@ type ForgotResponse struct {
 }
 
 func SendPasswordResetEmail(email, token string) error {
-	d := gomail.NewDialer("smtp.gmail.com", 587, "omamchonvat@gmail.com", "fdhf oddx bfjt ktvo")
+	d := gomail.NewDialer("smtp.gmail.com", 587, "TheMINICSGym@gmail.com", "rmzo slrg mdqf cxgg")
 
 	// Create an email message
 	m := gomail.NewMessage()
-	m.SetHeader("From", "omamchonvat@gmail.com")
+	m.SetHeader("From", "TheMINICSGym@gmail.com")
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Password Reset")
 	m.SetBody("text/plain", fmt.Sprintf("To reset your password, click on the following link: http://127.0.0.1:5173/resetpassword"))
