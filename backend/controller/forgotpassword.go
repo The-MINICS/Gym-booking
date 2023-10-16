@@ -3,84 +3,139 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"time"
 
+	"github.com/asaskevich/govalidator"
+	"github.com/chonticha1844/Gym-booking/entity"
+	"github.com/chonticha1844/Gym-booking/service"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid" // You can use your own token generation library
+	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/gomail.v2"
+	"gorm.io/gorm"
 )
 
-// User struct represents user data (e.g., ID, email, reset token, token expiration time).
-type User struct {
-	ID           int
-	Email        string
-	ResetToken   string
-	TokenExpires time.Time
+// ForgotPayload
+type ForgotPayload struct {
+	Email string `json:"email"`
 }
 
-var usersDB = make(map[int]User)
-
-func main() {
-	r := gin.Default()
-
-	// Endpoint to request a password reset
-	r.POST("/forgot-password", ForgotPassword)
-
-	r.Run(":8080")
+// LoginResponse token response
+type ForgotResponse struct {
+	Token string `json:"token"`
+	ID    uint   `json:"id"`
 }
 
-// ForgotPassword generates a reset token and sends a reset email.
+func SendPasswordResetEmail(email, token string) error {
+	d := gomail.NewDialer("smtp.gmail.com", 587, "omamchonvat@gmail.com", "fdhf oddx bfjt ktvo")
+
+	// Create an email message
+	m := gomail.NewMessage()
+	m.SetHeader("From", "omamchonvat@gmail.com")
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "Password Reset")
+	m.SetBody("text/plain", fmt.Sprintf("To reset your password, click on the following link: http://127.0.0.1:5173/resetpassword"))
+
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func ForgotPassword(c *gin.Context) {
-	// Parse user's email from the request
-	var request struct {
-		Email string `json:"email"`
-	}
+	var forgotpassword ForgotPayload
+	var member entity.Member
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+	if err := c.ShouldBindJSON(&forgotpassword); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Check if the email is associated with a user
-	user, ok := findUserByEmail(request.Email)
-	if !ok {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+	if tx := entity.DB().Where("email = ?", forgotpassword.Email).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Your email is incorrect."})
 		return
 	}
 
-	// Generate a unique reset token
-	resetToken := generateResetToken()
-
-	// Set the token expiration time (e.g., 1 hour from now)
-	tokenExpires := time.Now().Add(time.Hour)
-
-	// Store the token and expiration time in the database
-	user.ResetToken = resetToken
-	user.TokenExpires = tokenExpires
-	usersDB[user.ID] = user
-
-	// Send a reset email to the user's email address (replace with your email sending logic)
-	sendResetEmail(user.Email, resetToken)
-
-	// Respond with a success message
-	c.JSON(http.StatusOK, gin.H{"message": "Password reset instructions sent to your email"})
-}
-
-// Helper function to find a user by email (replace with your database query logic)
-func findUserByEmail(email string) (User, bool) {
-	for _, user := range usersDB {
-		if user.Email == email {
-			return user, true
-		}
+	jwtWrapper := service.JwtWrapper{
+		SecretKey:       "SvNQpBN8y3qlVrsGAYYWoJJk56LtzFHx",
+		Issuer:          "AuthService",
+		ExpirationHours: 24,
 	}
-	return User{}, false
+
+	// Generate a password reset token
+	token, err := jwtWrapper.GeneratePasswordResetToken(forgotpassword.Email)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error generating the password reset token"})
+		return
+	}
+
+	// Send a password reset email to the user
+	err = SendPasswordResetEmail(forgotpassword.Email, token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending the password reset email"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Password reset email sent successfully"})
 }
 
-// Helper function to generate a unique reset token (using UUID as an example)
-func generateResetToken() string {
-	return uuid.New().String()
-}
+func ResetPassword(c *gin.Context) {
+	var member entity.Member
 
-// Helper function to send a reset email (replace with your email sending logic)
-func sendResetEmail(email, token string) {
-	fmt.Printf("Sending reset email to %s with token %s\n", email, token)
+	// Bind the JSON request to a struct
+	if err := c.ShouldBindJSON(&member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var newNewPassword = member.NewPassword
+	var newConfirmNewPassword = member.ConfirmNewPassword
+
+	// Retrieve the user's current hashed password from the database
+	if tx := entity.DB().Where("id = ?", member.ID).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
+		return
+	}
+
+	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
+	hashedNewPassword, err := bcrypt.GenerateFromPassword([]byte(newNewPassword), 14)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		return
+	}
+
+	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
+	hashedConfirmNewPassword, err := bcrypt.GenerateFromPassword([]byte(newConfirmNewPassword), 14)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		return
+	}
+
+	// การ validate
+	if _, err := govalidator.ValidateStruct(member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	reset_password := entity.Member{
+		Model:              gorm.Model{ID: member.ID},
+		NewPassword:        string(hashedNewPassword),
+		ConfirmNewPassword: string(hashedConfirmNewPassword),
+	}
+
+	if tx := entity.DB().Where("id = ?", member.ID).Updates(&reset_password).Error; tx != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": tx.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": reset_password})
+
+	// Validate the new password and confirmation
+	if newNewPassword != newConfirmNewPassword {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "New password and confirmation do not match"})
+		return
+	}
+
+	// Update the user's password in the database with the new hashed password
+	if err := entity.DB().Model(&member).Update("Password", string(hashedNewPassword)).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating password"})
+		return
+	}
 }

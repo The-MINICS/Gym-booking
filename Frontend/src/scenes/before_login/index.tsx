@@ -6,6 +6,8 @@ import Footer from '../footer';
 import Navbar1 from '../navbar/navbar';
 import Terms from '../terms';
 import SignIn from "../sign_in";
+import { Route, Routes } from "react-router-dom";
+import ResetPassword from "../forgot_password/new_password";
 
 
 function BeforeLogin() {
@@ -38,6 +40,9 @@ function BeforeLogin() {
                 <Benefits setSelectedPage = {setSelectedPage} />
                 <Terms setSelectedPage = {setSelectedPage} />
                 <SignIn setSelectedPage={setSelectedPage} />
+                <Routes>
+                  <Route path="/resetpassword" element={< ResetPassword/>}/> {}
+                </Routes>
                 <Footer/>
             </div>
         </>

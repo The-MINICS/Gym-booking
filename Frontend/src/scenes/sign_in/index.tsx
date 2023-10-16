@@ -85,7 +85,7 @@ const SignIn = ({setSelectedPage}: Props) => {
                   onClose={handleClose}
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
-                  {AlerSignIn()}
+                  {AlertSignIn()}
                 </Snackbar>
                 {/* login failure */}
                 <Snackbar
@@ -226,7 +226,7 @@ const SignIn = ({setSelectedPage}: Props) => {
         </section>
     );
 
-    function AlerSignIn() {
+    function AlertSignIn() {
       if (roles === 'Admin') {
         return (
           <Alert onClose={handleClose} severity="success">

@@ -24,6 +24,9 @@ func main() {
 	r.POST("/login/member", controller.LoginMember)
 
 	r.POST("/forgot-password", controller.ForgotPassword)
+
+	r.PATCH("/reset-password", controller.ResetPassword)
+
 	api := r.Group("")
 	{
 		protected := api.Use(middlewares.Authorizes())

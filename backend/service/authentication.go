@@ -40,6 +40,26 @@ func (j *JwtWrapper) GenerateToken(email string) (signedToken string, err error)
 	return
 }
 
+// Generate a password reset token
+func (j *JwtWrapper) GeneratePasswordResetToken(email string) (signedToken string, err error) {
+	claims := &JwtClaim{
+		Email: email,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(j.ExpirationHours)).Unix(),
+			Issuer:    j.Issuer,
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	signedToken, err = token.SignedString([]byte(j.SecretKey))
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 // Validate Token validates the jwt token
 func (j *JwtWrapper) ValidateToken(signedToken string) (claims *JwtClaim, err error) {
 	token, err := jwt.ParseWithClaims(

@@ -4,6 +4,8 @@ import HText from "@/shared/HText";
 import LoginPageGraphic from "@/assets/LoginPageGraphic.jpg"
 import React, { useState } from "react";
 import { SigninInterface } from "@/interfaces/ISignin";
+import { ForgotPasswordInterface } from "@/interfaces/IForgotPassword";
+import { ForgotPassword } from '@/services/HttpClientService';
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -11,6 +13,9 @@ type Props = {
 
 function InputEmail({setSelectedPage}: Props){
     const [signin, setSignin] = useState<Partial<SigninInterface>>({});
+    const [error, setError] = useState(false);
+    const [forgot, setForgot] = useState<ForgotPasswordInterface>({});
+    const [success, setSuccess] = useState(false);
 
     const Cancel = () => {
         setTimeout(() => {
@@ -21,17 +26,21 @@ function InputEmail({setSelectedPage}: Props){
     const handleInputChange = (
         event: React.ChangeEvent<{ id?: string; value: any }>
       ) => {
-        const id = event.target.id as keyof typeof signin;
+        const id = event.target.id as keyof typeof forgot;
         const { value } = event.target;
-        setSignin({ ...signin, [id]: value });
+        setForgot({ ...forgot, [id]: value });
     };
     
     const submit = async () => {
-        //submit
-        // setTimeout(() => {
-        //     window.location.href = "/emailcheck";
-        // }, 1000);
+      let res = await ForgotPassword(forgot);
+      if (res) {
+        setSuccess(true);
+        setTimeout(() => {
+          window.location.href = "/";
+      }, 1000);
+      } else { setError(true); };
     };
+  
 
   return (
     <section id="joinnow" className="w-full bg-yellow-50">
@@ -80,7 +89,7 @@ function InputEmail({setSelectedPage}: Props){
                         name="email"
                         autoComplete="email"
                         autoFocus
-                        value={signin.Email || ""}
+                        value={forgot.Email || ""}
                         onChange={handleInputChange}
                       />
                     </div>

@@ -1,5 +1,6 @@
 import { SigninInterface } from "../interfaces/ISignin";
 import { MemberInterface } from "@/interfaces/IMember";
+import { ForgotPasswordInterface } from "@/interfaces/IForgotPassword";
 
 const apiUrl = "http://localhost:9999";
 
@@ -18,6 +19,28 @@ async function Login(data: SigninInterface) {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("mid", res.data.id);
         localStorage.setItem("role", res.data.role);
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+  return res;
+}
+
+async function ForgotPassword(data: ForgotPasswordInterface) {
+  console.log(data)
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  let res = await fetch(`${apiUrl}/forgot-password`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("mid", res.data.id);
         return res.data;
       } else {
         return false;
@@ -488,6 +511,7 @@ async function GetGenders() {
 
 export {
   Login,
+  ForgotPassword,
   Members,
   GetMemberByMID,
   GetMembers,
