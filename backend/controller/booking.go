@@ -151,6 +151,7 @@ func ListBookings(c *gin.Context) {
 func DeleteBooking(c *gin.Context) {
 	var booking entity.Booking
 	var timeslot entity.Timeslot
+	var equipmentbooking entity.EquipmentBooking
 
 	id := c.Param("id")
 
@@ -164,6 +165,11 @@ func DeleteBooking(c *gin.Context) {
 		return
 	}
 
+	if err := entity.DB().Where("booking_id = ?", booking.ID).Find(&equipmentbooking).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Equipment bookings not found"})
+		return
+	}
+
 	if timeslot.Quantity > 0 {
 		timeslot.Quantity--
 	}
@@ -174,9 +180,15 @@ func DeleteBooking(c *gin.Context) {
 		return
 	}
 
-	// Update the equipment status to "available"
+	// Update the booking status to "canceled"
 	if err := entity.DB().Model(&booking).Update("StatusID", 4).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update booking status"})
+		return
+	}
+
+	// Update the status of associated equipment bookings to "canceled" (status 4)
+	if err := entity.DB().Model(entity.EquipmentBooking{}).Where("booking_id = ?", booking.ID).Update("StatusID", 4).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update equipment booking status"})
 		return
 	}
 

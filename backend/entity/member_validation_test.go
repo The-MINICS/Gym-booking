@@ -14,12 +14,15 @@ func TestMemberCorrect(t *testing.T) {
 	t.Run("Check format Member", func(t *testing.T) {
 		member := Member{
 
-			Username:    "B1234567",
-			Email:       "B1234567@g.sut.ac.th",
-			Password:    "1234567890123",
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
 			Firstname:   "Tom ",
 			Lastname:    "Highway",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
@@ -42,17 +45,20 @@ func TestMember(t *testing.T) {
 		member := Member{
 
 			Username:    "",
-			Email:       "B1234567@g.sut.ac.th",
-			Password:    "1234567890123",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
 			Firstname:   "Tom ",
 			Lastname:    "Highway",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your username."))
+		g.Expect(err.Error()).To(Equal("Please fill your username."))
 	})
 
 	// t.Run("Check username must be 8 digit ", func(t *testing.T) {
@@ -77,30 +83,36 @@ func TestMember(t *testing.T) {
 
 		member := Member{
 
-			Username:    "B1234567",
+			Username:    "omchonvat",
 			Email:       "",
-			Password:    "1234567890123",
+			Password:    "123456",
 			Firstname:   "Tom ",
 			Lastname:    "Highway",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your email."))
+		g.Expect(err.Error()).To(Equal("Please fill your email."))
 	})
 
 	t.Run("Check email format correct ", func(t *testing.T) {
 
 		member := Member{
 
-			Username:    "B1234567",
-			Email:       "B1234567@",
-			Password:    "1234567890123",
+			Username:    "omchonvat",
+			Email:       "omchonvat@",
+			Password:    "123456",
 			Firstname:   "Tom ",
 			Lastname:    "Highway",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
@@ -113,18 +125,21 @@ func TestMember(t *testing.T) {
 
 		member := Member{
 
-			Username:    "B1234567",
-			Email:       "B1234567@g.sut.ac.th",
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
 			Password:    "",
 			Firstname:   "Tom ",
 			Lastname:    "Highway",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your password."))
+		g.Expect(err.Error()).To(Equal("Please fill your password."))
 	})
 
 	// t.Run("Check password must be =13 digit", func(t *testing.T) {
@@ -149,36 +164,63 @@ func TestMember(t *testing.T) {
 
 		member := Member{
 
-			Username:    "B1234567",
-			Email:       "B1234567@g.sut.ac.th",
-			Password:    "1234567890123",
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
 			Firstname:   "",
 			Lastname:    "Highway",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your firstname."))
+		g.Expect(err.Error()).To(Equal("Please fill your firstname."))
 	})
 
 	t.Run("Check lastname not blank ", func(t *testing.T) {
 
 		member := Member{
 
-			Username:    "B1234567",
-			Email:       "B1234567@g.sut.ac.th",
-			Password:    "1234567890123",
-			Firstname:   "Tom",
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
 			Lastname:    "",
 			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please enter your lastname."))
+		g.Expect(err.Error()).To(Equal("Please fill your lastname."))
+	})
+
+	t.Run("Check phone number not blank ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "",
+			Age:         21,
+			Weight:      70,
+			Height:      182,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("Please fill your phone number."))
 	})
 
 	t.Run("Tel. is not correct. ", func(t *testing.T) {
@@ -196,17 +238,146 @@ func TestMember(t *testing.T) {
 			member := Member{
 
 				Username:    "B1234567",
-				Email:       "B1234567@g.sut.ac.th",
-				Password:    "1234567890123",
-				Firstname:   "Tom",
+				Email:       "omchonvat@gmail.com",
+				Password:    "123456",
+				Firstname:   "Tom ",
 				Lastname:    "Highway",
 				Phonenumber: Phonenumber,
+				Age:         21,
+				Weight:      70,
+				Height:      182,
 			}
 			//ตรวจสอบด้วย govalidator
 			ok, err := govalidator.ValidateStruct(member)
 			g.Expect(ok).ToNot(BeTrue())
 			g.Expect(err).ToNot(BeNil())
-			g.Expect(err.Error()).To(Equal("Phone number is not correct."))
+			g.Expect(err.Error()).To(Equal("Phone number is incorrect."))
 		}
+	})
+
+	t.Run("Check age not blank ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "0881234567",
+			Age:         0,
+			Weight:      70,
+			Height:      182,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("Please fill your age."))
+	})
+
+	t.Run("Check age not zero ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "0881234567",
+			Age:         -12,
+			Weight:      70,
+			Height:      182,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("The age number must not be negative."))
+	})
+
+	t.Run("Check Weight not blank ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      0,
+			Height:      182,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("Please fill your weight."))
+	})
+
+	t.Run("Check Weight not zero ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      -70,
+			Height:      182,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("The weight number must not be negative."))
+	})
+
+	t.Run("Check height not blank ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      0,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("Please fill your height."))
+	})
+
+	t.Run("Check height not zero ", func(t *testing.T) {
+
+		member := Member{
+
+			Username:    "omchonvat",
+			Email:       "omchonvat@gmail.com",
+			Password:    "123456",
+			Firstname:   "Tom ",
+			Lastname:    "Highway",
+			Phonenumber: "0881234567",
+			Age:         21,
+			Weight:      70,
+			Height:      -182,
+		}
+		//ตรวจสอบด้วย govalidator
+		ok, err := govalidator.ValidateStruct(member)
+		g.Expect(ok).ToNot(BeTrue())
+		g.Expect(err).ToNot(BeNil())
+		g.Expect(err.Error()).To(Equal("The height number must not be negative."))
 	})
 }

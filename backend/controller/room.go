@@ -103,13 +103,32 @@ func ListRooms(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": rooms})
 }
 
-// DELETE--room id--
 func DeleteRoom(c *gin.Context) {
 	id := c.Param("id")
+
+	var room entity.Room
+	if err := entity.DB().Where("id = ?", id).First(&room).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Room not found"})
+		return
+	}
+
+	// Delete associated timeslots
+	if err := entity.DB().Exec("DELETE FROM timeslots WHERE room_id = ?", id).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to delete associated timeslots"})
+		return
+	}
+
+	// Delete associated dates
+	if err := entity.DB().Exec("DELETE FROM dates WHERE room_id = ?", id).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to delete associated dates"})
+		return
+	}
+
 	if tx := entity.DB().Exec("DELETE FROM rooms WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "room not found"})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"data": id})
 }
 

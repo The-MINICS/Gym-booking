@@ -121,11 +121,6 @@ func UpdateEquipment(c *gin.Context) {
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", equipment.ID).First(&equipment); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Equipment not found"})
-		return
-	}
-
 	if tx := entity.DB().Where("id = ?", equipment.StatusID).First(&status); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Status not found"})
 		return

@@ -12,7 +12,7 @@ import (
 )
 
 // POST /members
-func CreateMember(c *gin.Context) {
+func CreateMemberForAdmin(c *gin.Context) {
 	var member entity.Member
 	var gender entity.Gender
 	var role entity.Role
@@ -64,6 +64,62 @@ func CreateMember(c *gin.Context) {
 		Weight:          member.Weight,
 		Height:          member.Height,
 		Role:            role,
+	}
+
+	// 13: บันทึก
+	if err := entity.DB().Create(&mr).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": mr})
+}
+
+// POST /members
+func CreateMemberForUser(c *gin.Context) {
+	var member entity.Member
+	var gender entity.Gender
+
+	if err := c.ShouldBindJSON(&member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ค้นหา gender ด้วย id
+	if tx := entity.DB().Where("id = ?", member.GenderID).First(&gender); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
+		return
+	}
+
+	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(member.Password), 14)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		return
+	}
+
+	// การ validate
+	if _, err := govalidator.ValidateStruct(member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//กำหนด Role ตอนสร้าง
+	role := uint(2)
+
+	// 14: สร้าง  member
+	mr := entity.Member{
+		Username:        member.Username,
+		Email:           member.Email,
+		Password:        string(hashPassword),
+		Gender:          gender,
+		Firstname:       member.Firstname,
+		Lastname:        member.Lastname,
+		Phonenumber:     member.Phonenumber,
+		Member_datetime: time.Now(),
+		Age:             member.Age,
+		Weight:          member.Weight,
+		Height:          member.Height,
+		RoleID:          &role,
 	}
 
 	// 13: บันทึก

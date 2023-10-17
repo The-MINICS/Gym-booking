@@ -494,7 +494,7 @@ function MemberManagement() {
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
                                                 id="Password"
-                                                type="string"
+                                                type="password"
                                                 autoFocus
                                                 value={member.Password || ""}
                                                 onChange={handleInputChange}
@@ -512,10 +512,10 @@ function MemberManagement() {
                                             />
                                         </Grid>
                                         <Grid item xs={5.7} margin={1}>
-                                            <label id="Gender" className="font-medium">Gender</label>
+                                            <label id="Role" className="font-medium">Role</label>
                                             <Select
                                                 native
-                                                id="Gender"
+                                                id="Role"
                                                 className="border-1 border-slate-100 mt-1 bg-transparent w-full h-9 rounded"
                                                 value={member.RoleID + ""}
                                                 onChange={handleChange}

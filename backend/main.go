@@ -16,15 +16,14 @@ func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
-	r.POST("/members", controller.CreateMember)
+	r.POST("/members", controller.CreateMemberForAdmin)
+	r.POST("/members-user", controller.CreateMemberForUser)
 	r.GET("/genders", controller.ListGenders)
 	r.GET("/roles", controller.ListRoles)
 
 	// Authentication Routes
 	r.POST("/login/member", controller.LoginMember)
-
 	r.POST("/forgot-password", controller.ForgotPassword)
-
 	r.PATCH("/reset-password", controller.ResetPassword)
 
 	api := r.Group("")

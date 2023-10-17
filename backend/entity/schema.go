@@ -29,15 +29,15 @@ type Gender struct {
 // Member
 type Member struct {
 	gorm.Model
-	Username           string `gorm:"uniqueIndex" valid:"required~Please enter your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
-	Email              string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please enter your email."`
-	Password           string `valid:"required~Please enter your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
-	Firstname          string `valid:"required~Please enter your firstname."`
-	Lastname           string `valid:"required~Please enter your lastname."`
-	Phonenumber        string `valid:"matches(^0([6|8|9])([0-9]{8}$))~Phone number is not correct."`
-	Age                int32
-	Weight             int32
-	Height             int32
+	Username           string `gorm:"uniqueIndex" valid:"required~Please fill your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
+	Email              string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please fill your email."`
+	Password           string `valid:"required~Please fill your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
+	Firstname          string `valid:"required~Please fill your firstname."`
+	Lastname           string `valid:"required~Please fill your lastname."`
+	Phonenumber        string `valid:"required~Please fill your phone number., matches(^0([6|8|9])([0-9]{8}$))~Phone number is incorrect."`
+	Age                int32  `valid:"required~Please fill your age., IsPositive~The age number must not be negative."`
+	Weight             int32  `valid:"required~Please fill your weight., IsPositive~The Weight number must not be negative."`
+	Height             int32  `valid:"required~Please fill your height., IsPositive~The height number must not be negative."`
 	Member_datetime    time.Time
 	OldPassword        string
 	NewPassword        string
@@ -101,7 +101,7 @@ type Room struct {
 	gorm.Model
 	Activity     string `valid:"required~Please fill activity about the room." `
 	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
-	Capacity     int16  `valid:"IsPositive~Please fill a number is not less than 1 and not more than 100." `
+	Capacity     int16  `valid:"required~Please fill the room capacity., Range~Please fill a capacity number is not less than 1 and not more than 100." `
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `
 	Caption      string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
@@ -219,11 +219,20 @@ func init() {
 	}))
 
 	govalidator.CustomTypeTagMap.Set("IsPositive", func(i interface{}, context interface{}) bool {
-		t := i.(int)
+		t := i.(int32)
+		if t < 1 {
+			return false
+		} else {
+			return true
+		}
+	})
+
+	govalidator.CustomTypeTagMap.Set("Range", func(i interface{}, context interface{}) bool {
+		t := i.(int16)
 		if t < 1 {
 			return false
 		}
-		if t > 60 {
+		if t > 100 {
 			return false
 		} else {
 			return true
