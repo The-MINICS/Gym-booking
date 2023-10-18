@@ -84,7 +84,7 @@ function InputEmail({setSelectedPage}: Props){
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert onClose={handleClose} severity="success">
-                    Please check your email
+                    Please check your email : {forgot.Email}
                   </Alert>
                 </Snackbar>
                 {/* login failure */}
@@ -95,7 +95,7 @@ function InputEmail({setSelectedPage}: Props){
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert onClose={handleClose} severity="error">
-                  {errorMessage}
+                    {errorMessage}
                   </Alert>
                 </Snackbar>
                 {/* Header */}

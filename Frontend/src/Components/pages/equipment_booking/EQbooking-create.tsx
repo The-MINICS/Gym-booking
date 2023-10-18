@@ -352,7 +352,7 @@ function EquipmentBookingCreate() {
                 <div className="flex EB-book-header gap-2 mb-2">
                   {(books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID).length > 0) ? (
                     <React.Fragment>
-                      {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
+                      {books.filter((BookTime: BookingInterface) => ((BookTime.MemberID) === members.ID) && (BookTime.StatusID === 3))
                         .map((BookTime) => (
                           <React.Fragment>
                             {BookTime.Room?.Activity && (BookTime.Room?.Activity.includes("fitness") || 
@@ -458,7 +458,7 @@ function EquipmentBookingCreate() {
                       </ul>
                       <p>Equipment Booking List:</p>
                       <div>
-                        {books.filter((BookTime: BookingInterface) => (BookTime.MemberID) === members.ID)
+                        {books.filter((BookTime: BookingInterface) => ((BookTime.MemberID) === members.ID) && (BookTime.StatusID === 3))
                             .map((BookTime, index) => (
                               <React.Fragment>
                                 <div>

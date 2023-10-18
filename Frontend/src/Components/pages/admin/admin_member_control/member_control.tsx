@@ -482,9 +482,9 @@ function MemberManagement() {
                                             <label id="Email" className="font-medium">Email</label>
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                                                placeholder="There is no need to fill in"
                                                 id="Email"
                                                 type="string"
-                                                autoFocus
                                                 value={member.Email || ""}
                                                 onChange={handleInputChange}
                                             />
@@ -493,9 +493,9 @@ function MemberManagement() {
                                             <label id="Password" className="font-medium">Password</label>
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                                                placeholder="There is no need to fill in"
                                                 id="Password"
                                                 type="password"
-                                                autoFocus
                                                 value={member.Password || ""}
                                                 onChange={handleInputChange}
                                             />
@@ -504,9 +504,9 @@ function MemberManagement() {
                                             <label id="Username" className="font-medium">Username</label>
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
+                                                placeholder="There is no need to fill in"
                                                 id="Username"
                                                 type="string"
-                                                autoFocus
                                                 value={member.Username || ""}
                                                 onChange={handleInputChange}
                                             />
