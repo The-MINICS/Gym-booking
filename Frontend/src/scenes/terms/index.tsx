@@ -12,14 +12,12 @@ type Props = {
     setSelectedPage: (value: SelectedPage) => void;
 }
 
-const Benefits = ({setSelectedPage}: Props) => {
-  return <section id="terms" className="w-full md:py-1 sm:py-1 bg-gray-20">
+const Terms = ({setSelectedPage}: Props) => {
+  return <section id="terms" className="w-full md:py-1 sm:py-1 bg-slate-50">
         <motion.div
-            className="w-5/6 mx-auto min-h-full"
+            className="mx-5 min-h-full"
             onViewportEnter={() => setSelectedPage(SelectedPage.Terms)}>
-            {/* Graphics and description */}
-            {/* Our class */}
-            <div className="mt-16 items-center justify-between gap-10 md:mt-28 md:flex">
+            <div className="mt-5 items-center justify-between gap-10 md:mt-28 md:flex">
                 {/* Graphic */}
                 <div className="relative">
                     <div className="mx-auto rounded-lg">
@@ -62,34 +60,34 @@ const Benefits = ({setSelectedPage}: Props) => {
                         }}
                     >
                         <h3 className="my-4 text-red-900 font-bold">SERVICE RATE</h3>
-                        <p className="my-4">
-                            <p>1. Students, staff, families of SUT personnel are free of charge.</p>
-                            <p>2. SUT alumni pay half the annual membership fee from 5,000 baht to 2,500 baht.</p>
-                            <p>3. Third party pay annual membership fee 5,000 baht / daily 100 baht</p>
-                        </p>
+                        <ul className="my-4">
+                            <li>1. Students, staff, families of SUT personnel are free of charge.</li>
+                            <li>2. SUT alumni pay half the annual membership fee from 5,000 baht to 2,500 baht.</li>
+                            <li>3. Third party pay annual membership fee 5,000 baht / daily 100 baht</li>
+                        </ul>
 
                         <h3 className="my-4 text-red-900 font-bold">
                             GYM MEMBERSHIP APPLICATION STEPS</h3>
-                        <p className="mb-4">
-                            <p>1. Must pass a physical fitness test first.</p>
-                            <p>
+                        <ul className="mb-4">
+                            <li>1. Must pass a physical fitness test first.</li>
+                            <li>
                             2. Must pass the basic knowledge assessment test with more than 75% 
                             (recommended to study from the training media clips, knowledge, knowledge of sports and health facilities)
-                            </p>
-                            <p>3. Must be trained in the use of exercise equipment first.</p>
-                            <p>4. Students, personnel, family members, go to the service page, choose to reserve a physical fitness test time.</p>
-                            <p>5. Third parties contact information counter Pay the membership fee and get access to the service immediately.</p>
-                        </p>
+                            </li>
+                            <li>3. Must be trained in the use of exercise equipment first.</li>
+                            <li>4. Students, personnel, family members, go to the service page, choose to reserve a physical fitness test time.</li>
+                            <li>5. Third parties contact information counter Pay the membership fee and get access to the service immediately.</li>
+                        </ul>
 
                         <h3 className="my-4 text-red-900 font-bold">
                             PROCEDURE FOR ACCESSING THE GYM</h3>
-                        <p className="mb-8">
-                            <p>1. Open the system to reserve the service from 6:00 a.m. onwards.</p>
-                            <p>2. Sign in in the sutsport.sut.ac.th system and reserve the service and the time period you want to use the service.</p>
-                            <p>3. When arriving at the fitness room Log in to the service in front of the fitness room again.</p>
-                            <p>4. Sign out (Sign out) when the service is completed.</p>
-                            <p>5. Fitness room opens for reservations through the website from 6:00 a.m.</p>
-                        </p>
+                        <ul className="mb-8">
+                            <li>1. Open the system to reserve the service from 6:00 a.m. onwards.</li>
+                            <li>2. Sign in in the sutsport.sut.ac.th system and reserve the service and the time period you want to use the service.</li>
+                            <li>3. When arriving at the fitness room Log in to the service in front of the fitness room again.</li>
+                            <li>4. Sign out when the service is completed.</li>
+                            <li>5. Fitness room opens for reservations through the website from 6:00 a.m.</li>
+                        </ul>
                     </motion.div>
                 </div>
             </div>
@@ -97,4 +95,4 @@ const Benefits = ({setSelectedPage}: Props) => {
   </section>
 }
 
-export default Benefits
+export default Terms;

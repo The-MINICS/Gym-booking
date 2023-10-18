@@ -17,9 +17,8 @@ function InputEmail({setSelectedPage}: Props){
     const [errorMessage, setErrorMessage] = useState("");
 
     const Cancel = () => {
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      localStorage.clear();
+      window.location.href = "/";
     }
 
     const handleInputChange = (

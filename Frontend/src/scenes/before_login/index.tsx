@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import { SelectedPage } from '@/shared/types'
 import Home1 from '../home/home';
-import Benefits from '../benefits';
 import Footer from '../footer';
 import Navbar1 from '../navbar/navbar';
 import Terms from '../terms';
 import SignIn from "../sign_in";
-import ResetPassword from "../forgot_password/new_password";
-import { BrowserRouter as Router, Route,} from 'react-router-dom';
 
 
 function BeforeLogin() {
@@ -37,7 +34,6 @@ function BeforeLogin() {
                 setSelectedPage = {setSelectedPage}
                 />
                 <Home1 setSelectedPage = {setSelectedPage} />
-                <Benefits setSelectedPage = {setSelectedPage} />
                 <Terms setSelectedPage = {setSelectedPage} />
                 <SignIn setSelectedPage={setSelectedPage} />
                 <Footer/>
