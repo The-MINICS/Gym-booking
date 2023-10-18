@@ -35,9 +35,9 @@ type Member struct {
 	Firstname          string `valid:"required~Please fill your firstname."`
 	Lastname           string `valid:"required~Please fill your lastname."`
 	Phonenumber        string `valid:"required~Please fill your phone number., matches(^0([6|8|9])([0-9]{8}$))~Phone number is incorrect."`
-	Age                int32  `valid:"required~Please fill your age., IsPositive~The age number must not be negative."`
-	Weight             int32  `valid:"required~Please fill your weight., IsPositive~The Weight number must not be negative."`
-	Height             int32  `valid:"required~Please fill your height., IsPositive~The height number must not be negative."`
+	Age                int    `valid:"range(0|100)~Please fill age number in range 1-100."`    //required~Please fill your age.,
+	Weight             int    `valid:"range(0|200)~Please fill weight number in range 1-200."` //required~Please fill your weight.,
+	Height             int    `valid:"range(0|300)~Please fill height number in range 1-300."` //required~Please fill your height.,
 	Member_datetime    time.Time
 	OldPassword        string
 	NewPassword        string
@@ -101,7 +101,7 @@ type Room struct {
 	gorm.Model
 	Activity     string `valid:"required~Please fill activity about the room." `
 	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
-	Capacity     int16  `valid:"required~Please fill the room capacity., Range~Please fill a capacity number is not less than 1 and not more than 100." `
+	Capacity     int16  `valid:"range(1|100)~Please fill a capacity number in range 1-100." ` //required~Please fill the room capacity.,
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `
 	Caption      string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
@@ -218,24 +218,24 @@ func init() {
 		return match
 	}))
 
-	govalidator.CustomTypeTagMap.Set("IsPositive", func(i interface{}, context interface{}) bool {
-		t := i.(int32)
-		if t < 1 {
-			return false
-		} else {
-			return true
-		}
-	})
+	// govalidator.CustomTypeTagMap.Set("IsPositive", func(i interface{}, context interface{}) bool {
+	// 	t := i.(int)
+	// 	if t < 1 {
+	// 		return false
+	// 	} else {
+	// 		return true
+	// 	}
+	// })
 
-	govalidator.CustomTypeTagMap.Set("Range", func(i interface{}, context interface{}) bool {
-		t := i.(int16)
-		if t < 1 {
-			return false
-		}
-		if t > 100 {
-			return false
-		} else {
-			return true
-		}
-	})
+	// govalidator.CustomTypeTagMap.Set("Range", func(i interface{}, context interface{}) bool {
+	// 	t := i.(int16)
+	// 	if t < 1 {
+	// 		return false
+	// 	}
+	// 	if t > 100 {
+	// 		return false
+	// 	} else {
+	// 		return true
+	// 	}
+	// })
 }

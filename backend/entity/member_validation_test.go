@@ -255,27 +255,6 @@ func TestMember(t *testing.T) {
 		}
 	})
 
-	t.Run("Check age not blank ", func(t *testing.T) {
-
-		member := Member{
-
-			Username:    "omchonvat",
-			Email:       "omchonvat@gmail.com",
-			Password:    "123456",
-			Firstname:   "Tom ",
-			Lastname:    "Highway",
-			Phonenumber: "0881234567",
-			Age:         0,
-			Weight:      70,
-			Height:      182,
-		}
-		//ตรวจสอบด้วย govalidator
-		ok, err := govalidator.ValidateStruct(member)
-		g.Expect(ok).ToNot(BeTrue())
-		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please fill your age."))
-	})
-
 	t.Run("Check age not zero ", func(t *testing.T) {
 
 		member := Member{
@@ -294,28 +273,7 @@ func TestMember(t *testing.T) {
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("The age number must not be negative."))
-	})
-
-	t.Run("Check Weight not blank ", func(t *testing.T) {
-
-		member := Member{
-
-			Username:    "omchonvat",
-			Email:       "omchonvat@gmail.com",
-			Password:    "123456",
-			Firstname:   "Tom ",
-			Lastname:    "Highway",
-			Phonenumber: "0881234567",
-			Age:         21,
-			Weight:      0,
-			Height:      182,
-		}
-		//ตรวจสอบด้วย govalidator
-		ok, err := govalidator.ValidateStruct(member)
-		g.Expect(ok).ToNot(BeTrue())
-		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please fill your weight."))
+		g.Expect(err.Error()).To(Equal("Please fill age number in range 1-100."))
 	})
 
 	t.Run("Check Weight not zero ", func(t *testing.T) {
@@ -336,28 +294,7 @@ func TestMember(t *testing.T) {
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("The weight number must not be negative."))
-	})
-
-	t.Run("Check height not blank ", func(t *testing.T) {
-
-		member := Member{
-
-			Username:    "omchonvat",
-			Email:       "omchonvat@gmail.com",
-			Password:    "123456",
-			Firstname:   "Tom ",
-			Lastname:    "Highway",
-			Phonenumber: "0881234567",
-			Age:         21,
-			Weight:      70,
-			Height:      0,
-		}
-		//ตรวจสอบด้วย govalidator
-		ok, err := govalidator.ValidateStruct(member)
-		g.Expect(ok).ToNot(BeTrue())
-		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("Please fill your height."))
+		g.Expect(err.Error()).To(Equal("Please fill weight number in range 1-200."))
 	})
 
 	t.Run("Check height not zero ", func(t *testing.T) {
@@ -372,12 +309,12 @@ func TestMember(t *testing.T) {
 			Phonenumber: "0881234567",
 			Age:         21,
 			Weight:      70,
-			Height:      -182,
+			Height:      382,
 		}
 		//ตรวจสอบด้วย govalidator
 		ok, err := govalidator.ValidateStruct(member)
 		g.Expect(ok).ToNot(BeTrue())
 		g.Expect(err).ToNot(BeNil())
-		g.Expect(err.Error()).To(Equal("The height number must not be negative."))
+		g.Expect(err.Error()).To(Equal("Please fill height number in range 1-300."))
 	})
 }

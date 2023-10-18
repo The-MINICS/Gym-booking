@@ -284,7 +284,6 @@ func ChangePassword(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": tx.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": update_password})
 
 	// Verify the old password
 	if err := bcrypt.CompareHashAndPassword([]byte(member.Password), []byte(newOldPassword)); err != nil {
@@ -303,6 +302,8 @@ func ChangePassword(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating password"})
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{"data": update_password})
 }
 
 // DELETE /members/:id

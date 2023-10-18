@@ -261,7 +261,6 @@ function AccountSettings() {
                                 </button>
                             </div>
                             <div className="mt-28 flex justify-end items-center gap-1 mr-2">
-                                <button className="text-white p-1 rounded font-medium bg-green-600">New Account</button>
                                 <button onClick={signout}
                                     className="text-white p-1 rounded font-medium bg-red-500">
                                         Sign Out
@@ -326,11 +325,11 @@ function AccountSettings() {
                                                 />
                                             </Grid>
                                             <Grid item xs={5.8} margin={1}>
-                                                <label id="Phone" className="font-medium">Phone Number</label>
+                                                <label id="Phonenumber" className="font-medium">Phone Number</label>
                                                 <input
                                                     className="w-full border-2 rounded p-1 text-black"
-                                                    id="Phone"
-                                                    name="phone"
+                                                    id="Phonenumber"
+                                                    name="Phonenumber"
                                                     type="string"
                                                     autoFocus
                                                     value={member.Phonenumber || ""}
