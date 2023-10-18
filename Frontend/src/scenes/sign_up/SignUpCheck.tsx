@@ -48,7 +48,7 @@ function SignUp({setSelectedPage}: Props) {
     };
 
     useEffect(() => {
-        getMembers();
+      getMembers();
     }, []);
 
     const convertType = (data: string | number | undefined) => {
@@ -138,7 +138,7 @@ function SignUp({setSelectedPage}: Props) {
                                     className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
                                     py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
                                     onClick={() =>
-                                        navigate({ pathname: `/member/update/${item.ID}` })
+                                      navigate({ pathname: `/member/update/${item.ID}` })
                                     }
                                     >
                                     Next

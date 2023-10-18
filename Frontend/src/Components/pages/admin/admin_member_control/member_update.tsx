@@ -320,7 +320,7 @@ function MemberUpdate() {
                         />
                       </Grid>
                       <Grid item xs={5.7} margin={1}>
-                        <label id="Gender" className="font-medium text-black">Gender</label>
+                        <label id="Gender" className="font-medium text-black">Role</label>
                         <Select
                           native
                           id="Gender"

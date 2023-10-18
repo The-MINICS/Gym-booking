@@ -482,7 +482,6 @@ function MemberManagement() {
                                             <label id="Email" className="font-medium">Email</label>
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
-                                                placeholder="There is no need to fill in"
                                                 id="Email"
                                                 type="string"
                                                 value={member.Email || ""}
@@ -493,7 +492,7 @@ function MemberManagement() {
                                             <label id="Password" className="font-medium">Password</label>
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
-                                                placeholder="There is no need to fill in"
+                                                placeholder="Enter Phone Number for Default Password"
                                                 id="Password"
                                                 type="password"
                                                 value={member.Password || ""}
@@ -504,7 +503,6 @@ function MemberManagement() {
                                             <label id="Username" className="font-medium">Username</label>
                                             <input
                                                 className="rounded w-full h-auto bg-transparent border-slate-100 border-2 mt-1 p-1"
-                                                placeholder="There is no need to fill in"
                                                 id="Username"
                                                 type="string"
                                                 value={member.Username || ""}
