@@ -16,10 +16,13 @@ func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
-	r.POST("/members", controller.CreateMemberForAdmin)
-	r.POST("/members-user", controller.CreateMemberForUser)
+	//member route
+	r.POST("/members", controller.CreateMember)
 	r.GET("/genders", controller.ListGenders)
 	r.GET("/roles", controller.ListRoles)
+
+	//member request
+	r.POST("/member-request", controller.MemberRequest)
 
 	// Authentication Routes
 	r.POST("/login/member", controller.LoginMember)
@@ -118,6 +121,12 @@ func main() {
 			protected.PATCH("/dates", controller.UpdateDate)
 			protected.DELETE("/dates/:id", controller.DeleteDate)
 
+			//Member Request Routes
+			protected.GET("/memberrequest/:id", controller.GetMemberRequest)
+			protected.GET("/memberrequests", controller.ListMemberRequests)
+			protected.DELETE("/memberrequests/:id", controller.DeleteMemberRequest)
+			protected.POST("/acceptrequest", controller.AcceptRequest)
+			protected.POST("/denymemberrequest", controller.DenyRequest)
 		}
 	}
 

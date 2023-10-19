@@ -15,7 +15,8 @@ type Role struct {
 	gorm.Model
 	Role string
 
-	Member []Member `gorm:"foreignKey:RoleID"`
+	Member        []Member        `gorm:"foreignKey:RoleID"`
+	MemberRequest []MemberRequest `gorm:"foreignKey:RoleID"`
 }
 
 // Gender
@@ -23,7 +24,8 @@ type Gender struct {
 	gorm.Model
 	Gender string
 
-	Member []Member `gorm:"foreignKey:GenderID"`
+	Member        []Member        `gorm:"foreignKey:GenderID"`
+	MemberRequest []MemberRequest `gorm:"foreignKey:GenderID"`
 }
 
 // Member
@@ -51,6 +53,31 @@ type Member struct {
 	Booking   []Booking   `gorm:"foreignKey:MemberID"`
 	Contactus []Contactus `gorm:"foreignKey:MemberID"`
 	Equipment []Equipment `gorm:"foreignKey:MemberID"`
+}
+
+type MemberRequest struct {
+	gorm.Model
+	Username               string `gorm:"uniqueIndex" valid:"required~Please fill your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
+	Email                  string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please fill your email."`
+	Password               string `valid:"required~Please fill your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
+	Firstname              string `valid:"required~Please fill your firstname."`
+	Lastname               string `valid:"required~Please fill your lastname."`
+	Phonenumber            string `valid:"required~Please fill your phone number., matches(^0([6|8|9])([0-9]{8}$))~Phone number is incorrect."`
+	Age                    int    `valid:"range(0|100)~Please fill age number in range 1-100."`    //required~Please fill your age.,
+	Weight                 int    `valid:"range(0|200)~Please fill weight number in range 1-200."` //required~Please fill your weight.,
+	Height                 int    `valid:"range(0|300)~Please fill height number in range 1-300."` //required~Please fill your height.,
+	MemberRequest_datetime time.Time
+	OldPassword            string
+	NewPassword            string
+	ConfirmNewPassword     string
+	Attachment             string `valid:"required~Please attach your file."`
+
+	GenderID *uint
+	Gender   Gender `gorm:"references:id" valid:"-"`
+	RoleID   *uint
+	Role     Role `gorm:"references:id" valid:"-"`
+	StatusID *uint
+	Status   Status `gorm:"references:id" valid:"-"`
 }
 
 // date
@@ -205,6 +232,7 @@ type Status struct {
 	Equipment        []Equipment        `gorm:"foreignKey:StatusID"`
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:StatusID"`
 	Booking          []Booking          `gorm:"foreignKey:StatusID"`
+	MemberRequest []MemberRequest `gorm:"foreignKey:StatusID"`
 }
 
 // ฟังก์ชันที่จะใช่ในการ validation ตัวอักษรพิเศษและตัวเลข
@@ -218,24 +246,4 @@ func init() {
 		return match
 	}))
 
-	// govalidator.CustomTypeTagMap.Set("IsPositive", func(i interface{}, context interface{}) bool {
-	// 	t := i.(int)
-	// 	if t < 1 {
-	// 		return false
-	// 	} else {
-	// 		return true
-	// 	}
-	// })
-
-	// govalidator.CustomTypeTagMap.Set("Range", func(i interface{}, context interface{}) bool {
-	// 	t := i.(int16)
-	// 	if t < 1 {
-	// 		return false
-	// 	}
-	// 	if t > 100 {
-	// 		return false
-	// 	} else {
-	// 		return true
-	// 	}
-	// })
 }

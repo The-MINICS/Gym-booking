@@ -15,7 +15,6 @@ func CreateBooking(c *gin.Context) {
 	var room entity.Room
 	var timeslot entity.Timeslot
 	var date entity.Date
-	var status entity.Status
 
 	if err := c.ShouldBindJSON(&booking); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -46,16 +45,10 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา status ด้วย id
-	if tx := entity.DB().Where("id = ?", booking.StatusID).First(&status); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select status a date"})
-		return
-	}
-
 	// Check if the member already has a booking for the same timeslot with "canceled" status
 	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ? AND status_id = ?", booking.MemberID, booking.TimeslotID, 4).First(&booking); tx.RowsAffected != 0 {
 		// Member already booked this timeslot, update the existing booking
-		status1 := uint(3)
+		status := uint(3)
 		bk := entity.Booking{
 			Datetime: booking.Datetime,
 			Note:     booking.Note,
@@ -63,7 +56,7 @@ func CreateBooking(c *gin.Context) {
 			Room:     room,
 			Timeslot: timeslot,
 			Date:     date,
-			StatusID: &status1,
+			StatusID: &status,
 		}
 
 		if err := entity.DB().Save(&bk).Error; err != nil {
@@ -91,7 +84,7 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	status1 := uint(3)
+	status := uint(3)
 
 	// 14: สร้าง  booking
 	bk := entity.Booking{
@@ -101,7 +94,7 @@ func CreateBooking(c *gin.Context) {
 		Room:     room,
 		Timeslot: timeslot,
 		Date:     date,
-		StatusID: &status1,
+		StatusID: &status,
 	}
 
 	// การ validate
