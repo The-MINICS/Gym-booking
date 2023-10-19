@@ -9,8 +9,8 @@ import { GenderInterface } from '@/interfaces/IGender';
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
 import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
-import SignUpPageGraphic3 from "@/assets/SignUpPageGraphic3.jpg";
 import { SelectedPage } from '@/shared/types';
+import { Grid } from "@mui/material";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
@@ -28,11 +28,16 @@ function SignUp({setSelectedPage}: Props) {
 
     const handleInputChange = (
       event: React.ChangeEvent<{ id?: string; value: any }>
-  ) => {
+    ) => {
       const id = event.target.id as keyof typeof SignUp;
       const { value } = event.target;
       setMember({ ...member, [id]: value });
-  };
+    };
+
+    const Cancel = () => {
+      localStorage.clear();
+      window.location.href = "/";
+    }
 
     const handleClose = (
         event?: React.SyntheticEvent | Event,
@@ -111,7 +116,7 @@ function SignUp({setSelectedPage}: Props) {
           Weight: typeof member.Weight === "string" ? parseInt(member.Weight) : 0,
           Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
           GenderID: convertType(member.GenderID),
-          RoleID: convertType(member.RoleID),
+          RoleID: 2,
         };
         console.log(data)
         const apiUrl = "http://localhost:9999";
@@ -145,7 +150,7 @@ function SignUp({setSelectedPage}: Props) {
 
     return (
         <section id="joinnow" className="w-full bg-gray-20">
-          <motion.div className="mx-auto w-5/6 pt-24 pb-32"
+          <motion.div className="mx-10 py-10"
           onViewportEnter={() => setSelectedPage(SelectedPage.JoinNow)}>
                 {/* Snackbar */}
                 <Snackbar
@@ -173,7 +178,7 @@ function SignUp({setSelectedPage}: Props) {
 
                 {/* Header */}
                 <motion.div
-                    className="md:w-3/5"
+                    className="md:w-3/5 w-full"
                     initial="hidden" 
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
@@ -206,62 +211,73 @@ function SignUp({setSelectedPage}: Props) {
                     }}
                   >
                     {/* Fill the form */}
-                      <div>
-                        <label className="text-lg font-semibold text-red-700">FirstName</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your FirstName"
-                          id="Firstname"
-                          name="firstname"
-                          type="firstname"
-                          autoFocus
-                          value={member.Firstname || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">LastName</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Lastname"
-                          id="Lastname"
-                          name="lastname"
-                          type="string"
-                          autoFocus
-                          value={member.Lastname || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Username</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Username"
-                          id="Username"
-                          name="username"
-                          type="string"
-                          autoFocus
-                          value={member.Username || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Email</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Email"
-                          id="Email"
-                          name="email"
-                          type="string"
-                          autoFocus
-                          value={member.Email || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Password</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Password"
-                          id="Password"
-                          name="password"
-                          type="password"
-                          autoFocus
-                          value={member.Password || ""}
-                          onChange={handleInputChange}
-                        />
+                      <Grid container padding={1}>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">FirstName</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your FirstName"
+                            id="Firstname"
+                            name="firstname"
+                            type="firstname"
+                            autoFocus
+                            value={member.Firstname || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">LastName</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Lastname"
+                            id="Lastname"
+                            name="lastname"
+                            type="string"
+                            autoFocus
+                            value={member.Lastname || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Email</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Email"
+                            id="Email"
+                            name="email"
+                            type="string"
+                            autoFocus
+                            value={member.Email || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Password</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Password"
+                            id="Password"
+                            name="password"
+                            type="password"
+                            autoFocus
+                            value={member.Password || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Username</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Username"
+                            id="Username"
+                            name="username"
+                            type="string"
+                            autoFocus
+                            value={member.Username || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
                         <label className="text-lg font-semibold text-red-700">Phone Number</label>
                         <input
                           className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
@@ -273,71 +289,86 @@ function SignUp({setSelectedPage}: Props) {
                           value={member.Phonenumber || ""}
                           onChange={handleInputChange}
                         />
-                        <label className="text-lg font-semibold text-red-700">Gender</label>
-                        <Select
-                          className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full rounded-2xl"
-                          native
-                          value={member.GenderID + ""}
-                          onChange={handleChange}
-                          inputProps={{
-                              name: "GenderID",
-                          }}>
-                          <option className="text-gray-300">Choose your Gender</option>
-                          {genders.map((item: GenderInterface) => (
-                              <option value={item.ID} key={item.ID}>
-                                {item.Gender}
-                              </option>
-                          ))}
-                        </Select>
-                        <label className="text-lg font-semibold text-red-700">Age</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Age"
-                          id="Age"
-                          name="age"
-                          type="number"
-                          autoFocus
-                          value={member.Age || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Weight(Kg.)</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Weight"
-                          id="Weight"
-                          name="weight"
-                          type="number"
-                          autoFocus
-                          value={member.Weight || ""}
-                          onChange={handleInputChange}
-                        />
-                        <label className="text-lg font-semibold text-red-700">Height(cm.)</label>
-                        <input
-                          className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Height"
-                          id="Height"
-                          name="Height"
-                          type="number"
-                          autoFocus
-                          value={member.Height || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Gender</label>
+                          <Select
+                            className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full"
+                            native
+                            value={member.GenderID + ""}
+                            onChange={handleChange}
+                            inputProps={{
+                                name: "GenderID",
+                            }}>
+                            <option className="text-gray-300">Choose your Gender</option>
+                            {genders.map((item: GenderInterface) => (
+                                <option value={item.ID} key={item.ID}>
+                                  {item.Gender}
+                                </option>
+                            ))}
+                          </Select>
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Age</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Age"
+                            id="Age"
+                            name="age"
+                            type="number"
+                            autoFocus
+                            value={member.Age || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Weight(Kg.)</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Weight"
+                            id="Weight"
+                            name="weight"
+                            type="number"
+                            autoFocus
+                            value={member.Weight || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <Grid item xs={5.7} margin={1}>
+                          <label className="text-lg font-semibold text-red-700">Height(cm.)</label>
+                          <input
+                            className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
+                            placeholder="Enter your Height"
+                            id="Height"
+                            name="Height"
+                            type="number"
+                            autoFocus
+                            value={member.Height || ""}
+                            onChange={handleInputChange}
+                          />
+                        </Grid>
+                      </Grid>
 
-                      <div className="mt-4 flex flex-col gap-y-4">
+                      <div className="mt-3 flex items-center justify-end gap-2 mr-7">
+                          <button 
+                            className="text-black bg-slate-300 text-lg font-bold rounded-xl 
+                            p-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                            onClick={Cancel}>
+                              Cancel
+                          </button>
                           <button 
                             className="bg-yellow-500 text-white hover:bg-red-400 text-lg font-bold rounded-xl 
-                            py-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
+                            p-3 active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out"
                             onClick= {submit}
                             >
-                              Create a Member
+                              Become a Member
                           </button>
                       </div>
                 </motion.div>
 
                 {/* Image */}
                 <motion.div
-                        className="mt-16 basis-3/5 md:mt-0"
+                        className="basis-2/5 md:mt-0"
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.5 }}
@@ -356,16 +387,6 @@ function SignUp({setSelectedPage}: Props) {
                           alt="login-page-graphic"
                           src={SignUpPageGraphic2}
                         />
-                        <img
-                          className="w-full rounded-lg bg-auto my-2"
-                          alt="login-page-graphic"
-                          src={SignUpPageGraphic3}
-                        />
-                        <div className="relative">
-                            <div className="before:absolute before:-bottom-30 before:-right-10 
-                              before:z-[-1] md:before:content-evolvetext">
-                            </div>
-                        </div>
                     </motion.div>
                 </div>
           </motion.div>
