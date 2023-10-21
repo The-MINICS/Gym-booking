@@ -25,6 +25,7 @@ import RoomUpdate from './Components/pages/admin/admin_room_control/room_update'
 import EquipmentBookingCreate from './Components/pages/equipment_booking/EQbooking-create';
 import AccountSettings from './Components/pages/account_information';
 import BookingManagement from './Components/pages/admin/admin_book_handle';
+import MemberVerified from './Components/pages/admin/admin_member_control/member_verified';
 
 function App() {
   const [token, setToken] = useState<String>("");
@@ -64,6 +65,7 @@ function App() {
         <Route path="/picture/update/:id" element={<PictureEquipmentUpdate/>}/> {}
         <Route path="/equipment/update/:id" element={<EquipmentUpdate/>}/> {}
         <Route path="/room/update/:id" element={<RoomUpdate/>}/> {}
+        <Route path="/member/verified/update/:id" element={<MemberVerified/>}/> {}
         <Route path="/equipmentbooking-create" element={<EquipmentBookingCreate/>}/> {}
       </Routes>
       <Footer />

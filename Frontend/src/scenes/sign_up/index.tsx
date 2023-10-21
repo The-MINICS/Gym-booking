@@ -4,20 +4,21 @@ import Snackbar from "@mui/material/Snackbar";
 import { motion } from 'framer-motion';
 import HText from "@/shared/HText";
 import { useEffect, useState } from 'react';
-import { MemberInterface } from '@/interfaces/IMember';
 import { GenderInterface } from '@/interfaces/IGender';
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
 import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import { SelectedPage } from '@/shared/types';
 import { Grid } from "@mui/material";
+import { MemberRequestInterface } from "@/interfaces/IMemberRequest";
 
 type Props = {
   setSelectedPage: (value: SelectedPage) => void;
 }
 
 function SignUp({setSelectedPage}: Props) {
-    const [member, setMember] = useState<MemberInterface>({ Member_datetime: new Date(), });
+    const [image, setImage] = React.useState<string | ArrayBuffer | null>("");
+    const [memberRequest, setMemberRequest] = useState<MemberRequestInterface>({ Member_datetime: new Date(), });
     const [genders, setGenders] = useState<GenderInterface[]>([]);
 
     const [success, setSuccess] = useState(false);
@@ -26,12 +27,22 @@ function SignUp({setSelectedPage}: Props) {
 
     const apiUrl = "http://localhost:9999";
 
+    const onImgChange = (event: any) => {
+      const image = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = () => {
+        const base64Data = reader.result;
+        setImage(base64Data)
+      }
+  };
+
     const handleInputChange = (
       event: React.ChangeEvent<{ id?: string; value: any }>
     ) => {
       const id = event.target.id as keyof typeof SignUp;
       const { value } = event.target;
-      setMember({ ...member, [id]: value });
+      setMemberRequest({ ...memberRequest, [id]: value });
     };
 
     const Cancel = () => {
@@ -51,9 +62,9 @@ function SignUp({setSelectedPage}: Props) {
     };
 
     const handleChange = (event: SelectChangeEvent) => {
-      const name = event.target.name as keyof typeof member;
-      setMember({
-        ...member,
+      const name = event.target.name as keyof typeof memberRequest;
+      setMemberRequest({
+        ...memberRequest,
         [name]: event.target.value,
       });
     };
@@ -105,17 +116,18 @@ function SignUp({setSelectedPage}: Props) {
 
     async function submit() {
         let data = {
-          Firstname: member.Firstname?? "",
-          Lastname: member.Lastname?? "",
-          Username: member.Username?? "",
-          Email: member.Email?? "",
-          Password: member.Password?? "",
-          Phonenumber: member.Phonenumber?? "",
-          Member_datetime: member.Member_datetime,
-          Age: typeof member.Age === "string" ? parseInt(member.Age) : 0,
-          Weight: typeof member.Weight === "string" ? parseInt(member.Weight) : 0,
-          Height: typeof member.Height === "string" ? parseInt(member.Height) : 0,
-          GenderID: convertType(member.GenderID),
+          Firstname: memberRequest.Firstname?? "",
+          Lastname: memberRequest.Lastname?? "",
+          Username: memberRequest.Username?? "",
+          Email: memberRequest.Email?? "",
+          Attachment: image,
+          Password: memberRequest.Password?? "",
+          Phonenumber: memberRequest.Phonenumber?? "",
+          Member_datetime: memberRequest.Member_datetime,
+          Age: typeof memberRequest.Age === "string" ? parseInt(memberRequest.Age) : 0,
+          Weight: typeof memberRequest.Weight === "string" ? parseInt(memberRequest.Weight) : 0,
+          Height: typeof memberRequest.Height === "string" ? parseInt(memberRequest.Height) : 0,
+          GenderID: convertType(memberRequest.GenderID),
           RoleID: 2,
         };
         console.log(data)
@@ -129,7 +141,7 @@ function SignUp({setSelectedPage}: Props) {
           body: JSON.stringify(data),
         };
 
-        fetch(`${apiUrl}/members`, requestOptions)
+        fetch(`${apiUrl}/member-request`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             console.log(res)
@@ -139,7 +151,7 @@ function SignUp({setSelectedPage}: Props) {
               setErrorMessage("")
               setTimeout(() => {
                 window.location.reload();
-              }, 1000);
+              }, 10000);
             } else {
               console.log("Error!")
               setError(true);
@@ -156,12 +168,13 @@ function SignUp({setSelectedPage}: Props) {
                 <Snackbar
                   id="success"
                   open={success}
-                  autoHideDuration={5000}
+                  autoHideDuration={10000}
                   onClose={handleClose}
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                   >
                     <Alert onClose={handleClose} severity="success">
-                      Saved Successfully!
+                      Saved Successfully!: Please wait for email confirmation at "{memberRequest.Email}"
+                      within 1-2 business days
                     </Alert>
                 </Snackbar>
                 <Snackbar
@@ -172,7 +185,7 @@ function SignUp({setSelectedPage}: Props) {
                   anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 >
                   <Alert onClose={handleClose} severity="error">
-                    Save failed!! : {errorMessage}
+                    {errorMessage}
                   </Alert>
                 </Snackbar>
 
@@ -221,7 +234,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="firstname"
                             type="firstname"
                             autoFocus
-                            value={member.Firstname || ""}
+                            value={memberRequest.Firstname || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -234,7 +247,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="lastname"
                             type="string"
                             autoFocus
-                            value={member.Lastname || ""}
+                            value={memberRequest.Lastname || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -247,7 +260,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="email"
                             type="string"
                             autoFocus
-                            value={member.Email || ""}
+                            value={memberRequest.Email || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -260,7 +273,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="password"
                             type="password"
                             autoFocus
-                            value={member.Password || ""}
+                            value={memberRequest.Password || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -273,7 +286,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="username"
                             type="string"
                             autoFocus
-                            value={member.Username || ""}
+                            value={memberRequest.Username || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -286,7 +299,7 @@ function SignUp({setSelectedPage}: Props) {
                           name="phonenumber"
                           type="string"
                           autoFocus
-                          value={member.Phonenumber || ""}
+                          value={memberRequest.Phonenumber || ""}
                           onChange={handleInputChange}
                         />
                         </Grid>
@@ -295,7 +308,7 @@ function SignUp({setSelectedPage}: Props) {
                           <Select
                             className="border-2 border-red-300 mt-1 bg-transparent mb-4 w-full"
                             native
-                            value={member.GenderID + ""}
+                            value={memberRequest.GenderID + ""}
                             onChange={handleChange}
                             inputProps={{
                                 name: "GenderID",
@@ -317,7 +330,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="age"
                             type="number"
                             autoFocus
-                            value={member.Age || ""}
+                            value={memberRequest.Age || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -330,7 +343,7 @@ function SignUp({setSelectedPage}: Props) {
                             name="weight"
                             type="number"
                             autoFocus
-                            value={member.Weight || ""}
+                            value={memberRequest.Weight || ""}
                             onChange={handleInputChange}
                           />
                         </Grid>
@@ -343,8 +356,14 @@ function SignUp({setSelectedPage}: Props) {
                             name="Height"
                             type="number"
                             autoFocus
-                            value={member.Height || ""}
+                            value={memberRequest.Height || ""}
                             onChange={handleInputChange}
+                          />
+                        </Grid>
+                        <label className="italic text-red-700">Please attach the member card (Type: *.jpg, *.jpec, *.png)</label>
+                        <Grid item xs={11.9} margin={1}>
+                          <input accept="image/*" type="file"
+                            onChange={onImgChange} 
                           />
                         </Grid>
                       </Grid>
@@ -377,15 +396,13 @@ function SignUp({setSelectedPage}: Props) {
                         hidden: { opacity: 0, x:-50 },
                         visible: { opacity: 1, x:-0 },
                         }}>
-                        <img
+                        <p className="text-lg font-semibold text-red-700">
+                          Attachment Preview:
+                        </p>
+                        <img 
                           className="w-full rounded-lg bg-auto my-2"
-                          alt="login-page-graphic"
-                          src={SignUpPageGraphic1}
-                        />
-                        <img
-                          className="w-full rounded-lg bg-auto my-2"
-                          alt="login-page-graphic"
-                          src={SignUpPageGraphic2}
+                          src={`${image}`} 
+                          alt="preview-cover"
                         />
                     </motion.div>
                 </div>

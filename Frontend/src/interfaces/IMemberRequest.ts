@@ -1,8 +1,9 @@
 import { GenderInterface } from "./IGender";
-import { MemberRequestInterface } from "./IMemberRequest";
 import { RoleInterface } from "./IRole";
+import { StatusInterface } from "./IStatus";
 
-export interface MemberInterface {
+
+export interface MemberRequestInterface {
     ID?: number,
     Username?: string;
     Email?: string;
@@ -17,6 +18,7 @@ export interface MemberInterface {
     OldPassword?: string;
     NewPassword?: string;
     ConfirmNewPassword?: string;
+    Attachment?: string;
 
     GenderID?: number;
     Gender?: GenderInterface;
@@ -24,6 +26,6 @@ export interface MemberInterface {
     RoleID?: number;
     Role?: RoleInterface;
 
-    MemberRequestID?: number;
-    MemberRequest?: MemberRequestInterface;
+    StatusID?: number;
+    Status?: StatusInterface;
 }

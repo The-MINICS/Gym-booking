@@ -187,7 +187,8 @@ function RoomCreate({ onClose }:any){
                                     <FormControl fullWidth variant="outlined" >
                                         <IconButton aria-label="upload picture" component="label">
                                             <input hidden accept="image/*" type="file"
-                                                onChange={onImgChange} />
+                                                onChange={onImgChange} 
+                                            />
                                             <AddPhotoAlternateIcon sx={{ fontSize: 75, mt: 2}} color="secondary" />
                                         </IconButton>
                                     </FormControl>

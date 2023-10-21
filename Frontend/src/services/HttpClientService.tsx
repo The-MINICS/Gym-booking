@@ -72,6 +72,28 @@ async function Members(data: MemberInterface) {
   return res;
 }
 
+async function GetMemberRequests() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  let res = await fetch(`${apiUrl}/memberrequests`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        return res.data;
+      } else {
+        return false;
+      }
+    });
+
+  return res;
+}
+
 async function GetMemberByMID() {
   let mid = localStorage.getItem("mid");
   const requestOptions = {
@@ -537,6 +559,7 @@ export {
   Members,
   GetMemberByMID,
   GetMembers,
+  GetMemberRequests,
   MemberDelete,
   RoomDelete,
   BookDelete,

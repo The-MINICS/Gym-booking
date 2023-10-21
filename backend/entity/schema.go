@@ -45,10 +45,12 @@ type Member struct {
 	NewPassword        string
 	ConfirmNewPassword string
 
-	GenderID *uint
-	Gender   Gender `gorm:"references:id" valid:"-"`
-	RoleID   *uint
-	Role     Role `gorm:"references:id" valid:"-"`
+	GenderID        *uint
+	Gender          Gender `gorm:"references:id" valid:"-"`
+	RoleID          *uint
+	Role            Role `gorm:"references:id" valid:"-"`
+	MemberRequestID *uint
+	MemberRequest   Role `gorm:"references:id" valid:"-"`
 
 	Booking   []Booking   `gorm:"foreignKey:MemberID"`
 	Contactus []Contactus `gorm:"foreignKey:MemberID"`
@@ -78,6 +80,8 @@ type MemberRequest struct {
 	Role     Role `gorm:"references:id" valid:"-"`
 	StatusID *uint
 	Status   Status `gorm:"references:id" valid:"-"`
+
+	Member []Member `gorm:"foreignKey:MemberRequestID"`
 }
 
 // date
@@ -232,7 +236,7 @@ type Status struct {
 	Equipment        []Equipment        `gorm:"foreignKey:StatusID"`
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:StatusID"`
 	Booking          []Booking          `gorm:"foreignKey:StatusID"`
-	MemberRequest []MemberRequest `gorm:"foreignKey:StatusID"`
+	MemberRequest    []MemberRequest    `gorm:"foreignKey:StatusID"`
 }
 
 // ฟังก์ชันที่จะใช่ในการ validation ตัวอักษรพิเศษและตัวเลข

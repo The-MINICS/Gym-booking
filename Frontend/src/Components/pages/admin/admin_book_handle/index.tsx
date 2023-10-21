@@ -239,7 +239,7 @@ function BookingManagement() {
                             <TableBody className="py-2 bg-white">
                                     {Bookings.map((row) => (
                                         <TableRow 
-                                                className={(row.StatusID === 3) ? "py-2 bg-green-200" : "py-2 bg-slate-100"}
+                                                className={(row.StatusID === 3) ? "bg-green-100" : "bg-slate-100"}
                                                 key={row.ID}
                                             >
                                                 <TableCell align="center">{row.ID}</TableCell>
@@ -294,7 +294,7 @@ function BookingManagement() {
                             <TableBody className="py-2 bg-white">
                                     {EquipmentBookings.map((row) => (
                                         <TableRow 
-                                                className={(row.StatusID === 3) ? "py-2 bg-green-200" : "py-2 bg-slate-100"}
+                                                className={(row.StatusID === 3) ? "bg-green-100" : "bg-slate-100"}
                                                 key={row.ID}
                                             >
                                                 <TableCell align="center">{row.ID}</TableCell>

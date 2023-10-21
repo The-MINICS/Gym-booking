@@ -141,7 +141,6 @@ func CreateMemberFromRequest(memberrequest *entity.MemberRequest) (*entity.Membe
 }
 
 func CopyMemberRequestToMember(memberRequestID uint, recipientEmail string) (*entity.Member, error) {
-
 	// Get the MemberRequest with the specified ID
 	memberRequest, err := GetMemberRequestByID(memberRequestID)
 	if err != nil {

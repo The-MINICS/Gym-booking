@@ -1,6 +1,6 @@
 import React from "react";
 import { MemberInterface } from "@/interfaces/IMember";
-import { GetGenders, GetMembers, GetRoles, MemberDelete } from "@/services/HttpClientService";
+import { GetGenders, GetMemberRequests, GetMembers, GetRoles, MemberDelete } from "@/services/HttpClientService";
 import MemberIcon from "@/assets/group.png";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -25,11 +25,15 @@ import dayjs from "dayjs";
 import { TransitionProps } from "@mui/material/transitions";
 import { GenderInterface } from "@/interfaces/IGender";
 import { RoleInterface } from "@/interfaces/IRole";
+import { MemberRequestInterface } from "@/interfaces/IMemberRequest";
+import VerifiedIcon from '@mui/icons-material/Verified';
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 
 function MemberManagement() {
     const navigate = useNavigate();
     const [member, setMember] = useState<MemberInterface>({ Member_datetime: new Date(), });
     const [Members, setMembers] = useState<MemberInterface[]>([]);
+    const [MemberRequests, setMemberRequests] = useState<MemberRequestInterface[]>([]);
     const [genders, setGenders] = useState<GenderInterface[]>([]);
     const [roles, setRoles] = useState<RoleInterface[]>([]);
     const [openMemberCreate, setOpenMemberCreate] = useState(false);
@@ -63,6 +67,13 @@ function MemberManagement() {
         }
     };
 
+    const getMemberRequests = async () => {
+        let res = await GetMemberRequests();
+        if (res) {
+            setMemberRequests(res);
+        }
+    };
+
     const handleInputChange = (
         event: React.ChangeEvent<{ id?: string; value: any }>
     ) => {
@@ -77,7 +88,7 @@ function MemberManagement() {
           ...member,
           [name]: event.target.value,
         });
-      };
+    };
 
     const handleClose = (
         event?: React.SyntheticEvent | Event,
@@ -106,14 +117,14 @@ function MemberManagement() {
     const handleDialogDeleteOpen = (ID: number) => {
         setDeleteID(ID)
         setOpenDelete(true)
-      }
-      const handleDialogDeleteclose = () => {
+    }
+    const handleDialogDeleteclose = () => {
         setOpenDelete(false)
         setTimeout(() => {
             setDeleteID(0)
         }, 500)
-      }
-      const handleDelete = async () => {
+    }
+    const handleDelete = async () => {
         let res = await MemberDelete(deleteID)
         if (res) {
             console.log(res.data)
@@ -125,13 +136,25 @@ function MemberManagement() {
         setTimeout(() => {
           window.location.href = "/member-manage";
         }, 500);
-      }
+    }
+
+    const handleDocumentDownload = (id: number) => {
+        const memberRequest = MemberRequests.find((item) => item.ID === id);
+
+        if (memberRequest) {
+            const downloadLink = document.createElement('a');
+            downloadLink.href = memberRequest.Attachment || "";
+            downloadLink.download = `${memberRequest.Firstname}_${memberRequest.Lastname}.jpg`;
+            downloadLink.click();
+        }
+    }
   
-      useEffect(() => {
+    useEffect(() => {
         getMembers();
+        getMemberRequests();
         getGenders();
         getRoles();
-      }, []);
+    }, []);
   
     const Transition = React.forwardRef(function Transition(
         props: TransitionProps & {
@@ -216,7 +239,7 @@ function MemberManagement() {
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
                   <Alert onClose={handleClose} severity="error">
-                    Save failed!! : {errorMessage}
+                    {errorMessage}
                   </Alert>
                 </Snackbar>
                 {/* Header */}
@@ -295,7 +318,8 @@ function MemberManagement() {
                     visible: { opacity: 1, x:-0 }
                 }}
             >
-                <TableContainer className="">
+                <h1 className="text-3xl font-bold m-1 text-red-500">Member List</h1>
+                <TableContainer>
                     <Table className="hover:table-auto -ml-3">
                         <TableHead className="bg-gray-100">
                             <TableRow className="py-2 text-lg font-bold bg-pink-300">
@@ -346,6 +370,87 @@ function MemberManagement() {
                                                     >Del
                                                     </Button>
                                                 </ButtonGroup>
+                                            </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </motion.div>
+
+            {/* List of members waiting for confirmation */}
+            <motion.div
+                className="bg-center mx-20 my-8"
+                initial="hidden" 
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.5 }}
+                variants={{
+                    hidden: { opacity: 0, x:-50 },
+                    visible: { opacity: 1, x:-0 }
+                }}
+            >
+                <h1 className="text-xl font-bold italic m-1 text-red-500">
+                    *List Of Members Waiting For Confirmation
+                </h1>
+                <TableContainer>
+                    <Table className="hover:table-auto -ml-3">
+                        <TableHead className="bg-gray-100">
+                            <TableRow className="py-2 text-lg font-bold bg-red-300">
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Attachment</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">UserName</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Full-Name</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Gender</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Email</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Phone</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Age</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Weight(kg)</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Height(cm)</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Date</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Action</h4></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody className="py-2 bg-white">
+                                {MemberRequests.map((row) => (
+                                    <TableRow 
+                                            className={(row.StatusID === 6) ? "" : "bg-slate-100"}
+                                            key={row.ID}
+                                        >
+                                            <TableCell align="center">
+                                                <button
+                                                    className="cursor-pointer p-1 border-2 rounded bg-blue-600 border-blue-700 text-white
+                                                    hover:bg-purple-500 active:scale-[.98] active:duration-75 transition-all"
+                                                    onClick={() => handleDocumentDownload(Number(row.ID))}
+                                                    >
+                                                        <DownloadForOfflineIcon/> Document
+                                                </button>
+                                            </TableCell>
+                                            <TableCell align="center">{row.Username}</TableCell>
+                                            <TableCell align="center">{row.Firstname} {row.Lastname}</TableCell>
+                                            <TableCell align="center">{row.Gender?.Gender}</TableCell>
+                                            <TableCell align="center">{row.Email}</TableCell>
+                                            <TableCell align="center">{row.Phonenumber}</TableCell>
+                                            <TableCell align="center">{row.Age}</TableCell>
+                                            <TableCell align="center">{row.Weight}</TableCell>
+                                            <TableCell align="center">{row.Height}</TableCell>
+                                            <TableCell align="center">{dayjs(row.Member_datetime).format('YYYY-MM-DD HH:mm')}</TableCell>
+                                            <TableCell align="center">
+                                                {(row.StatusID === 6) ? (
+                                                    <ButtonGroup>
+                                                        <Button
+                                                            startIcon={<VerifiedIcon/>}
+                                                            className="cursor-pointer p-1"
+                                                            color="success"
+                                                            onClick={() =>
+                                                                navigate({ pathname: `/member/verified/update/${row.ID}` })
+                                                            }
+                                                        >
+                                                            verified
+                                                        </Button>
+                                                    </ButtonGroup>
+                                                ):(
+                                                    <p className="italic">{row.Status?.State}</p>
+                                                )}
                                             </TableCell>
                                     </TableRow>
                                 ))}
