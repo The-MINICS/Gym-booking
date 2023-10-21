@@ -22,7 +22,7 @@ func MemberRequest(c *gin.Context) {
 	}
 
 	// ค้นหา gender ด้วย id
-	if err := entity.DB().Where("id = ?", memberrequest.GenderID).First(&gender); err != nil {
+	if tx := entity.DB().Where("id = ?", memberrequest.GenderID).First(&gender); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
 		return
 	}
