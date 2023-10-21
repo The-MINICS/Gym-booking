@@ -56,7 +56,7 @@ function MemberVerified() {
           "Content-Type": "application/json",
           },
         };
-      let res = await fetch(`${apiUrl}/memberrequests/`+id, requestOptions)
+      let res = await fetch(`${apiUrl}/memberrequest/`+id, requestOptions)
         .then((response) => response.json())
         .then((res) => {
         if (res.data) {
@@ -114,7 +114,7 @@ function MemberVerified() {
           body: JSON.stringify(data),
       };
       
-      fetch(`${apiUrl}/memberrequests`, requestOptions)
+      fetch(`${apiUrl}/acceptrequest`, requestOptions)
         .then((response) => response.json())
         .then((res) => {
         console.log(res)
@@ -148,7 +148,7 @@ function MemberVerified() {
             body: JSON.stringify(data),
         };
         
-        fetch(`${apiUrl}/memberrequests`, requestOptions)
+        fetch(`${apiUrl}/denymemberrequest`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
           console.log(res)

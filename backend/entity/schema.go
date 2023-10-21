@@ -50,7 +50,7 @@ type Member struct {
 	RoleID          *uint
 	Role            Role `gorm:"references:id" valid:"-"`
 	MemberRequestID *uint
-	MemberRequest   Role `gorm:"references:id" valid:"-"`
+	MemberRequest   MemberRequest `gorm:"references:id" valid:"-"`
 
 	Booking   []Booking   `gorm:"foreignKey:MemberID"`
 	Contactus []Contactus `gorm:"foreignKey:MemberID"`

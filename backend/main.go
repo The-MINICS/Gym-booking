@@ -125,8 +125,8 @@ func main() {
 			protected.GET("/memberrequest/:id", controller.GetMemberRequest)
 			protected.GET("/memberrequests", controller.ListMemberRequests)
 			protected.DELETE("/memberrequests/:id", controller.DeleteMemberRequest)
-			protected.POST("/acceptrequest", controller.AcceptRequest)
-			protected.POST("/denymemberrequest", controller.DenyRequest)
+			protected.PATCH("/acceptrequest", controller.AcceptRequest)
+			protected.PATCH("/denymemberrequest", controller.DenyRequest)
 		}
 	}
 

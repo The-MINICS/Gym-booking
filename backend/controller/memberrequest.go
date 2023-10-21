@@ -22,7 +22,7 @@ func MemberRequest(c *gin.Context) {
 	}
 
 	// ค้นหา gender ด้วย id
-	if tx := entity.DB().Where("id = ?", memberrequest.GenderID).First(&gender); tx.RowsAffected == 0 {
+	if err := entity.DB().Where("id = ?", memberrequest.GenderID).First(&gender); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
 		return
 	}
@@ -108,21 +108,13 @@ func DeleteMemberRequest(c *gin.Context) {
 //////////////////////////////////////////////////////////////////////////////////////
 
 // ขั้นตอนการ ACCEPT by admin
-func GetMemberRequestByID(id uint) (*entity.MemberRequest, error) {
-	var memberrequest entity.MemberRequest
-	if err := entity.DB().Where("id = ?", id).First(&memberrequest).Error; err != nil {
-		return nil, err
-	}
-	return &memberrequest, nil
-}
-
 func CreateMemberFromRequest(memberrequest *entity.MemberRequest) (*entity.Member, error) {
 	// Create a new member using data from the MemberRequest
 	member := entity.Member{
 		Username:        memberrequest.Username,
 		Email:           memberrequest.Email,
 		Password:        memberrequest.Password,
-		Gender:          memberrequest.Gender,
+		GenderID:        memberrequest.GenderID,
 		Firstname:       memberrequest.Firstname,
 		Lastname:        memberrequest.Lastname,
 		Phonenumber:     memberrequest.Phonenumber,
@@ -131,6 +123,7 @@ func CreateMemberFromRequest(memberrequest *entity.MemberRequest) (*entity.Membe
 		Weight:          memberrequest.Weight,
 		Height:          memberrequest.Height,
 		RoleID:          memberrequest.RoleID,
+		MemberRequestID: &memberrequest.ID,
 	}
 
 	if err := entity.DB().Create(&member).Error; err != nil {
@@ -138,27 +131,6 @@ func CreateMemberFromRequest(memberrequest *entity.MemberRequest) (*entity.Membe
 	}
 
 	return &member, nil
-}
-
-func CopyMemberRequestToMember(memberRequestID uint, recipientEmail string) (*entity.Member, error) {
-	// Get the MemberRequest with the specified ID
-	memberRequest, err := GetMemberRequestByID(memberRequestID)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create a new Member based on the retrieved MemberRequest
-	newMember, err := CreateMemberFromRequest(memberRequest)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := SendInformEmail1(recipientEmail); err != nil {
-		return nil, err
-	}
-
-	return newMember, nil
-
 }
 
 func SendInformEmail1(email string) error {
@@ -178,15 +150,40 @@ func SendInformEmail1(email string) error {
 	return nil
 }
 
+// GET /member/:id
+func GetMemberRequestID(c *gin.Context) {
+	id := c.Param("id")
+	var memberRequestID uint
+	if err := entity.DB().Model(entity.MemberRequest{}).Where("id = ?", id).Pluck("id", &memberRequestID).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member request not found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": memberRequestID})
+}
+
 func AcceptRequest(c *gin.Context) {
 	var memberrequest entity.MemberRequest
-	memberRequestID := memberrequest.ID
-	recipientEmail := memberrequest.Email
 
-	// Call the function to copy the data and create a new Member
-	newMember, err := CopyMemberRequestToMember(memberRequestID, recipientEmail)
+	if err := c.ShouldBindJSON(&memberrequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if tx := entity.DB().Where("id = ?", memberrequest.ID).First(&memberrequest); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member request not found"})
+		return
+	}
+
+	// Create a new Member based on the Member Request
+	newMember, err := CreateMemberFromRequest(&memberrequest)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to accept member request."})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a new member"})
+		return
+	}
+
+	err = SendInformEmail1(memberrequest.Email)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending email"})
 		return
 	}
 
@@ -222,6 +219,11 @@ func SendInformEmail2(email string) error {
 func DenyRequest(c *gin.Context) {
 	var memberrequest entity.MemberRequest
 
+	if err := c.ShouldBindJSON(&memberrequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Where("id = ?", memberrequest.ID).First(&memberrequest).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Member request not found"})
 		return
@@ -234,7 +236,7 @@ func DenyRequest(c *gin.Context) {
 	}
 
 	// Update the member request status to "denied"
-	if err := entity.DB().Model(&memberrequest).Update("StatusID", 6).Error; err != nil {
+	if err := entity.DB().Model(&memberrequest).Update("StatusID", 7).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to update member request status"})
 		return
 	}
