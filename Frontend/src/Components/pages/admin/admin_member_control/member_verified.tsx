@@ -11,6 +11,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { MemberRequestInterface } from "@/interfaces/IMemberRequest";
 import { GetMemberRequests } from "@/services/HttpClientService";
+import dayjs from "dayjs";
 
 function MemberVerified() {
     let { id } = useParams();
@@ -213,13 +214,15 @@ function MemberVerified() {
                     >
                         <div ref={dialogContentRef}
                     >
-                        <div className="flex justify-between items-baseline mb-3">
-                            <h1 className="font-bold text-purple-800 font-monserrat text-2xl">
-                                Membership Confirmation
-                            </h1>
+                        <div className="flex items-stretch justify-end mb-3"> 
                             <button onClick={handleDialogClose}>
                                 <CancelIcon style={{ color: "red" }}/>
                             </button>
+                        </div>
+                        <div className="flex items-center justify-center mb-3">
+                          <h1 className="font-bold text-purple-800 font-monserrat text-3xl">
+                            Membership Confirmation
+                          </h1>
                         </div>
                         <Divider/>
                         <div className="my-3">
@@ -228,11 +231,32 @@ function MemberVerified() {
                                     .map((item) => (
                                         <React.Fragment>
                                         <Grid container>
-                                            <Grid item xs={6}>
-                                                <h1>Name: {item.Firstname} {item.Lastname}</h1>
+                                            <Grid item xs={8}>
+                                                <h1 className="font-bold mb-2 text-red-700">*** Personal Information ***</h1>
+                                                <ul className="mt-2 ml-2 space-y-1 text-lg">
+                                                  <li>Full-Name: <span className="font-semibold text-red-900">
+                                                      {item.Firstname} {item.Lastname}
+                                                    </span>
+                                                  </li>
+                                                  <li>UserName: <span className="font-semibold text-red-900">{item.Username}</span></li>
+                                                  <li>Email: <span className="font-semibold text-red-900">{item.Email}</span></li>
+                                                  <li>Phone-Number: <span className="font-semibold text-red-900">{item.Phonenumber}</span></li>
+                                                  <li>Gender: <span className="font-semibold text-red-900">{item.Gender?.Gender}</span></li>
+                                                  <li>Age: <span className="font-semibold text-red-900">{item.Age}</span></li>
+                                                  <li>Weight: <span className="font-semibold text-red-900">{item.Weight} kg</span></li>
+                                                  <li>Height: <span className="font-semibold text-red-900">{item.Height} cm</span></li>
+                                                  <li>Register Date: <span className="font-semibold text-red-900">
+                                                      {dayjs(item.Member_datetime).format('YYYY-MM-DD HH:mm')}
+                                                    </span>
+                                                  </li>
+                                                  <li>Status: <span className="font-semibold text-red-900">{item.Status?.State}</span></li>
+                                                </ul>
                                             </Grid>
-                                            <Grid item xs={6}>
-                                                
+                                            <Grid item xs={4}>
+                                                <h1 className="italic text-right text-red-700">Document View:</h1>
+                                                <div className="flex items-baseline justify-end">
+                                                  <img src={`${item.Attachment}`} width="250" height="150"/>
+                                                </div>
                                             </Grid>
                                         </Grid>
                                         </React.Fragment>
