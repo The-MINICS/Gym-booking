@@ -28,15 +28,18 @@ import { RoleInterface } from "@/interfaces/IRole";
 import { MemberRequestInterface } from "@/interfaces/IMemberRequest";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 function MemberManagement() {
     const navigate = useNavigate();
     const [member, setMember] = useState<MemberInterface>({ Member_datetime: new Date(), });
     const [Members, setMembers] = useState<MemberInterface[]>([]);
     const [MemberRequests, setMemberRequests] = useState<MemberRequestInterface[]>([]);
+    const [memberRequestID, setMemberRequestID] = useState<number>();
     const [genders, setGenders] = useState<GenderInterface[]>([]);
     const [roles, setRoles] = useState<RoleInterface[]>([]);
     const [openMemberCreate, setOpenMemberCreate] = useState(false);
+    const [openMemberDocument, setOpenMemberDocument] = useState(false);
     const [dialogWidth, setDialogWidth] = useState<number | string>('auto');
     const dialogContentRef = React.createRef<HTMLDivElement>();
     const [deleteID, setDeleteID] = useState<number>(0);
@@ -112,6 +115,20 @@ function MemberManagement() {
 
     const handleDialogMemberCreateClose = () => {
         setOpenMemberCreate(false)
+    }
+
+    const handleDialogMemberDocumentOpen = (id: number) => {
+        setOpenMemberDocument(false);
+        const contentWidth = dialogContentRef.current?.scrollWidth;
+        if (contentWidth) {
+            setDialogWidth(contentWidth);
+        }
+        setOpenMemberDocument(true);
+        setMemberRequestID(id);
+    }
+
+    const handleDialogMemberDocumentClose = () => {
+        setOpenMemberDocument(false)
     }
 
     const handleDialogDeleteOpen = (ID: number) => {
@@ -333,6 +350,7 @@ function MemberManagement() {
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Height(cm)</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Role</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Registration Date</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Data</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Action</h4></TableCell>
                             </TableRow>
                         </TableHead>
@@ -352,6 +370,15 @@ function MemberManagement() {
                                             <TableCell align="center">{row.Height}</TableCell>
                                             <TableCell align="center">{row.Role?.Role}</TableCell>
                                             <TableCell align="center">{dayjs(row.Member_datetime).format('YYYY-MM-DD HH:mm')}</TableCell>
+                                            <TableCell align="center">
+                                                <button
+                                                    className="flex items-center justify-center cursor-pointer p-1 border-2 rounded bg-green-600 border-green-700 
+                                                    text-white hover:bg-orange-500 active:scale-[.98] active:duration-75 transition-all"
+                                                    onClick={() => handleDialogMemberDocumentOpen(Number(row.ID))}
+                                                >
+                                                    <VisibilityIcon/> Document
+                                                </button>
+                                            </TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>
                                                     <Button
@@ -655,6 +682,85 @@ function MemberManagement() {
                     </dialog>
                 </div>
             )}
+
+            {/* MemberRequest Update */}
+          { openMemberDocument && (
+            <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md">
+                <dialog
+                    open={openMemberDocument}
+                    style={{
+                        width: dialogWidth,
+                        border: '1px solid #ccc',
+                        padding: '20px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        borderRadius: '8px',
+                        zIndex: 1000,
+                    }}
+                    >
+                        <div ref={dialogContentRef}
+                    >
+                        <div className="flex items-center justify-center mb-3">
+                          <h1 className="font-bold text-purple-800 font-monserrat text-3xl">
+                            Membership Confirmation History
+                          </h1>
+                        </div>
+                        <Divider/>
+                        <div className="my-3">
+                            <React.Fragment>
+                                {MemberRequests.filter((items) => (items.ID) === memberRequestID)
+                                    .map((items) => (
+                                        <React.Fragment>
+                                        <Grid container>
+                                            <Grid item xs={8}>
+                                                <h1 className="font-bold mb-2 text-red-700">*** Personal Information ***</h1>
+                                                <ul className="mt-2 ml-2 space-y-1 text-lg">
+                                                  <li>Full-Name: <span className="font-semibold text-red-900">
+                                                      {items.Firstname} {items.Lastname}
+                                                    </span>
+                                                  </li>
+                                                  <li>UserName: <span className="font-semibold text-red-900">{items.Username}</span></li>
+                                                  <li>Email: <span className="font-semibold text-red-900">{items.Email}</span></li>
+                                                  <li>Phone-Number: <span className="font-semibold text-red-900">{items.Phonenumber}</span></li>
+                                                  <li>Gender: <span className="font-semibold text-red-900">{items.Gender?.Gender}</span></li>
+                                                  <li>Age: <span className="font-semibold text-red-900">{items.Age}</span></li>
+                                                  <li>Weight: <span className="font-semibold text-red-900">{items.Weight} kg</span></li>
+                                                  <li>Height: <span className="font-semibold text-red-900">{items.Height} cm</span></li>
+                                                  <li>Register Date: <span className="font-semibold text-red-900">
+                                                      {dayjs(items.Member_datetime).format('YYYY-MM-DD HH:mm')}
+                                                    </span>
+                                                  </li>
+                                                  <li>Status: <span className="font-semibold text-red-900">{items.Status?.State}</span></li>
+                                                </ul>
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <h1 className="italic text-right text-red-700">Document View:</h1>
+                                                <div className="flex items-baseline justify-end">
+                                                  <img src={`${items.Attachment}`} width="250" height="150"/>
+                                                </div>
+                                            </Grid>
+                                        </Grid>
+                                        </React.Fragment>
+                                    ))
+                                }
+                            </React.Fragment>
+                        </div>
+                        <Divider/>
+                        <div className="flex justify-center items-center gap-3 my-3">
+                            <button className="rounded px-2 py-1 bg-red-600 text-white active:scale-[.98] active:duration-75 transition-all" 
+                                onClick={handleDialogMemberDocumentClose}
+                            >
+                                <CancelIcon/> Close
+                            </button>
+                        </div>
+                    </div>
+                </dialog>
+            </div>
+        )}
 
             {/* Delete Dialog */}
             <Dialog
