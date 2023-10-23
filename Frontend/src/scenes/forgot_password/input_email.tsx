@@ -61,6 +61,10 @@ function InputEmail({setSelectedPage}: Props){
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("mid", res.data.id);
             console.log("Saved")
+            setTimeout(() => {
+              localStorage.clear();
+              window.location.href = "/";
+          }, 1000);
             setSuccess(true);
             setErrorMessage("")
           } else {
