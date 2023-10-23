@@ -3,8 +3,7 @@ import { GetContactUs, ContactUsDelete } from "@/services/HttpClientService";
 import ComplaintIcon from "@/assets/complaint-handle.png"
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Link } from "react-router-dom";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import BuildIcon from '@mui/icons-material/Build';
 import HomeIcon from '@mui/icons-material/Home';
@@ -18,7 +17,6 @@ import { ContactUsInterface } from "@/interfaces/IContactus";
 import CheckIcon from '@mui/icons-material/Check';
 
 function ComplaintHandling() {
-    const navigate = useNavigate();
     const [ContactUs, setContactUs] = useState<ContactUsInterface[]>([]);
     const [deleteID, setDeleteID] = useState<number>(0);
     const [openDelete, setOpenDelete] = useState(false);
@@ -155,14 +153,18 @@ function ComplaintHandling() {
                                             <TableCell align="center">{row.Member?.Firstname} {row.Member?.Lastname}</TableCell>
                                             <TableCell align="center">{row.Member?.Email}</TableCell>
                                             <TableCell align="center">
-                                                <ButtonGroup>
-                                                    <Button
-                                                    startIcon={<CheckIcon />}
-                                                    color="success"
-                                                    onClick={() => { handleDialogDeleteOpen(Number(row.ID)) }}
-                                                        >Complete
-                                                    </Button>
-                                                </ButtonGroup>
+                                                {(row.StatusID === 6) ? (
+                                                    <ButtonGroup>
+                                                        <Button
+                                                            startIcon={<CheckIcon />}
+                                                            color="success"
+                                                            onClick={() => { handleDialogDeleteOpen(Number(row.ID)) }}
+                                                                >Complete
+                                                        </Button>
+                                                    </ButtonGroup>
+                                                ):(
+                                                    <p className="italic text-red-900">completed</p>
+                                                )}
                                             </TableCell>
                                     </TableRow>
                                 ))}
@@ -182,14 +184,14 @@ function ComplaintHandling() {
                 </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Are you sure that you have finished this issue completely, This issue will be
+                            Are you sure that you have completed this issue completely, This issue will be
                             deleted immediately and will not be able to recovery
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button color= "error" onClick={handleDialogDeleteclose}>Cancel</Button>
                         <Button color= "secondary" onClick={handleDelete} className="bg-red-500" autoFocus>
-                          Finished
+                          Completed
                         </Button>
                     </DialogActions>
             </Dialog>

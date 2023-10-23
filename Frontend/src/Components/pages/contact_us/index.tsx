@@ -174,12 +174,6 @@ function ContactUs(){
                 <HText>
                     <span className="text-red-500">CONTACT US</span>: YOURE PROBLEM IS UNDER OUR RESPONSIBILITY
                 </HText>
-                <p className="my-5">
-                Recovery and Wellness Facilities: APC understands the importance of recovery 
-                and offers facilities such as saunas, steam rooms, cryotherapy chambers, 
-                and massage therapy to promote muscle relaxation, reduce soreness, 
-                and enhance overall well-being.
-                </p>
             </motion.div>
 
             {/* Form and image */}

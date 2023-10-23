@@ -6,8 +6,6 @@ import HText from "@/shared/HText";
 import { useEffect, useState } from 'react';
 import { GenderInterface } from '@/interfaces/IGender';
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import SignUpPageGraphic1 from "@/assets/SignUpPageGraphic1.jpg";
-import SignUpPageGraphic2 from "@/assets/SignUpPageGraphic2.jpg";
 import { SelectedPage } from '@/shared/types';
 import { Grid } from "@mui/material";
 import { MemberRequestInterface } from "@/interfaces/IMemberRequest";
