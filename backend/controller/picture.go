@@ -57,7 +57,7 @@ func ListPictures(c *gin.Context) {
 func DeletePicture(c *gin.Context) {
 	id := c.Param("id")
 	if tx := entity.DB().Exec("DELETE FROM pictures WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "picture not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Picture not found"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": id})
@@ -77,7 +77,7 @@ func UpdatePicture(c *gin.Context) {
 	var new_picture_describe = pic.Describe
 
 	if tx := entity.DB().Where("id = ?", pic.ID).First(&pic); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "picture not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Picture not found"})
 		return
 	}
 

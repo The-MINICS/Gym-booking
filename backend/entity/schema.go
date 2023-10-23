@@ -131,7 +131,7 @@ type EquipmentTimeslot struct {
 type Room struct {
 	gorm.Model
 	Activity     string `valid:"required~Please fill activity about the room." `
-	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format." `
+	Number       string `gorm:"uniqueIndex" valid:"required~Please fill the room number., matches(^(R)([0-9]{3}$))~Please fill the correct room format. This must be start with R and followind by 3 digits." `
 	Capacity     int16  `valid:"range(1|100)~Please fill a capacity number in range 1-100." ` //required~Please fill the room capacity.,
 	Attendant    string `valid:"required~Please fill the room attendant." `
 	Illustration string `valid:"required~Please select a illustration." `
@@ -203,7 +203,7 @@ type Booking struct {
 type EquipmentBooking struct {
 	gorm.Model
 	EquipmentDatetime   time.Time
-	EquipmentNote       string
+	EquipmentNote       string `valid:"maxstringlength(50)~It is too many characters." `
 	EquipmentTimeslotID *uint
 	EquipmentTimeslot   EquipmentTimeslot `gorm:"references:id" valid:"-"`
 
@@ -221,11 +221,13 @@ type EquipmentBooking struct {
 // Member เป็นคนใช้
 type Contactus struct {
 	gorm.Model
-	Subject string
-	Message string
+	Subject string `valid:"required~Please fill the subject." `
+	Message string `valid:"required~Please fill the message." `
 
 	MemberID *uint
 	Member   Member `gorm:"references:id" valid:"-"`
+	StatusID *uint
+	Status   Status `gorm:"references:id" valid:"-"`
 }
 
 // status
@@ -237,6 +239,7 @@ type Status struct {
 	EquipmentBooking []EquipmentBooking `gorm:"foreignKey:StatusID"`
 	Booking          []Booking          `gorm:"foreignKey:StatusID"`
 	MemberRequest    []MemberRequest    `gorm:"foreignKey:StatusID"`
+	Contactus        []Contactus        `gorm:"foreignKey:StatusID"`
 }
 
 // ฟังก์ชันที่จะใช่ในการ validation ตัวอักษรพิเศษและตัวเลข

@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/chonticha1844/Gym-booking/entity"
-	"github.com/chonticha1844/Gym-booking/service"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gomail.v2"
@@ -24,7 +22,24 @@ type ForgotResponse struct {
 	ID    uint   `json:"id"`
 }
 
-func SendPasswordResetEmail(email, token string) error {
+// func SendPasswordResetEmail(email, token string) error {
+// 	d := gomail.NewDialer("smtp.gmail.com", 587, "TheMINICSGym@gmail.com", "rmzo slrg mdqf cxgg")
+
+// 	// Create an email message
+// 	m := gomail.NewMessage()
+// 	m.SetHeader("From", "TheMINICSGym@gmail.com")
+// 	m.SetHeader("To", email)
+// 	m.SetHeader("Subject", "Password Reset")
+// 	m.SetBody("text/html", fmt.Sprintf("To reset your password, <a href='http://127.0.0.1:5173/reset-password?token=%s'>click here</a>.", token))
+
+// 	if err := d.DialAndSend(m); err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
+func SendPasswordResetEmail(email string) error {
 	d := gomail.NewDialer("smtp.gmail.com", 587, "TheMINICSGym@gmail.com", "rmzo slrg mdqf cxgg")
 
 	// Create an email message
@@ -32,7 +47,7 @@ func SendPasswordResetEmail(email, token string) error {
 	m.SetHeader("From", "TheMINICSGym@gmail.com")
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Password Reset")
-	m.SetBody("text/html", fmt.Sprintf("To reset your password, <a href='http://127.0.0.1:5173/reset-password?token=%s'>click here</a>.", token))
+	m.SetBody("text/plain", "We have received your request. We will contact you within 24 hours.")
 
 	if err := d.DialAndSend(m); err != nil {
 		return err
@@ -55,21 +70,24 @@ func ForgotPassword(c *gin.Context) {
 		return
 	}
 
-	jwtWrapper := service.JwtWrapper{
-		SecretKey:       "SvNQpBN8y3qlVrsGAYYWoJJk56LtzFHx",
-		Issuer:          "AuthService",
-		ExpirationHours: 24,
+	status := uint(6)
+
+	// 14: สร้าง  contactus
+	ctu := entity.Contactus{
+		Subject:  "Fotgotten password",
+		Message:  "Please change my password to default password.",
+		Member:   member,
+		StatusID: &status,
 	}
 
-	// Generate a password reset token
-	token, err := jwtWrapper.GeneratePasswordResetToken(forgotpassword.Email)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Error generating the password reset token"})
+	// 13: บันทึก
+	if err := entity.DB().Create(&ctu).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	// Send a password reset email to the user
-	err = SendPasswordResetEmail(forgotpassword.Email, token)
+	err := SendPasswordResetEmail(forgotpassword.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending the password reset email"})
 		return
@@ -77,6 +95,43 @@ func ForgotPassword(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": member})
 }
+
+// func ForgotPassword(c *gin.Context) {
+// 	var forgotpassword ForgotPayload
+// 	var member entity.Member
+
+// 	if err := c.ShouldBindJSON(&forgotpassword); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	if tx := entity.DB().Where("email = ?", forgotpassword.Email).First(&member); tx.RowsAffected == 0 {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Your email is incorrect."})
+// 		return
+// 	}
+
+// 	jwtWrapper := service.JwtWrapper{
+// 		SecretKey:       "SvNQpBN8y3qlVrsGAYYWoJJk56LtzFHx",
+// 		Issuer:          "AuthService",
+// 		ExpirationHours: 24,
+// 	}
+
+// 	// Generate a password reset token
+// 	token, err := jwtWrapper.GeneratePasswordResetToken(forgotpassword.Email)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error generating the password reset token"})
+// 		return
+// 	}
+
+// 	// Send a password reset email to the user
+// 	err = SendPasswordResetEmail(forgotpassword.Email, token)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending the password reset email"})
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, gin.H{"data": member})
+// }
 
 func ResetPassword(c *gin.Context) {
 	var member entity.Member

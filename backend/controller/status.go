@@ -48,7 +48,7 @@ func ListStatuses(c *gin.Context) {
 func DeleteStatus(c *gin.Context) {
 	id := c.Param("id")
 	if tx := entity.DB().Exec("DELETE FROM statuses WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "status not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Status not found"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": id})
@@ -63,7 +63,7 @@ func UpdateStatus(c *gin.Context) {
 	}
 
 	if tx := entity.DB().Where("id = ?", status.ID).First(&status); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "status not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Status not found"})
 		return
 	}
 

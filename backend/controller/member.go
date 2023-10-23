@@ -24,19 +24,13 @@ func CreateMember(c *gin.Context) {
 
 	// ค้นหา gender ด้วย id
 	if tx := entity.DB().Where("id = ?", member.GenderID).First(&gender); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select your gender"})
 		return
 	}
 
 	// ค้นหา role ด้วย id
 	if tx := entity.DB().Where("id = ?", member.RoleID).First(&role); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your role"})
-		return
-	}
-
-	// ค้นหา role ด้วย id
-	if tx := entity.DB().Where("id = ?", member.RoleID).First(&role); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your role"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select your role"})
 		return
 	}
 
@@ -82,7 +76,7 @@ func GetMember(c *gin.Context) {
 	var member entity.Member
 	id := c.Param("id")
 	if tx := entity.DB().Preload("Gender").Preload("Role").Raw("SELECT * FROM members WHERE id = ?", id).Find(&member).Error; tx != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "member not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": member})
@@ -157,15 +151,6 @@ func UpdateMember(c *gin.Context) {
 		return
 	}
 
-	if !(member.Password[0:13] == "$2a$14$") {
-		hashPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), 14)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
-			return
-		}
-		update_member.Password = string(hashPassword)
-	}
-
 	if tx := entity.DB().Where("id = ?", member.ID).Updates(&update_member).Error; tx != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": tx.Error()})
 		return
@@ -197,21 +182,21 @@ func ChangePassword(c *gin.Context) {
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
 	hashedOldPassword, err := bcrypt.GenerateFromPassword([]byte(newOldPassword), 14)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error hashing password"})
 		return
 	}
 
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
 	hashedNewPassword, err := bcrypt.GenerateFromPassword([]byte(newNewPassword), 14)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error hashing password"})
 		return
 	}
 
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
 	hashedConfirmNewPassword, err := bcrypt.GenerateFromPassword([]byte(newConfirmNewPassword), 14)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error hashing password"})
 		return
 	}
 

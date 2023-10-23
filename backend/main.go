@@ -91,21 +91,21 @@ func main() {
 			protected.POST("/bookings", controller.CreateBooking)
 			protected.GET("/bookings", controller.ListBookings)
 			protected.GET("/booking/:id", controller.GetBooking)
-			protected.DELETE("/bookings/:id", controller.DeleteBooking)
+			protected.DELETE("/bookings/:id", controller.CancelBooking)
 
 			// Equipment Booking Routes
 			protected.POST("/equipmentbookings", controller.CreateEquipmentBooking)
 			protected.GET("/equipmentbookings", controller.ListEquipmentBookings)
 			protected.GET("/equipmentbooking/:id", controller.GetEquipmentBooking)
 			protected.PATCH("/equipmentbookings", controller.UpdateEquipmentBooking)
-			protected.DELETE("/equipmentbookings/:id", controller.DeleteEquipmentBooking)
+			protected.DELETE("/equipmentbookings/:id", controller.CancelEquipmentBooking)
 
 			// Contactus Routes
 			protected.POST("/contactuses", controller.CreateContactus)
 			protected.GET("/contactuses", controller.ListContactuses)
 			protected.GET("/contactus/:id", controller.GetContactus)
 			protected.PATCH("/contactuses", controller.UpdateContactus)
-			protected.DELETE("/contactuses/:id", controller.DeleteContactus)
+			protected.DELETE("/contactuses/:id", controller.ResponseContactus)
 
 			// Status Routes
 			protected.POST("/statuses", controller.CreateStatus)

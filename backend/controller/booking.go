@@ -23,7 +23,7 @@ func CreateBooking(c *gin.Context) {
 
 	// ค้นหา member ด้วย id
 	if tx := entity.DB().Where("id = ?", booking.MemberID).First(&member); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "member not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
 		return
 	}
 
@@ -71,7 +71,7 @@ func CreateBooking(c *gin.Context) {
 	//Member can book only 1 times per time slot
 	if *booking.StatusID == uint(3) {
 		if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "You can book only 1 times per time slot"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this time slot."})
 			return
 		}
 	}
@@ -141,7 +141,7 @@ func ListBookings(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": bookings})
 }
 
-func DeleteBooking(c *gin.Context) {
+func CancelBooking(c *gin.Context) {
 	var booking entity.Booking
 	var timeslot entity.Timeslot
 	var equipmentbooking entity.EquipmentBooking

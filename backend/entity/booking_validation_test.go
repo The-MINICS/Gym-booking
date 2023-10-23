@@ -32,7 +32,7 @@ func TestBookingCorrect(t *testing.T) {
 func TestBooking(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-	t.Run("Check booking not blank ", func(t *testing.T) {
+	t.Run("Check note not too many characters", func(t *testing.T) {
 
 		booking := Booking{
 

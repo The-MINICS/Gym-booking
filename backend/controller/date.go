@@ -63,7 +63,7 @@ func UpdateDate(c *gin.Context) {
 	}
 
 	if tx := entity.DB().Where("id = ?", date.ID).First(&date); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "date not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Date not found"})
 		return
 	}
 

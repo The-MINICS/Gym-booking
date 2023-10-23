@@ -23,14 +23,14 @@ func MemberRequest(c *gin.Context) {
 
 	// ค้นหา gender ด้วย id
 	if tx := entity.DB().Where("id = ?", memberrequest.GenderID).First(&gender); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Choose your gender"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please select your gender"})
 		return
 	}
 
 	// เข้ารหัสลับรหัสผ่านที่ผู้ใช้กรอกก่อนบันทึกลงฐานข้อมูล
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(memberrequest.Password), 14)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error hashing password"})
 		return
 	}
 
@@ -77,7 +77,7 @@ func GetMemberRequest(c *gin.Context) {
 	var memberrequest entity.MemberRequest
 	id := c.Param("id")
 	if tx := entity.DB().Preload("Gender").Preload("Role").Preload("Status").Raw("SELECT * FROM member_requests WHERE id = ?", id).Find(&memberrequest).Error; tx != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "member request not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member request not found"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": memberrequest})
@@ -231,7 +231,7 @@ func DenyRequest(c *gin.Context) {
 
 	err := SendInformEmail2(memberrequest.Email)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to deny member request."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending email"})
 		return
 	}
 

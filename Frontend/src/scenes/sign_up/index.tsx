@@ -229,7 +229,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">FirstName</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your FirstName"
+                            placeholder="Fill your Firstname"
                             id="Firstname"
                             name="firstname"
                             type="firstname"
@@ -242,7 +242,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">LastName</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Lastname"
+                            placeholder="Fill your Lastname"
                             id="Lastname"
                             name="lastname"
                             type="string"
@@ -255,7 +255,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">Email</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Email"
+                            placeholder="Fill your Email"
                             id="Email"
                             name="email"
                             type="string"
@@ -268,7 +268,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">Password</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Password"
+                            placeholder="Fill your Password"
                             id="Password"
                             name="password"
                             type="password"
@@ -281,7 +281,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">Username</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Username"
+                            placeholder="Fill your Username"
                             id="Username"
                             name="username"
                             type="string"
@@ -294,7 +294,7 @@ function SignUp({setSelectedPage}: Props) {
                         <label className="text-lg font-semibold text-red-700">Phone Number</label>
                         <input
                           className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                          placeholder="Enter your Email"
+                          placeholder="Fill your Email"
                           id="Phonenumber"
                           name="phonenumber"
                           type="string"
@@ -325,7 +325,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">Age</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Age"
+                            placeholder="Fill your Age"
                             id="Age"
                             name="age"
                             type="number"
@@ -338,7 +338,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">Weight(Kg.)</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Weight"
+                            placeholder="Fill your Weight"
                             id="Weight"
                             name="weight"
                             type="number"
@@ -351,7 +351,7 @@ function SignUp({setSelectedPage}: Props) {
                           <label className="text-lg font-semibold text-red-700">Height(cm.)</label>
                           <input
                             className="w-full border-2 border-red-300 rounded-xl p-3 mt-1 bg-transparent mb-3"
-                            placeholder="Enter your Height"
+                            placeholder="Fill your Height"
                             id="Height"
                             name="Height"
                             type="number"

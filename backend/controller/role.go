@@ -48,7 +48,7 @@ func ListRoles(c *gin.Context) {
 func DeleteRole(c *gin.Context) {
 	id := c.Param("id")
 	if tx := entity.DB().Exec("DELETE FROM roles WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "role not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Role not found"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": id})
@@ -63,7 +63,7 @@ func UpdateRole(c *gin.Context) {
 	}
 
 	if tx := entity.DB().Where("id = ?", role.ID).First(&role); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "gender not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Role not found"})
 		return
 	}
 

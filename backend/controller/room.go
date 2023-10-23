@@ -125,7 +125,7 @@ func DeleteRoom(c *gin.Context) {
 	}
 
 	if tx := entity.DB().Exec("DELETE FROM rooms WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "room not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Room not found"})
 		return
 	}
 
@@ -149,7 +149,7 @@ func UpdateRoom(c *gin.Context) {
 	var new_room_caption = room.Caption
 
 	if tx := entity.DB().Where("id = ?", room.ID).First(&room); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "room not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Room not found"})
 		return
 	}
 
