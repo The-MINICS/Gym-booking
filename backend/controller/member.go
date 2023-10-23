@@ -160,6 +160,81 @@ func UpdateMember(c *gin.Context) {
 
 }
 
+func UpdateMemberByAdmin(c *gin.Context) {
+	var member entity.Member
+	var gender entity.Gender
+	var role entity.Role
+
+	if err := c.ShouldBindJSON(&member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var newUsername = member.Username
+	var newFirstname = member.Firstname
+	var newLastname = member.Lastname
+	var newEmail = member.Email
+	var newPassword = member.Password
+	var newPhone = member.Phonenumber
+	var newAge = member.Age
+	var newWeight = member.Weight
+	var newHeight = member.Height
+
+	if tx := entity.DB().Where("id = ?", member.GenderID).First(&gender); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Gender not found"})
+		return
+	}
+
+	if tx := entity.DB().Where("id = ?", member.RoleID).First(&role); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Role not found"})
+		return
+	}
+
+	if tx := entity.DB().Where("id = ?", member.ID).First(&member); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Member not found"})
+		return
+	}
+
+	update_member := entity.Member{
+		Model:           gorm.Model{ID: member.ID},
+		Username:        newUsername,
+		Email:           newEmail,
+		Password:        newPassword,
+		Gender:          gender,
+		Firstname:       newFirstname,
+		Lastname:        newLastname,
+		Phonenumber:     newPhone,
+		Member_datetime: member.Member_datetime,
+		Age:             newAge,
+		Weight:          newWeight,
+		Height:          newHeight,
+		Role:            role,
+	}
+
+	// การ validate
+	if _, err := govalidator.ValidateStruct(update_member); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !(member.Password[0:13] == "$2a$14$") {
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), 14)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+			return
+		}
+		update_member.Password = string(hashPassword)
+	}
+
+	if tx := entity.DB().Where("id = ?", member.ID).Updates(&update_member).Error; tx != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": tx.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": update_member})
+
+}
+
 func ChangePassword(c *gin.Context) {
 	var member entity.Member
 

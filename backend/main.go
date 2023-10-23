@@ -49,6 +49,7 @@ func main() {
 			protected.GET("/member/:id", controller.GetMember)
 			protected.GET("/members", controller.ListMembers)
 			protected.PATCH("/members", controller.UpdateMember)
+			protected.PATCH("/member-admin", controller.UpdateMemberByAdmin)
 			protected.PATCH("/changepassword", controller.ChangePassword)
 			protected.DELETE("/members/:id", controller.DeleteMember)
 

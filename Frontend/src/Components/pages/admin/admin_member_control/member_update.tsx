@@ -137,7 +137,7 @@ function MemberUpdate() {
           body: JSON.stringify(data),
       };
       
-      fetch(`${apiUrl}/members`, requestOptions)
+      fetch(`${apiUrl}/member-admin`, requestOptions)
         .then((response) => response.json())
         .then((res) => {
         console.log(res)
