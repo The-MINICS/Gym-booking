@@ -138,7 +138,8 @@ function ComplaintHandling() {
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">No.</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Topic</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Body Messages</h4></TableCell>
-                                <TableCell><h4 className="font-semibold text-base font-sans text-center">User</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Name</h4></TableCell>
+                                <TableCell><h4 className="font-semibold text-base font-sans text-center">Email</h4></TableCell>
                                 <TableCell><h4 className="font-semibold text-base font-sans text-center">Action</h4></TableCell>
                             </TableRow>
                         </TableHead>
@@ -152,13 +153,14 @@ function ComplaintHandling() {
                                             <TableCell align="center">{row.Subject}</TableCell>
                                             <TableCell align="center">{row.Message}</TableCell>
                                             <TableCell align="center">{row.Member?.Firstname} {row.Member?.Lastname}</TableCell>
+                                            <TableCell align="center">{row.Member?.Email}</TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>
                                                     <Button
                                                     startIcon={<CheckIcon />}
                                                     color="success"
                                                     onClick={() => { handleDialogDeleteOpen(Number(row.ID)) }}
-                                                        >Finished
+                                                        >Complete
                                                     </Button>
                                                 </ButtonGroup>
                                             </TableCell>

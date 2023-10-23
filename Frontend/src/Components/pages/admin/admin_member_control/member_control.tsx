@@ -371,13 +371,17 @@ function MemberManagement() {
                                             <TableCell align="center">{row.Role?.Role}</TableCell>
                                             <TableCell align="center">{dayjs(row.Member_datetime).format('YYYY-MM-DD HH:mm')}</TableCell>
                                             <TableCell align="center">
-                                                <button
-                                                    className="flex items-center justify-center cursor-pointer p-1 border-2 rounded bg-green-600 border-green-700 
-                                                    text-white hover:bg-orange-500 active:scale-[.98] active:duration-75 transition-all"
-                                                    onClick={() => handleDialogMemberDocumentOpen(Number(row.ID))}
-                                                >
-                                                    <VisibilityIcon/> Document
-                                                </button>
+                                                {(row.MemberRequestID !== null) ? (
+                                                    <button
+                                                        className="flex items-center justify-center cursor-pointer p-1 border-2 rounded bg-green-600 border-green-700 
+                                                        text-white hover:bg-orange-500 active:scale-[.98] active:duration-75 transition-all"
+                                                        onClick={() => handleDialogMemberDocumentOpen(Number(row.MemberRequestID))}
+                                                    >
+                                                        <VisibilityIcon/> Document
+                                                    </button>
+                                                ):(
+                                                    <p className="text-sm italic">Signed up by Admin</p>
+                                                )}
                                             </TableCell>
                                             <TableCell align="center">
                                                 <ButtonGroup>

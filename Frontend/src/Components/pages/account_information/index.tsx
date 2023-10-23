@@ -260,9 +260,9 @@ function AccountSettings() {
                                         Change My Password
                                 </button>
                             </div>
-                            <div className="mt-28 flex justify-end items-center gap-1 mr-2">
+                            <div className="mt-28 flex justify-center items-center">
                                 <button onClick={signout}
-                                    className="text-white p-1 rounded font-medium bg-red-500">
+                                    className="text-white p-2 rounded font-medium bg-red-500">
                                         Sign Out
                                 </button>
                             </div>

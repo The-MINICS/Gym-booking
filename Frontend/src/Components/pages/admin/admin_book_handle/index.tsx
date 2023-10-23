@@ -351,7 +351,7 @@ function BookingManagement() {
                 </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Would you like to delete this booking?
+                            Would you like to cancel this booking?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -374,7 +374,7 @@ function BookingManagement() {
                 </DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Would you like to delete this Equipment booking?
+                            Would you like to cancel this Equipment booking?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>

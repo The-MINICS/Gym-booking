@@ -2,10 +2,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import React from 'react';
 import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useState } from 'react';
-import { GenderInterface } from '@/interfaces/IGender';
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useNavigate, useParams } from "react-router-dom";
-import { RoleInterface } from "@/interfaces/IRole";
+import { useParams } from "react-router-dom";
 import { Divider, Grid } from "@mui/material";
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -179,7 +176,7 @@ function MemberVerified() {
               anchorOrigin={{ vertical: "top", horizontal: "center" }}
               >
                 <Alert onClose={handleClose} severity="success">
-                  {memberRequest.Status?.State} Successful!!
+                  Saved Successful!!
                 </Alert>
             </Snackbar>
             <Snackbar
