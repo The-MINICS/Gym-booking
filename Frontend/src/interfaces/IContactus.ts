@@ -1,4 +1,5 @@
 import { MemberInterface } from "./IMember";
+import { StatusInterface } from "./IStatus";
 
 export interface ContactUsInterface {
     ID?: number,
@@ -7,4 +8,7 @@ export interface ContactUsInterface {
 
     MemberID?: number;
     Member?: MemberInterface;
+
+    StatusID?: number;
+    Status?: StatusInterface;
 }
