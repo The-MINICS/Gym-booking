@@ -128,6 +128,9 @@ function MemberVerified() {
           setError(true);
             setErrorMessage(res.error)
           }
+          setTimeout(() => {
+            window.location.href = "/member-manage";
+          }, 1000);
         });
     }
 
