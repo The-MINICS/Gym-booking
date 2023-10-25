@@ -59,8 +59,8 @@ type Member struct {
 
 type MemberRequest struct {
 	gorm.Model
-	Username               string `gorm:"uniqueIndex" valid:"required~Please fill your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
-	Email                  string `gorm:"uniqueIndex" valid:"email~Email format is invalid.,required~Please fill your email."`
+	Username               string `valid:"required~Please fill your username." ` //,matches(^(A|B|D|M)([0-9]{7}$))~username ต้องมี 8 ตัว
+	Email                  string `valid:"email~Email format is invalid.,required~Please fill your email."`
 	Password               string `valid:"required~Please fill your password." ` //,matches(^[1-9]([0-9]{12}$))~password ต้องมี 13 ตัว
 	Firstname              string `valid:"required~Please fill your firstname."`
 	Lastname               string `valid:"required~Please fill your lastname."`
@@ -146,8 +146,8 @@ type Room struct {
 // Picture
 type Picture struct {
 	gorm.Model
-	Picture  string `valid:"required~Please select the picture." `
-	Title    string `valid:"required~Please fill the equipment name." `
+	Picture  string `gorm:"uniqueIndex" valid:"required~Please select the picture." `
+	Title    string `gorm:"uniqueIndex" valid:"required~Please fill the equipment name." `
 	Describe string `valid:"required~Please fill any caption about the equipment that you added., maxstringlength(500)~It is too many characters." `
 
 	Equipment []Equipment `gorm:"foreignKey:PictureID"`
@@ -156,7 +156,7 @@ type Picture struct {
 // Equipment
 type Equipment struct {
 	gorm.Model
-	Name string `valid:"required~Please fill the equipment name." `
+	Name string `gorm:"uniqueIndex" valid:"required~Please fill the equipment name." `
 
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`

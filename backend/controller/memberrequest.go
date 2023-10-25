@@ -174,13 +174,29 @@ func AcceptRequest(c *gin.Context) {
 		return
 	}
 
-	// Create a new Member based on the Member Request
+	// Check if email or username already exist
+	errorMessage := CheckEmailAndUsernameExists(memberrequest.Email, memberrequest.Username)
+	if errorMessage == "Email already exists" {
+		SendInformEmailEmailAlreadyExists(memberrequest.Email)
+		entity.DB().Model(&memberrequest).Update("StatusID", 7)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errorMessage})
+		return
+	}
+	if errorMessage == "Username already exists" {
+		SendInformEmailUsernameAlreadyExists(memberrequest.Email)
+		entity.DB().Model(&memberrequest).Update("StatusID", 7)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errorMessage})
+		return
+	}
+
+	// If no existing member found, create a new member
 	newMember, err := CreateMemberFromRequest(&memberrequest)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create a new member"})
 		return
 	}
 
+	// Send an email
 	err = SendInformEmail1(memberrequest.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending email"})
@@ -194,6 +210,53 @@ func AcceptRequest(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"data": newMember})
+}
+
+func CheckEmailAndUsernameExists(email, username string) string {
+	var existingMember entity.Member
+	if err := entity.DB().Where("email = ?", email).First(&existingMember).Error; err == nil {
+		return "Email already exists"
+	}
+
+	if err := entity.DB().Where("username = ?", username).First(&existingMember).Error; err == nil {
+		return "Username already exists"
+	}
+
+	return ""
+}
+
+func SendInformEmailEmailAlreadyExists(email string) error {
+	d := gomail.NewDialer("smtp.gmail.com", 587, "TheMINICSGym@gmail.com", "rmzo slrg mdqf cxgg")
+
+	// Create an email message
+	m := gomail.NewMessage()
+	m.SetHeader("From", "TheMINICSGym@gmail.com")
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "Membership acceptance")
+	m.SetBody("text/plain", "Sorry, Your member request was rejected because of your email have been used. Please send a request again with a new email address.")
+
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func SendInformEmailUsernameAlreadyExists(email string) error {
+	d := gomail.NewDialer("smtp.gmail.com", 587, "TheMINICSGym@gmail.com", "rmzo slrg mdqf cxgg")
+
+	// Create an email message
+	m := gomail.NewMessage()
+	m.SetHeader("From", "TheMINICSGym@gmail.com")
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "Membership acceptance")
+	m.SetBody("text/plain", "Sorry, Your member request was rejected because of your username have been used. Please send a request again with a new username.")
+
+	if err := d.DialAndSend(m); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
