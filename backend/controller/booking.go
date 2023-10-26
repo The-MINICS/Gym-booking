@@ -55,7 +55,9 @@ func CreateBooking(c *gin.Context) {
 			Member:   member,
 			Room:     room,
 			Timeslot: timeslot,
+			Slot:     timeslot.Slot,
 			Date:     date,
+			DateCode: date.DateCode,
 			StatusID: &status,
 		}
 
@@ -68,10 +70,15 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
+	if tx := entity.DB().Where("member_id = ? AND slot = ? AND date_code = ?", booking.MemberID, timeslot.Slot, date.DateCode).First(&booking); tx.RowsAffected != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this date and this time."})
+		return
+	}
+
 	//Member can book only 1 times per time slot
 	if *booking.StatusID == uint(3) {
 		if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this time slot."})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this date and this time."})
 			return
 		}
 	}
@@ -93,7 +100,9 @@ func CreateBooking(c *gin.Context) {
 		Member:   member,
 		Room:     room,
 		Timeslot: timeslot,
+		Slot:     timeslot.Slot,
 		Date:     date,
+		DateCode: date.DateCode,
 		StatusID: &status,
 	}
 

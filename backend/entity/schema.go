@@ -186,10 +186,12 @@ type Booking struct {
 	RoomID *uint
 	Room   Room `gorm:"references:id" valid:"-"`
 
-	DateID *uint
-	Date   Date `gorm:"references:id" valid:"-"`
+	DateID   *uint
+	DateCode time.Time
+	Date     Date `gorm:"references:id" valid:"-"`
 
 	TimeslotID *uint
+	Slot       string
 	Timeslot   Timeslot `gorm:"references:id" valid:"-"`
 
 	StatusID *uint
