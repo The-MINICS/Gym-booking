@@ -339,7 +339,7 @@ function Booking() {
                 visible: { opacity: 1, x:-0 }
             }}
             >
-                <div className="px-3">
+                <div className="px-3 sm:px-0">
                     <Grid container sx={{ padding: 1 }} columnSpacing={5}>
                         <Snackbar
                             id="success"

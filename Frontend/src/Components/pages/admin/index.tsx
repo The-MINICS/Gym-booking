@@ -13,7 +13,7 @@ import BuildIcon from '@mui/icons-material/Build';
 function AdminTools(){
   return (
   <div
-    className="gap-16 bg-gray-50 pt-36 md:h-full md:pb-0 left-16">
+    className="gap-16 bg-gray-50 pt-20 md:h-full md:pb-0 left-16">
     {/* Image and main header */}
     <motion.div 
       className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
@@ -37,8 +37,7 @@ function AdminTools(){
             visible: { opacity: 1, x:-0 }
           }}>
           <div className="relative -ml-5">
-            <div className="before:absolute before:-top-24 before:-left-72
-              before:z-[-1] md:before:content-evolvetext">
+            <div>
               <img alt="home-page-text" src={HomePageText}/>
             </div>
           </div>
