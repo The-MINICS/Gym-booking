@@ -12,7 +12,7 @@ import BookingSchedule from "@/assets/BookingSchedule.png";
 function Home(){
   return (
   <div
-    className="gap-16 bg-gray-50 pt-36 md:h-full md:pb-0 left-16">
+    className="gap-16 bg-gray-50 pt-20 md:h-full md:pb-0 left-16">
     {/* Image and main header */}
     <motion.div 
       className="md:flex mx-auto w-5/6 items-center justify-center md:h-5/6">
