@@ -45,6 +45,31 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
+	// Check if the member already has a booking for the same datetime with "canceled" status
+	if tx := entity.DB().Where("member_id = ? AND slot = ? AND date_code = ? AND status_id = ?", booking.MemberID, timeslot.Slot, date.DateCode, 4).First(&booking); tx.RowsAffected != 0 {
+		// Member already booked this timeslot, update the existing booking
+		status := uint(3)
+		bk := entity.Booking{
+			Datetime: booking.Datetime,
+			Note:     booking.Note,
+			Member:   member,
+			Room:     room,
+			Timeslot: timeslot,
+			Slot:     timeslot.Slot,
+			Date:     date,
+			DateCode: date.DateCode,
+			StatusID: &status,
+		}
+
+		if err := entity.DB().Save(&bk).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": bk})
+		return
+	}
+
 	// Check if the member already has a booking for the same timeslot with "canceled" status
 	if tx := entity.DB().Where("member_id = ? AND timeslot_id = ? AND status_id = ?", booking.MemberID, booking.TimeslotID, 4).First(&booking); tx.RowsAffected != 0 {
 		// Member already booked this timeslot, update the existing booking
@@ -70,12 +95,13 @@ func CreateBooking(c *gin.Context) {
 		return
 	}
 
-	if tx := entity.DB().Where("member_id = ? AND slot = ? AND date_code = ?", booking.MemberID, timeslot.Slot, date.DateCode).First(&booking); tx.RowsAffected != 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this date and this time."})
-		return
+	if *booking.StatusID == uint(3) {
+		if tx := entity.DB().Where("member_id = ? AND slot = ? AND date_code = ?", booking.MemberID, timeslot.Slot, date.DateCode).First(&booking); tx.RowsAffected != 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this date and this time."})
+			return
+		}
 	}
 
-	//Member can book only 1 times per time slot
 	if *booking.StatusID == uint(3) {
 		if tx := entity.DB().Where("member_id = ? AND timeslot_id = ?", booking.MemberID, booking.TimeslotID).First(&booking); tx.RowsAffected != 0 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "You have booked this date and this time."})
