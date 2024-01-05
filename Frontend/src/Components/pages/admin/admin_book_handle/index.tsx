@@ -10,7 +10,7 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import ListIcon from '@mui/icons-material/List';
 import { BookingInterface } from "@/interfaces/IBooking";
 import { EquipmentBookingInterface } from "@/interfaces/IEquipmentBooking";
-import { BookDelete, EquipmentBookDelete, GetBooks, GetEquipmentBookings, GetMembers, GetSlot } from "@/services/HttpClientService";
+import { BookDelete, EquipmentBookDelete, GetBooks, GetEquipmentBookings, GetMembers } from "@/services/HttpClientService";
 import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogContentText,
         DialogTitle, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from "@mui/material";
@@ -146,9 +146,9 @@ function BookingManagement() {
                         }}
                     >
                         <div className="flex items-center justify-center gap-2 py-3 my-3">
-                            <img src={BookingIcon1} className="h-16 w-16"/>
+                            <img src={BookingIcon1} className="h-16 w-16" alt=""/>
                             <h1 className="text-red-500 font-bold text-6xl">Booking Management</h1>
-                            <img src={BookingIcon2} className="h-16 w-16"/>
+                            <img src={BookingIcon2} className="h-16 w-16" alt=""/>
                         </div>
                     </motion.div>
             </motion.div>
