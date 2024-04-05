@@ -40,18 +40,6 @@ So, We used:
    1.  _npm create vite@latest (to do along with their steps)_
    2.  _cd Frontend(Your Project)_
    3.  npm install
-   4.  npm i framer-motion react-anchor-link-smooth-scroll@1.0.12 @heroicons/react
-   5.  npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 @types/node
-   6.  npm i react-feather
-   7.  npm install --save react-router-dom@6.x
-   8.  npm install -g npm
-   9.  npm install @mui/material @emotion/react @emotion/styled
-   10. npm install @mui/material @mui/styled-engine-sc styled-components
-   11. npm install @mui/material @mui/icons-material
-   12. npm install @mui/x-date-pickers
-   13. npm install dayjs --save
-   14. npm install date-fns
-   15. npm install react-big-calendar moment @types/react-big-calendar
 
 ***Run Dev***
 + **Backend:**  -> go build -o main.exe main.go ***and then*** ./main.exe ***,or*** go run main.go
